@@ -21,12 +21,19 @@ body {
 	margin-top: 4px;
 }
 
+/* wise4 */
 #svg_editor #svgroot {
+	-moz-user-select: none;
+	/*position: absolute;
+	top: 0;
+	left: 0;*/
+}
+/*#svg_editor #svgroot {
 	-moz-user-select: none;
 	position: absolute;
 	top: 0;
 	left: 0;
-}
+}*/
 
 #svg_editor #svgcanvas {
 	background-color: #FFFFFF;
@@ -34,6 +41,7 @@ body {
 	vertical-align: middle;
 	width: 640px;
 	height: 480px;
+	top:0px !important;
 	-apple-dashboard-region:dashboard-region(control rectangle 0px 0px 0px 0px); /* for widget regions that shouldn't react to dragging */
 	position: relative;
 }
@@ -70,7 +78,28 @@ body {
 	height: 16px;
 }
 
+/* wise4 */
+#svg_editor div#work_wrapper {
+	/*display:inline-block;*/
+	clear:both;
+	width:100%;
+}
+
+/* wise4 */
 #svg_editor div#workarea {
+	/*display: inline-block;
+	position:absolute;
+	margin-top: 75px;
+	margin-right: 40px;*/
+	/*bottom: 60px;*/
+	/*right: 14px;*/
+	margin-right:2px;
+	padding:10px 10px;
+	background-color: #A0A0A0;
+	border: 1px solid #808080;
+	overflow: auto;
+}
+/*#svg_editor div#workarea {
 	display: inline-block;
 	position:absolute;
 	top: 75px;
@@ -80,9 +109,23 @@ body {
 	background-color: #A0A0A0;
 	border: 1px solid #808080;
 	overflow: auto;
-}
+}*/
 
+/* wise4 */
 #svg_editor #sidepanels {
+	/*display: inline-block;
+	position:absolute;*/
+	/*top: 75px;
+	bottom: 60px;*/
+	height:470px;
+	float:right;
+	width: 2px;
+	/*border-color: #808080;
+	border-style: solid;
+	border-width: 1px;
+	border-left: none;*/
+}
+/*#svg_editor #sidepanels {
 	display: inline-block;
 	position:absolute;
 	top: 75px;
@@ -94,9 +137,21 @@ body {
 	border-style: solid;
 	border-width: 1px;
 	border-left: none;
-}
+}*/
 
+/* wise4 */
 #svg_editor #layerpanel {
+	/*display: inline-block;*/
+	background-color: #E8E8E8;
+	/*position:absolute;*/
+	padding-top: 1px;
+	/*bottom: 0px;
+	right: 0px;*/
+	width: 0px;
+	overflow: hidden;
+	margin: 0px;
+}
+/*#svg_editor #layerpanel {
 	display: inline-block;
 	background-color: #E8E8E8;
 	position:absolute;
@@ -106,14 +161,34 @@ body {
 	width: 0px;
 	overflow: hidden;
 	margin: 0px;
-}
+}*/
 
 /*
 	border-style: solid;
 	border-color: #666;
 	border-width: 0px 0px 0px 1px;	
 */
+
+/* wise4 */
 #svg_editor #sidepanel_handle {
+	/*display: inline-block;
+	position: absolute;*/
+	background-color: #E8E8E8;
+	margin-left: 0px;
+	/*top: 40%;*/
+	position:relative;
+	width: 1em;
+	padding: 5px 1px 5px 5px;
+	margin-left: -10px;
+	cursor: pointer;
+	z-index:1000;
+	border-radius: 5px;
+	border:1px solid #777777;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-user-select: none;
+}
+/*#svg_editor #sidepanel_handle {
 	display: inline-block;
 	position: absolute;
 	background-color: #E8E8E8;
@@ -127,7 +202,7 @@ body {
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	-moz-user-select: none;
-}
+}*/
 
 #svg_editor #sidepanel_handle:hover {
 	font-weight: bold;
@@ -246,25 +321,50 @@ body {
 	height: 32px;
 }
 
+/* wise4 */
 #svg_editor #tools_top {
-	position: absolute;
-	left: 38px;
-	right: 2px;
-	top: 2px;
-	height: 72px;
+	/*position: absolute;*/
+	margin-left: 34px;
+	padding-top: 2px;
+	margin-right:10px;
 	border-bottom: none;
+	float:left;
+	width:99%;
+	min-height:72px;
 	/* Ideally this should be auto (makes scrollbar if needed), but currently hides 
 	the .dropdown lists.
 /*	overflow: auto;*/
 }
 
+/*#svg_editor #tools_top {
+	position: absolute;
+	left: 38px;
+	right: 2px;
+	top: 2px;
+	height: 72px;
+	border-bottom: none;*/
+	/* Ideally this should be auto (makes scrollbar if needed), but currently hides 
+	the .dropdown lists.
+/*	overflow: auto;*/
+/*}*/
+
+/* wise4 */
 #svg_editor #tools_left {
+	/*position: absolute;*/
+	float:left;
+	border-right: none;
+	width: 36px;
+	/*top: 75px;*/
+	margin-left: -4px;
+}
+
+/*#svg_editor #tools_left {
 	position: absolute;
 	border-right: none;
 	width: 36px;
 	top: 75px;
 	left: 2px;
-}
+}*/
 
 #workarea.wireframe #svgcontent * {
 	fill: none;
@@ -353,6 +453,7 @@ span.zoom_tool {
 
 .dropdown {
 	position: relative;
+	z-index:100;
 }
 
 #svg_editor .dropdown button {
@@ -567,13 +668,24 @@ span.zoom_tool {
 	background-color: #B0B0B0;
 }
 
+/* wise4 */
 #svg_editor #tools_bottom {
+	/*position: absolute;
+	left: 40px;
+	right: 2px;
+	bottom: 2px;*/
+	margin-left:32px;
+	height: 60px;
+	padding:2px;
+}
+
+/*#svg_editor #tools_bottom {
 	position: absolute;
 	left: 40px;
 	right: 2px;
 	bottom: 2px;
 	height: 60px;
-}
+}*/
 
 #svg_editor #tools_bottom_1 {
 	width: 115px;
@@ -867,4 +979,15 @@ button#tool_docprops_cancel {
 	padding: 2px;
 	width: 24px;
 	height: 24px;
+}
+
+/* wise4 hidden toolbuttons */
+#file_panel, #xy_panel, #image_panel, #circle_panel,
+#ellipse_panel, #line_panel, #tool_node_link {
+	display:none !important;
+}
+
+/* wise4 */
+#svg_editor label {
+	margin-right:4px;
 }

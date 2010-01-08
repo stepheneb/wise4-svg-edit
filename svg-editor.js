@@ -555,14 +555,16 @@ function svg_edit_setup() {
 	}
 
 	var pos = $('#tools_rect_show').position();
-	$('#tools_rect').css({'left': pos.left+4, 'top': pos.top+77});
+	$('#tools_rect').css({'left': pos.left+2, 'top': pos.top+2}); //wise4 positioning edits
+	//$('#tools_rect').css({'left': pos.left+4, 'top': pos.top+77});
 	pos = $('#tools_ellipse_show').position();
-	$('#tools_ellipse').css({'left': pos.left+4, 'top': pos.top+77});
+	$('#tools_ellipse').css({'left': pos.left+2, 'top': pos.top+2}); //wise4 positioning edits
+	//$('#tools_ellipse').css({'left': pos.left+4, 'top': pos.top+77});
 	
 	// stamp selector position (wise4)
 	//TODO: update css
-	var pos = $('#tools_stamps').position();
-	$('#tools_stamps').css({'left': pos.left+32, 'top': pos.top+272, 'position': 'absolute'});
+	var pos = $('#tool_image').position();
+	$('#tools_stamps').css({'left': pos.left+36, 'top': pos.top+2});
 
 	var changeRectRadius = function(ctl) {
 		svgCanvas.setRectRadius(ctl.value);
@@ -932,6 +934,8 @@ function svg_edit_setup() {
 	var clickText = function(){
 		toolButtonClick('#tool_text');
 		svgCanvas.setMode('text');
+		// always set opacity to 1 (wise4)
+		svgCanvas.setOpacity(1);
 		// change cursor to text (wise4) - indicates to students that drawing is active
 		$('#styleoverrides').text('#svgcanvas svg{cursor:text}');
 	};
@@ -2321,7 +2325,7 @@ function svg_edit_setup() {
 			
 			'align_left':'align-left.png',
 			'align_center':'align-center.png',
-			'align_right':'align-righ.png',
+			'align_right':'align-right.png',
 			'align_top':'align-top.png',
 			'align_middle':'align-middle.png',
 			'align_bottom':'align-bottom.png',

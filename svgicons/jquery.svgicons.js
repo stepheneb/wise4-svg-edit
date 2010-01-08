@@ -155,25 +155,26 @@ $(function() {
 					useFallback();
 				}
 			} else {
-				$.ajax({
-					url: file,
-					dataType: 'xml',
-					success: function(data) {
-						svgdoc = data;
-						$(function() {
-							if (useFallbackImgs) {
-								useFallback();
-							} else {
+				// check whether useFallback parameter was set to true (wise4)
+				if (useFallbackImgs) {
+					$(setTimeout(function() {$(useFallback)},10)); // use fallback png icons
+				} else {
+					$.ajax({
+						url: file,
+						dataType: 'xml',
+						success: function(data) {
+							svgdoc = data;
+							$(function() {
 								getIcons('ajax');
-							}
-						});
-					},
-					error: function() {
-						$(function() {
-							useFallback();
-						});
-					}
-				});
+							});
+						},
+						error: function() {
+							$(function() {
+								useFallback();
+							});
+						}
+					});
+				}
 			}
 			
 		function getIcons(evt, no_wait) {
