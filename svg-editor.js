@@ -34,8 +34,10 @@ function svg_edit_setup() {
 		'key_del':'Del'
 	};
 	
-	var palette = ["#000000","#202020","#404040","#606060","#808080","#a0a0a0","#c0c0c0","#e0e0e0","#ffffff","#800000","#ff0000","#808000","#ffff00","#008000","#00ff00","#008080","#00ffff","#000080","#0000ff","#800080","#ff00ff","#2b0000","#550000","#800000","#aa0000","#d40000","#ff0000","#ff2a2a","#ff5555","#ff8080","#ffaaaa","#ffd5d5","#280b0b","#501616","#782121","#a02c2c","#c83737","#d35f5f","#de8787","#e9afaf","#f4d7d7","#241c1c","#483737","#6c5353","#916f6f","#ac9393","#c8b7b7","#e3dbdb","#2b1100","#552200","#803300","#aa4400","#d45500","#ff6600","#ff7f2a","#ff9955","#ffb380","#ffccaa","#ffe6d5","#28170b","#502d16","#784421","#a05a2c","#c87137","#d38d5f","#deaa87","#e9c6af","#f4e3d7","#241f1c","#483e37","#6c5d53","#917c6f","#ac9d93","#c8beb7","#e3dedb","#2b2200","#554400","#806600","#aa8800","#d4aa00","#ffcc00","#ffd42a","#ffdd55","#ffe680","#ffeeaa","#fff6d5","#28220b","#504416","#786721","#a0892c","#c8ab37","#d3bc5f","#decd87","#e9ddaf","#f4eed7","#24221c","#484537","#6c6753","#918a6f","#aca793","#c8c4b7","#e3e2db","#222b00","#445500","#668000","#88aa00","#aad400","#ccff00","#d4ff2a","#ddff55","#e5ff80","#eeffaa","#f6ffd5","#22280b","#445016","#677821","#89a02c","#abc837","#bcd35f","#cdde87","#dde9af","#eef4d7","#22241c","#454837","#676c53","#8a916f","#a7ac93","#c4c8b7","#e2e3db","#112b00","#225500","#338000","#44aa00","#55d400","#66ff00","#7fff2a","#99ff55","#b3ff80","#ccffaa","#e5ffd5","#17280b","#2d5016","#447821","#5aa02c","#71c837","#8dd35f","#aade87","#c6e9af","#e3f4d7","#1f241c","#3e4837","#5d6c53","#7c916f","#9dac93","#bec8b7","#dee3db","#002b00","#005500","#008000","#00aa00","#00d400","#00ff00","#2aff2a","#55ff55","#80ff80","#aaffaa","#d5ffd5","#0b280b","#165016","#217821","#2ca02c","#37c837","#5fd35f","#87de87","#afe9af","#d7f4d7","#1c241c","#374837","#536c53","#6f916f","#93ac93","#b7c8b7","#dbe3db","#002b11","#005522","#008033","#00aa44","#00d455","#00ff66","#2aff80","#55ff99","#80ffb3","#aaffcc","#d5ffe6","#0b2817","#16502d","#217844","#2ca05a","#37c871","#5fd38d","#87deaa","#afe9c6","#d7f4e3","#1c241f","#37483e","#536c5d","#6f917c","#93ac9d","#b7c8be","#dbe3de","#002b22","#005544","#008066","#00aa88","#00d4aa","#00ffcc","#2affd5","#55ffdd","#80ffe6","#aaffee","#d5fff6","#0b2822","#165044","#217867","#2ca089","#37c8ab","#5fd3bc","#87decd","#afe9dd","#d7f4ee","#1c2422","#374845","#536c67","#6f918a","#93aca7","#b7c8c4","#dbe3e2","#00222b","#004455","#006680","#0088aa","#00aad4","#00ccff","#2ad4ff","#55ddff","#80e5ff","#aaeeff","#d5f6ff","#0b2228","#164450","#216778","#2c89a0","#37abc8","#5fbcd3","#87cdde","#afdde9","#d7eef4","#1c2224","#374548","#53676c","#6f8a91","#93a7ac","#b7c4c8","#dbe2e3","#00112b","#002255","#003380","#0044aa","#0055d4","#0066ff","#2a7fff","#5599ff","#80b3ff","#aaccff","#d5e5ff","#0b1728","#162d50","#214478","#2c5aa0","#3771c8","#5f8dd3","#87aade","#afc6e9","#d7e3f4","#1c1f24","#373e48","#535d6c","#6f7c91","#939dac","#b7bec8","#dbdee3","#00002b","#000055","#000080","#0000aa","#0000d4","#0000ff","#2a2aff","#5555ff","#8080ff","#aaaaff","#d5d5ff","#0b0b28","#161650","#212178","#2c2ca0","#3737c8","#5f5fd3","#8787de","#afafe9","#d7d7f4","#1c1c24","#373748","#53536c","#6f6f91","#9393ac","#b7b7c8","#dbdbe3","#11002b","#220055","#330080","#4400aa","#5500d4","#6600ff","#7f2aff","#9955ff","#b380ff","#ccaaff","#e5d5ff","#170b28","#2d1650","#442178","#5a2ca0","#7137c8","#8d5fd3","#aa87de","#c6afe9","#e3d7f4","#1f1c24","#3e3748","#5d536c","#7c6f91","#9d93ac","#beb7c8","#dedbe3","#22002b","#440055","#660080","#8800aa","#aa00d4","#cc00ff","#d42aff","#dd55ff","#e580ff","#eeaaff","#f6d5ff","#220b28","#441650","#672178","#892ca0","#ab37c8","#bc5fd3","#cd87de","#ddafe9","#eed7f4","#221c24","#453748","#67536c","#8a6f91","#a793ac","#c4b7c8","#e2dbe3","#2b0022","#550044","#800066","#aa0088","#d400aa","#ff00cc","#ff2ad4","#ff55dd","#ff80e5","#ffaaee","#ffd5f6","#280b22","#501644","#782167","#a02c89","#c837ab","#d35fbc","#de87cd","#e9afdd","#f4d7ee","#241c22","#483745","#6c5367","#916f8a","#ac93a7","#c8b7c4","#e3dbe2","#2b0011","#550022","#800033","#aa0044","#d40055","#ff0066","#ff2a7f","#ff5599","#ff80b2","#ffaacc","#ffd5e5","#280b17","#50162d","#782144","#a02c5a","#c83771","#d35f8d","#de87aa","#e9afc6","#f4d7e3","#241c1f","#48373e","#6c535d","#916f7c","#ac939d","#c8b7be","#e3dbde"]
-
+	// simplified palette colors for wise4
+	//var palette = ["#000000","#202020","#404040","#606060","#808080","#a0a0a0","#c0c0c0","#e0e0e0","#ffffff","#800000","#ff0000","#808000","#ffff00","#008000","#00ff00","#008080","#00ffff","#000080","#0000ff","#800080","#ff00ff","#2b0000","#550000","#800000","#aa0000","#d40000","#ff0000","#ff2a2a","#ff5555","#ff8080","#ffaaaa","#ffd5d5","#280b0b","#501616","#782121","#a02c2c","#c83737","#d35f5f","#de8787","#e9afaf","#f4d7d7","#241c1c","#483737","#6c5353","#916f6f","#ac9393","#c8b7b7","#e3dbdb","#2b1100","#552200","#803300","#aa4400","#d45500","#ff6600","#ff7f2a","#ff9955","#ffb380","#ffccaa","#ffe6d5","#28170b","#502d16","#784421","#a05a2c","#c87137","#d38d5f","#deaa87","#e9c6af","#f4e3d7","#241f1c","#483e37","#6c5d53","#917c6f","#ac9d93","#c8beb7","#e3dedb","#2b2200","#554400","#806600","#aa8800","#d4aa00","#ffcc00","#ffd42a","#ffdd55","#ffe680","#ffeeaa","#fff6d5","#28220b","#504416","#786721","#a0892c","#c8ab37","#d3bc5f","#decd87","#e9ddaf","#f4eed7","#24221c","#484537","#6c6753","#918a6f","#aca793","#c8c4b7","#e3e2db","#222b00","#445500","#668000","#88aa00","#aad400","#ccff00","#d4ff2a","#ddff55","#e5ff80","#eeffaa","#f6ffd5","#22280b","#445016","#677821","#89a02c","#abc837","#bcd35f","#cdde87","#dde9af","#eef4d7","#22241c","#454837","#676c53","#8a916f","#a7ac93","#c4c8b7","#e2e3db","#112b00","#225500","#338000","#44aa00","#55d400","#66ff00","#7fff2a","#99ff55","#b3ff80","#ccffaa","#e5ffd5","#17280b","#2d5016","#447821","#5aa02c","#71c837","#8dd35f","#aade87","#c6e9af","#e3f4d7","#1f241c","#3e4837","#5d6c53","#7c916f","#9dac93","#bec8b7","#dee3db","#002b00","#005500","#008000","#00aa00","#00d400","#00ff00","#2aff2a","#55ff55","#80ff80","#aaffaa","#d5ffd5","#0b280b","#165016","#217821","#2ca02c","#37c837","#5fd35f","#87de87","#afe9af","#d7f4d7","#1c241c","#374837","#536c53","#6f916f","#93ac93","#b7c8b7","#dbe3db","#002b11","#005522","#008033","#00aa44","#00d455","#00ff66","#2aff80","#55ff99","#80ffb3","#aaffcc","#d5ffe6","#0b2817","#16502d","#217844","#2ca05a","#37c871","#5fd38d","#87deaa","#afe9c6","#d7f4e3","#1c241f","#37483e","#536c5d","#6f917c","#93ac9d","#b7c8be","#dbe3de","#002b22","#005544","#008066","#00aa88","#00d4aa","#00ffcc","#2affd5","#55ffdd","#80ffe6","#aaffee","#d5fff6","#0b2822","#165044","#217867","#2ca089","#37c8ab","#5fd3bc","#87decd","#afe9dd","#d7f4ee","#1c2422","#374845","#536c67","#6f918a","#93aca7","#b7c8c4","#dbe3e2","#00222b","#004455","#006680","#0088aa","#00aad4","#00ccff","#2ad4ff","#55ddff","#80e5ff","#aaeeff","#d5f6ff","#0b2228","#164450","#216778","#2c89a0","#37abc8","#5fbcd3","#87cdde","#afdde9","#d7eef4","#1c2224","#374548","#53676c","#6f8a91","#93a7ac","#b7c4c8","#dbe2e3","#00112b","#002255","#003380","#0044aa","#0055d4","#0066ff","#2a7fff","#5599ff","#80b3ff","#aaccff","#d5e5ff","#0b1728","#162d50","#214478","#2c5aa0","#3771c8","#5f8dd3","#87aade","#afc6e9","#d7e3f4","#1c1f24","#373e48","#535d6c","#6f7c91","#939dac","#b7bec8","#dbdee3","#00002b","#000055","#000080","#0000aa","#0000d4","#0000ff","#2a2aff","#5555ff","#8080ff","#aaaaff","#d5d5ff","#0b0b28","#161650","#212178","#2c2ca0","#3737c8","#5f5fd3","#8787de","#afafe9","#d7d7f4","#1c1c24","#373748","#53536c","#6f6f91","#9393ac","#b7b7c8","#dbdbe3","#11002b","#220055","#330080","#4400aa","#5500d4","#6600ff","#7f2aff","#9955ff","#b380ff","#ccaaff","#e5d5ff","#170b28","#2d1650","#442178","#5a2ca0","#7137c8","#8d5fd3","#aa87de","#c6afe9","#e3d7f4","#1f1c24","#3e3748","#5d536c","#7c6f91","#9d93ac","#beb7c8","#dedbe3","#22002b","#440055","#660080","#8800aa","#aa00d4","#cc00ff","#d42aff","#dd55ff","#e580ff","#eeaaff","#f6d5ff","#220b28","#441650","#672178","#892ca0","#ab37c8","#bc5fd3","#cd87de","#ddafe9","#eed7f4","#221c24","#453748","#67536c","#8a6f91","#a793ac","#c4b7c8","#e2dbe3","#2b0022","#550044","#800066","#aa0088","#d400aa","#ff00cc","#ff2ad4","#ff55dd","#ff80e5","#ffaaee","#ffd5f6","#280b22","#501644","#782167","#a02c89","#c837ab","#d35fbc","#de87cd","#e9afdd","#f4d7ee","#241c22","#483745","#6c5367","#916f8a","#ac93a7","#c8b7c4","#e3dbe2","#2b0011","#550022","#800033","#aa0044","#d40055","#ff0066","#ff2a7f","#ff5599","#ff80b2","#ffaacc","#ffd5e5","#280b17","#50162d","#782144","#a02c5a","#c83771","#d35f8d","#de87aa","#e9afc6","#f4d7e3","#241c1f","#48373e","#6c535d","#916f7c","#ac939d","#c8b7be","#e3dbde"]
+	var palette = ["#ffaaaa","#ff5656","#ff0000","#bf0000","#7f0000","#ffffff","#ffd4aa","#ffaa56","#ff7f00","#bf5f00","#7f3f00","#e5e5e5","#ffffaa","#ffff56","#ffff00","#bfbf00","#7f7f00","#cccccc","#d4ffaa","#aaff56","#7fff00","#5fbf00","#3f7f00","#b2b2b2","#aaffaa","#56ff56","#00ff00","#00bf00","#007f00","#999999","#aaffd4","#56ffaa","#00ff7f","#00bf5f","#007f3f","#7f7f7f","#aaffff","#56aaff","#007fff","#005fbf","#003f7f","#4c4c4c","#aaaaff","#5656ff","#0000ff","#0000bf","#00007f","#333333","#d4aaff","#aa56ff","#7f00ff","#5f00bf","#3f007f","#191919","#ffaaff","#ff56ff","#ff00ff","#bf00bf","#7f007f","#000000","#ffaad4","#ff56aa","#ff007f","#bf005f","#7f003f"];
+	
 	var isMac = false; //(navigator.platform.indexOf("Mac") != -1);
 	var modKey = ""; //(isMac ? "meta+" : "ctrl+");
 	var svgCanvas = new SvgCanvas(document.getElementById("svgcanvas"));
@@ -152,6 +154,8 @@ function svg_edit_setup() {
 	
 	var fillPaint = new $.jGraduate.Paint({solidColor: "FF0000"}); // solid red
 	var strokePaint = new $.jGraduate.Paint({solidColor: "000000"}); // solid black
+	
+	var picker = "fill"; // color picker mode ("stroke" or "fill") var (wise4)
 
 	// TODO: Unfortunately Mozilla does not handle internal references to gradients
 	// inside a data: URL document.  This means that any elements filled/stroked 
@@ -265,8 +269,7 @@ function svg_edit_setup() {
 	var updateToolbar = function() {
 		if (selectedElement != null && 
 			selectedElement.tagName != "image" &&
-			selectedElement.tagName != "g")
-		{
+			selectedElement.tagName != "g") {
 			// get opacity values
 			var fillOpacity = parseFloat(selectedElement.getAttribute("fill-opacity"));
 			if (isNaN(fillOpacity)) {
@@ -314,30 +317,43 @@ function svg_edit_setup() {
 			fillPaint = getPaint(fillColor, fillOpacity);
 			strokePaint = getPaint(strokeColor, strokeOpacity);
 			
-			fillOpacity = fillOpacity + " %";
+			//fillOpacity = fillOpacity + "%";
+			fillOpacity = ""; // remove opacity labels (wise4)
 			//strokeOpacity = strokeOpacity + " %";
 			// Make it clear to students that stroke is not applicable to text objects (wise4)
 			if (selectedElement.tagName == "text") {
 				strokeOpacity = "Not Available";
 			} else {
-				strokeOpacity = strokeOpacity + " %";
+				//strokeOpacity = strokeOpacity + "%";
+				strokeOpacity = ""; // remove opacity labels (wise4)
 			}
-
 			// update fill color
-			if (fillColor == "none") {
+			if (fillColor == "transparent" || fillColor == "initial") {
 				//fillOpacity = "N/A";
 				// Make opacity identifier clearer for students (wise4)
-				if (selectedElement.tagName == "line" || selectedElement.tagName == "pencil"){
+				if (selectedElement.tagName == "line" || selectedElement.tagName == "polyline"){
 					fillOpacity = "Not Available";
 				} else {
 					fillOpacity = "None";
 				}
 			}
+			
+			// update stroke color (wise4)
+			if (strokeColor == "transparent" || fillColor == "initial") {
+				//fillOpacity = "N/A";
+				// Make opacity identifier clearer for students (wise4)
+				if (selectedElement.tagName == "text"){
+					fillOpacity = "Not Available";
+				} else {
+					fillOpacity = "None";
+				}
+			}
+			
 			document.getElementById("gradbox_fill").parentNode.firstChild.setAttribute("fill", fillColor);
 			if (strokeColor == null || strokeColor == "" || strokeColor == "none") {
 				strokeColor = "none";
 				//strokeOpacity = "N/A";
-				// Make opacity identifier clearer for students (wise4)
+				// Make description clearer for students (wise4)
 				strokeOpacity = "None";
 			}
 			
@@ -354,6 +370,23 @@ function svg_edit_setup() {
 			var opac_perc = ((selectedElement.getAttribute("opacity")||1.0)*100);
 			$('#group_opacity').val(opac_perc);
 			$('#opac_slider').slider('option', 'value', opac_perc);
+			
+			// Hide bottom toolbar options that are not applicable (wise4)
+			if(selectedElement.tagName == "text" || selectedElement.tagName == "image") {
+				$('#stroke_widthLabel').hide();
+				$('#stroke_width').hide();
+			} else {
+				$('#stroke_widthLabel').show();
+				$('#stroke_width').show();
+			}
+			
+			// Modify fill and stroke labels for when image is selected (wise4)
+			if(selectedElement.tagName == "image") {
+				fillOpacity = "Not Available";
+				strokeOpacity = "Not Available"
+				$('#fill_opacity').html(fillOpacity);
+				$('#stroke_opacity').html(strokeOpacity);
+			}
 		}
 		
 		updateToolButtonState();
@@ -528,6 +561,9 @@ function svg_edit_setup() {
 	});
 	$('#palette').append(str);
 	
+	// set first palette-item (no color) background (wise4)
+	$('#palette .palette_item:first').css({'background': 'transparent url("/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/no-color-item.png") center'});
+	
 	// Set up editor background functionality
 	var color_blocks = ['#FFF','#888','#000','url(data:image/gif;base64,R0lGODlhEAAQAIAAAP%2F%2F%2F9bW1iH5BAAAAAAALAAAAAAQABAAAAIfjG%2Bgq4jM3IFLJgpswNly%2FXkcBpIiVaInlLJr9FZWAQA7)'];
 	var str = '';
@@ -686,11 +722,20 @@ function svg_edit_setup() {
 		inp.focus().remove();
 	});
 
+	// Edited palette item click function - palette now used in place of jGraduate (wise4)
 	$('.palette_item').click(function(evt){
-		var picker = (evt.shiftKey ? "stroke" : "fill");
-		var id = (evt.shiftKey ? '#stroke_' : '#fill_');
+		//var picker = (evt.shiftKey ? "stroke" : "fill");
+		//var id = (evt.shiftKey ? '#stroke_' : '#fill_');
+		// set id based on picker values (wise4)
+		var id;
+		if(picker=='fill'){
+			id = '#fill_';
+		} else {
+			id = '#stroke_';
+		}
 		var color = $(this).attr('data-rgb');
-		var rectbox = document.getElementById("gradbox_"+picker).parentNode.firstChild;
+		// rectbox used in palette_commit.click function (wise4)
+		//var rectbox = document.getElementById("gradbox_"+picker).parentNode.firstChild;
 		var paint = null;
 
 		// Webkit-based browsers returned 'initial' here for no stroke
@@ -704,16 +749,18 @@ function svg_edit_setup() {
 		else {
 			paint = new $.jGraduate.Paint({alpha: 100, solidColor: color.substr(1)});
 		}
-		rectbox.setAttribute("fill", color);
 		
-		if (evt.shiftKey) {
+		// actual color change moved to palette_commit.click function (wise4)
+		//rectbox.setAttribute("fill", color);
+		
+		/*if (evt.shiftKey) {
 			strokePaint = paint;
 			if (svgCanvas.getStrokeColor() != color) {
 				svgCanvas.setStrokeColor(color);
 			}
 			if (color != 'none' && svgCanvas.getStrokeOpacity() != 1) {
 				svgCanvas.setStrokeOpacity(1.0);
-				$("#stroke_opacity").html("100 %");
+				//$("#stroke_opacity").html("100 %"); // remove stroke opacity label (wise4)
 			}
 		} else {
 			fillPaint = paint;
@@ -722,10 +769,57 @@ function svg_edit_setup() {
 			}
 			if (color != 'none' && svgCanvas.getFillOpacity() != 1) {
 				svgCanvas.setFillOpacity(1.0);
-				$("#fill_opacity").html("100 %");
+				//$("#fill_opacity").html("100 %"); // remove fill opacity label (wise4)
 			}
 		}
+		updateToolButtonState();*/
+		
+		// update preview color (wise4)
+		if (color=='none'){
+			$('#palette_preview').css({'background': 'transparent url("/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/no-color.png") center'}); // set preview color bg to 'none' image
+		} else {
+			$('#palette_preview').css({'background': color});
+		}
+		
+		if (picker=='stroke') {
+			strokePaint = paint;
+		} else {
+			fillPaint = paint;
+		}
+	});
+	
+	// color picker Ok button click (wise4) - commit color change
+	$('#palette_commit').click(function(){
+		var rectbox = document.getElementById("gradbox_"+picker).parentNode.firstChild;
+		var color = $('#palette_preview').css('background-color');
+		if (picker=="stroke") {
+			//strokePaint = paint;
+			if (svgCanvas.getStrokeColor() != color) {
+				svgCanvas.setStrokeColor(color);
+			}
+			if (color != 'none' && svgCanvas.getStrokeOpacity() != 1) {
+				svgCanvas.setStrokeOpacity(1.0);
+				//$("#stroke_opacity").html("100 %"); // remove stroke opacity label (wise4)
+			}
+		} else {
+			//fillPaint = paint;
+			if (svgCanvas.getFillColor() != color) {
+				svgCanvas.setFillColor(color);
+			}
+			if (color != 'none' && svgCanvas.getFillOpacity() != 1) {
+				svgCanvas.setFillOpacity(1.0);
+				//$("#fill_opacity").html("100 %"); // remove fill opacity label (wise4)
+			}
+		}
+		rectbox.setAttribute("fill", color);
 		updateToolButtonState();
+		updateToolbar();
+		$('#palette_holder').hide();
+	});
+	
+	// color picker Cancel button click (wise4) - close color picker
+	$('#palette_cancel').click(function(){
+		$('#palette_holder').hide();
 	});
 
 	// This is a common function used when a tool has been clicked (chosen)
@@ -1696,14 +1790,24 @@ function svg_edit_setup() {
 	// much simpler color picker, a la original #palette_holder (wise4)
 	$('#fill_color').click(function(){
 		//colorPicker($(this));
-		$('#palette_holder').toggle();
+		picker = "fill";
+		var color = svgCanvas.getFillColor();
+		$('#palette_preview').css({'background-color': color});
+		var pos = $('#fill_color').position();
+		$('#palette_holder').css({'left': pos.left+12, 'top': pos.top-292});
+		$('#palette_holder').show();
 		updateToolButtonState();
 	});
 
 	// much simpler color picker, a la original #palette_holder (wise4)
 	$('#stroke_color').click(function(){
 		//colorPicker($(this));
-		$('#palette_holder').toggle();
+		picker="stroke";
+		var color = svgCanvas.getStrokeColor();
+		$('#palette_preview').css({'background-color': color});
+		var pos = $('#stroke_color').position();
+		$('#palette_holder').css({'left': pos.left+12, 'top': pos.top-292});
+		$('#palette_holder').show();
 		updateToolButtonState();
 	});
 
@@ -1846,6 +1950,10 @@ function svg_edit_setup() {
 			sidedrag = -1;
 			sidedragging = false;
 		});
+	
+	// Hide stamp selector when canvas is clicked (wise4)
+	$('#svgcanvas').mousedown(function(){$("#tools_stamps").hide();});
+	
 	$('#svg_editor')
 		.mouseup(function(){sidedrag=-1;})
 		.mouseout(function(evt){
@@ -2527,10 +2635,12 @@ $(function() {
 			
 			svgCanvas : null,
 			teacherAnnotation:"",			
-			defaultImage:"",
-
-			// array to hold stamp paths
-			stamps : [],
+			defaultImage:"", // var to hold starting image
+			stamps : [], // array to hold stamp paths
+			snapshots_active : false, // var to specify whether snapshots are active
+			snapshots : [], // array to hold snapshot images
+			note_active: false, // var to specify whether student annotations/notes are active
+			note : null, // var to hold annotation/note text
 
 			init: function(jsonURL) {
 				this.svgCanvas = svg_edit_setup(); // create new svg canvas
@@ -2547,7 +2657,14 @@ $(function() {
 						for (var item in images) {
 							//context.stamps.push(images[item].uri);
 							context.stamps.push(images[item]);
-						};			
+						};
+						context.snapshots_active = data.snapshots_active;
+						var snapshots = data.snapshots;
+						for (var item in snapshots) {
+							context.snapshots.push(snapshots[item]);
+						};
+						context.note_active = data.note_active;
+						context.note = data.note;
 						context.defaultImage = data.svg_text;				
 						 var myDataService = new VleDS(vle);
 					 	   // or var myDataService = new DSSService(read,write);
@@ -2611,8 +2728,18 @@ $(function() {
 					} else if (context.defaultImage){ // if no previous work, load default (starting) drawing
 						context.svgCanvas.setSvgString(context.defaultImage);
 					}
-					context.initStamps(context.stamps, context);
-			
+					
+					if(context.snapshots_active){
+						$('#sidepanels').show();
+						context.initSnapshots(context.snapshots, context); // initiate snapshots
+					}
+					
+					if(context.note_active){
+						$('#notepanel').show();
+						context.initNote(context.note, context); // initiate student note/annotation
+					}
+					
+					context.initStamps(context.stamps, context); // initiate stamps
 			},
 
 			saveToVLE: function() {
@@ -2658,6 +2785,14 @@ $(function() {
 				} else {
 					$('#tool_image').hide(); // if no stamps are defined, hide stamp tool button
 				}
-			}		
+			},
+			
+			// populate snapshots
+			intiSnapshots : function(snapshots, context) {
+			},
+			
+			// populate student annotations/notes 
+			initNote : function(note, context) {
+			}
 		};
 })();
