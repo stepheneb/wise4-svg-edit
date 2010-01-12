@@ -2378,7 +2378,10 @@ function svg_edit_setup() {
 	}
 	
 	// set starting resolution (centers canvas)
-	setResolution(600,450); // edit for wise4
+	setResolution(600,450); // edited for wise4
+	
+	// make note panel draggable (wise4)
+	$('#descriptionpanel').draggable({ containment: 'window' });
 	
 //	var revnums = "svg-editor.js ($Rev: 1153 $) ";
 //	revnums += svgCanvas.getVersion();
@@ -2595,7 +2598,7 @@ $(function() {
 	  VleDS = function(_vle){
 	    this.data = "";
 	    this.annotations = "";
-	    this.vle = _vle
+	    this.vle = _vle;
 	    this.vleNode=_vle.getCurrentNode();
 	  };
 
@@ -2637,10 +2640,11 @@ $(function() {
 			teacherAnnotation:"",			
 			defaultImage:"", // var to hold starting image
 			stamps : [], // array to hold stamp paths
-			snapshots_active : false, // var to specify whether snapshots are active
+			snapshotsActive : false, // var to specify whether snapshots are active
 			snapshots : [], // array to hold snapshot images
-			note_active: false, // var to specify whether student annotations/notes are active
-			note : null, // var to hold annotation/note text
+			descriptionActive: false, // var to specify whether student annotation/description is active
+			description : null, // var to hold annotation/description text
+			defaultDescription:"", //var to hold starting description text
 
 			init: function(jsonURL) {
 				this.svgCanvas = svg_edit_setup(); // create new svg canvas
@@ -2658,13 +2662,9 @@ $(function() {
 							//context.stamps.push(images[item].uri);
 							context.stamps.push(images[item]);
 						};
-						context.snapshots_active = data.snapshots_active;
-						var snapshots = data.snapshots;
-						for (var item in snapshots) {
-							context.snapshots.push(snapshots[item]);
-						};
-						context.note_active = data.note_active;
-						context.note = data.note;
+						context.snapshotsActive = data.snapshots_active;
+						context.descriptionActive = data.description_active;
+						context.defaultDescription = data.description_default;
 						context.defaultImage = data.svg_text;				
 						 var myDataService = new VleDS(vle);
 					 	   // or var myDataService = new DSSService(read,write);
@@ -2729,17 +2729,7 @@ $(function() {
 						context.svgCanvas.setSvgString(context.defaultImage);
 					}
 					
-					if(context.snapshots_active){
-						$('#sidepanels').show();
-						context.initSnapshots(context.snapshots, context); // initiate snapshots
-					}
-					
-					if(context.note_active){
-						$('#notepanel').show();
-						context.initNote(context.note, context); // initiate student note/annotation
-					}
-					
-					context.initStamps(context.stamps, context); // initiate stamps
+					context.initDisplay(context); // initiate stamps, description, snapshots
 			},
 
 			saveToVLE: function() {
@@ -2757,14 +2747,65 @@ $(function() {
 			},				
 			
 			// populate tools_stamps div and svgCanvas object with stamp images (wise4)
-			initStamps : function(stamps, context) {
-				if(stamps.length > 0){
+			initDisplay : function(context) {
+				// initiate description
+				if(context.descriptionActive){
+					// TODO: add vle check for saved description logic
+					if (context.defaultDescription){
+						context.description = context.defaultDescription;
+					}
+					
+					$('#tool_description').attr("style","display:inline");
+					$('.tool_description').click(function(){
+						$('#description_commit').attr("disabled", "disabled");
+						$('#description_close').attr("disabled", "disabled");
+						$('#description_content').val(context.description);
+						var height = $('#descriptionpanel').height();
+						$('#descriptionpanel').css({top: $(window).height()/2-height/2});
+						$('#descriptionpanel').toggle();
+						// TODO: populate note text
+					});
+					
+					// Save description text (wise4)
+					$('#description_commit').click(function(){
+						// TODO: add vle saving logic
+						var value = $('#description_content').val();
+						context.description = value;
+						$(this).attr("disabled", "disabled");
+					});
+					
+					// Save description text and close dialogue (wise4)
+					$('#description_close').click(function(){
+						// TODO: add saving logic
+						var value = $('#description_content').val();
+						context.description = value;
+						$('#descriptionpanel').hide();
+					});
+					
+					$('#description_content').keyup(function(){
+						$('#description_commit').removeAttr("disabled");
+						$('#description_close').removeAttr("disabled");
+					});
+					
+					$('#close_description').click(function(){
+						$('#descriptionpanel').hide();
+					});
+				}
+				
+				//initiate snapshots
+				if(context.snapshotsActive){
+					$('#tool_snapshot').attr("style","display:inline");
+					
+				}
+				
+				//initiate stamps
+				if(context.stamps.length > 0){
 					//$('#tool_stamp').show(); // show stamp tool button
-					this.svgCanvas.setStampImages(this.stamps);
+					this.svgCanvas.setStampImages(context.stamps);
 					var stamptxt = "";
-					for (var i in this.stamps){
+					for (var i in context.stamps){
 						var num = i*1 + 1;
-						stamptxt += "<img id='" + i + "' class='tool_image' title='" + stamps[i].title + "' src=" + stamps[i].uri + " alt='Stamp " + num + "' height='" + stamps[i].height + "' width= '" + stamps[i].width + "'></div>";
+						stamptxt += "<img id='" + i + "' class='tool_image' title='" + context.stamps[i].title + "' src=" + context.stamps[i].uri + " alt='Stamp " + num + "' height='" + context.stamps[i].height + "' width= '" + context.stamps[i].width + "'></div>";
 					}
 					$('#tools_stamps').append(stamptxt);
 					// set first image as default (selected)
@@ -2785,14 +2826,7 @@ $(function() {
 				} else {
 					$('#tool_image').hide(); // if no stamps are defined, hide stamp tool button
 				}
-			},
-			
-			// populate snapshots
-			intiSnapshots : function(snapshots, context) {
-			},
-			
-			// populate student annotations/notes 
-			initNote : function(note, context) {
 			}
+				
 		};
 })();

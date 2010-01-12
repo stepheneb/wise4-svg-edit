@@ -676,8 +676,7 @@ span.zoom_tool {
 }
 
 #svg_editor .tool_button:hover, 
-#svg_editor .push_button:hover,
-#svg_editor .tool_image:hover /*wise4*/ {
+#svg_editor .push_button:hover {
 	background-color: #FFF;
 }
 
@@ -694,6 +693,11 @@ span.zoom_tool {
 	cursor: pointer !important;
 	margin:4px;
 	padding:4px;
+}
+
+/*wise4*/
+#svg_editor #tools_stamps .tool_image:hover {
+	background-color:#fff;
 }
 
 /*wise4*/
@@ -720,7 +724,7 @@ span.zoom_tool {
 	right: 2px;
 	bottom: 2px;*/
 	margin-left:32px;
-	height: 60px;
+	/*height: 60px;*/
 	padding:2px;
 }
 
@@ -742,12 +746,47 @@ span.zoom_tool {
 	float: left;
 }
 
+/*wise4*/
 #svg_editor #tools_bottom_3 {
+	/*float:right;*/
+	text-align: right;
+	margin-right:2px;
 }
 
+/*wise4*/
+#svg_editor #tools_bottom_3 div {
+	padding:2px;
+	display:inline;
+	display:none;
+}
+
+/*wise4*/
+#svg_editor #tools_bottom_3 div a {
+	text-decoration:underline;
+}
+
+/*wise4*/
+#svg_editor #tools_bottom_3 img {
+	vertical-align:middle;
+	height:24px;
+	width:24px;
+}
+
+/*wise4*/
+#svg_editor .tool_description, #svg_editor .tool_snapshot {
+	cursor:pointer;
+}
+
+/*wise4*/
 #svg_editor #copyright {
 	text-align: right;
+	margin-top:20px;
+	margin-right:2px;
 }
+
+/*#svg_editor #copyright {
+	text-align: right;
+}*/
 
 #svg_source_editor {
 	display: none;
@@ -1026,20 +1065,80 @@ button#tool_docprops_cancel {
 	height: 24px;
 }
 
+/* Note/Description panel (wise4) 
+-----------------------------------------*/
+#svg_editor #descriptionpanel {
+	padding:10px;
+	background-color:#333;
+	position:absolute;
+	top:32%;
+	left:8%;
+	width:84%;
+	border:1px solid #777;
+	border-radius:5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-box-shadow: 0px 0px 6px #666;
+	-webkit-box-shadow: 0px 0px 6px #666;
+	box-shadow: 0px 0px 6px #666;
+	display:none;
+}
+
+#svg_editor #descriptionpanel h3 {
+	float:left;
+	margin-top:0;
+	color:#FFFFFF;
+}
+
+#svg_editor #descriptionpanel #close_button {
+	text-align:right;
+	font-size:1.3em;	
+}
+
+#svg_editor #descriptionpanel #close_button a {
+	padding:.2em;
+	color:#ccc;
+}
+
+#svg_editor #description_header {
+	cursor:pointer;
+}
+
+#svg_editor #description_content {
+	padding:5px;
+	background-color:#eee;
+	height:100px;
+	border:1px solid #aaa;
+	font-size:1.3em;
+	line-height:1.4em;
+	padding:0.4em;
+	width:98%;
+}
+
+#svg_editor #description_content:focus {
+	background-color:#FFFFFF;
+	border-color:#3CB371;
+}
+
+#svg_editor #description_buttons {
+	text-align:center;
+	padding-top:10px;
+}
+
+/* wise4 */
+#svg_editor label {
+	margin-right:4px;
+}
+
 /* wise4 hidden toolbar items */
 #file_panel, #xy_panel, #image_panel, #circle_panel,
 #ellipse_panel, #line_panel, #tool_node_link,
 #layerpanel, #tool_fhrect, #tool_fhellipse,
-#stroke_style {
+#stroke_style, #zoom_panel {
 	display:none !important;
 }
 
 /* wise4 default hidden regions*/
 #sidepanels, #notepanel {
 	display:none;
-}
-
-/* wise4 */
-#svg_editor label {
-	margin-right:4px;
 }
