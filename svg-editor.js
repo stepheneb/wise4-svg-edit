@@ -1951,8 +1951,14 @@ function svg_edit_setup() {
 			sidedragging = false;
 		});
 	
-	// Hide stamp selector when canvas is clicked (wise4)
-	$('#svgcanvas').mousedown(function(){$("#tools_stamps").hide();});
+	// Canvas click actions (wise4)
+	$('#svgcanvas').mousedown(function(){
+		$("#tools_stamps").hide(); // hide stamp selector when canvas is clicked
+		if(svgCanvas.getMode()=='multiselect'){
+			$('#fill_opacity').html("");
+			$('#stroke_opacity').html("");
+		}
+	});
 	
 	$('#svg_editor')
 		.mouseup(function(){sidedrag=-1;})
@@ -2645,6 +2651,11 @@ $(function() {
 			descriptionActive: false, // var to specify whether student annotation/description is active
 			description : null, // var to hold annotation/description text
 			defaultDescription:"", //var to hold starting description text
+			studentData:{
+							"svgString": null,
+							"description": null,
+							"snapshots": null
+						},
 
 			init: function(jsonURL) {
 				this.svgCanvas = svg_edit_setup(); // create new svg canvas
@@ -2684,13 +2695,18 @@ $(function() {
 			
 			
 			loadCallback: function(text, context) {
-				
-				// get starting state json file
-				//$.getJSON("/vlewrapper/curriculum/wise35728/svgeditstep.json", function(data){
 					var annotationValue;
 					// check for previous work and load it
+					var data = null;
+					var svg;
 					if (text){
-						context.svgCanvas.setSvgString(text);
+						try{
+							data = JSON.parse(text);
+							svg = data.svgString;
+						} catch(err) {
+							svg = text;
+						}
+						context.svgCanvas.setSvgString(svg);
 
 						//check if annotations were retrieved
 						if(context.dataService.vle.annotations != null) {
@@ -2700,7 +2716,7 @@ $(function() {
 								var annotationValue = annotation.value;
 								//annotationValue = '<g><title>teacher</title><text xml:space="preserve" text-anchor="middle" font-family="serif" font-size="24" stroke-width="0" stroke="#000000" fill="#000000" id="svg_3" y="55.5" x="103">annotation</text></g>';
 								this.teacherAnnotation = annotationValue;
-								context.svgCanvas.setSvgString(text.replace("</svg>", this.teacherAnnotation + "</svg>"));
+								context.svgCanvas.setSvgString(svg.replace("</svg>", this.teacherAnnotation + "</svg>"));
 								context.svgCanvas.setCurrentLayer('Layer 1');
 							}
 						}
@@ -2711,7 +2727,7 @@ $(function() {
 							vle.annotations;
 							var annotationValue = annotation.value;
 							//annotationValue = '<g><title>teacher</title><text xml:space="preserve" text-anchor="middle" font-family="serif" font-size="24" stroke-width="0" stroke="#000000" fill="#000000" id="svg_3" y="55.5" x="103">annotation</text></g>';
-							context.svgCanvas.setSvgString(text.replace("</svg>", annotationValue + "</svg>"));
+							context.svgCanvas.setSvgString(svg.replace("</svg>", annotationValue + "</svg>"));
 							context.svgCanvas.setCurrentLayer('Layer 1');
 						};
 						//context.dataService.vle.connectionManager.request('GET', 3, 'http://localhost:8080/vlewrapper/vle/echo.html', {}, processGetDrawAnnotationResponse);
@@ -2729,57 +2745,68 @@ $(function() {
 						context.svgCanvas.setSvgString(context.defaultImage);
 					}
 					
-					context.initDisplay(context); // initiate stamps, description, snapshots
+					context.initDisplay(data,context); // initiate stamps, description, snapshots
 			},
 
 			saveToVLE: function() {
-				var svgStringToSave = this.svgCanvas.getSvgString();
+				//var svgStringToSave = this.svgCanvas.getSvgString();
 				// strip out annotations
 				if (this.teacherAnnotation != "") {
 					svgStringToSave = svgStringToSave.replace(this.teacherAnnotation, "");
 				}
-				
-				this.dataService.save(svgStringToSave);
+				this.studentData.svgString = this.svgCanvas.getSvgString();
+				this.studentData.description = this.description;
+				this.studentData.snapshots = this.snapshots;
+				var data = JSON.stringify(this.studentData);
+				//this.dataService.save(svgStringToSave);
+				this.dataService.save(data);
 			},
 		
 			load: function() {
 				this.dataService.load(this, this.loadCallback);	
 			},				
 			
-			// populate tools_stamps div and svgCanvas object with stamp images (wise4)
-			initDisplay : function(context) {
-				// initiate description
+			// populate stamp images, description/annotation text, and snapshots (wise4)
+			initDisplay : function(data,context) {
+				// initiate description/annotation
 				if(context.descriptionActive){
 					// TODO: add vle check for saved description logic
-					if (context.defaultDescription){
+					if (data){
+						context.description = data.description;
+					} else if (context.defaultDescription){
 						context.description = context.defaultDescription;
 					}
 					
-					$('#tool_description').attr("style","display:inline");
+					// Show description panel on link click
 					$('.tool_description').click(function(){
-						$('#description_commit').attr("disabled", "disabled");
-						$('#description_close').attr("disabled", "disabled");
-						$('#description_content').val(context.description);
-						var height = $('#descriptionpanel').height();
-						$('#descriptionpanel').css({top: $(window).height()/2-height/2});
-						$('#descriptionpanel').toggle();
-						// TODO: populate note text
+						if (!$('#descriptionpanel').is(':visible')){ // prevent text from being overridden if panel is already visible
+							$('#description_commit').attr("disabled", "disabled");
+							$('#description_close').attr("disabled", "disabled");
+							$('#description_content').val(context.description); // populate note text
+							// center panel in window
+							var height = $('#descriptionpanel').height();
+							var width = $('#descriptionpanel').width();
+							$('#descriptionpanel').css({top: $(window).height()/2-height/2, left: $(window).width()/2-width/2});
+							$('#descriptionpanel').show(); // show description panel
+						}
 					});
 					
-					// Save description text (wise4)
+					// Save description text
 					$('#description_commit').click(function(){
-						// TODO: add vle saving logic
 						var value = $('#description_content').val();
 						context.description = value;
 						$(this).attr("disabled", "disabled");
+						context.saveToVLE(); // save changes to VLE
 					});
 					
-					// Save description text and close dialogue (wise4)
+					// Save description text and close dialogue
 					$('#description_close').click(function(){
-						// TODO: add saving logic
 						var value = $('#description_content').val();
 						context.description = value;
 						$('#descriptionpanel').hide();
+						context.saveToVLE(); // save changes to VLE
+						// TODO: add logic to check whether save button has been clicked already
+						// If it has, no need to resave the data to the vle
 					});
 					
 					$('#description_content').keyup(function(){
@@ -2790,6 +2817,8 @@ $(function() {
 					$('#close_description').click(function(){
 						$('#descriptionpanel').hide();
 					});
+					
+					$('#tool_description').attr("style","display:inline"); // show add description link
 				}
 				
 				//initiate snapshots
@@ -2800,7 +2829,6 @@ $(function() {
 				
 				//initiate stamps
 				if(context.stamps.length > 0){
-					//$('#tool_stamp').show(); // show stamp tool button
 					this.svgCanvas.setStampImages(context.stamps);
 					var stamptxt = "";
 					for (var i in context.stamps){
@@ -2823,6 +2851,7 @@ $(function() {
 						});
 						$('#tools_stamps').fadeOut("slow");
 					});
+					//$('#tool_image').show(); // show stamp tool button
 				} else {
 					$('#tool_image').hide(); // if no stamps are defined, hide stamp tool button
 				}

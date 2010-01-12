@@ -1082,6 +1082,7 @@ button#tool_docprops_cancel {
 	-webkit-box-shadow: 0px 0px 6px #666;
 	box-shadow: 0px 0px 6px #666;
 	display:none;
+	z-index:999;
 }
 
 #svg_editor #descriptionpanel h3 {
@@ -1098,10 +1099,11 @@ button#tool_docprops_cancel {
 #svg_editor #descriptionpanel #close_button a {
 	padding:.2em;
 	color:#ccc;
+	cursor:pointer;
 }
 
 #svg_editor #description_header {
-	cursor:pointer;
+	cursor:move;
 }
 
 #svg_editor #description_content {
