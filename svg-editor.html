@@ -4,20 +4,20 @@
 <head>
 <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
-<link rel="icon" type="image/png" href="images/logo.png">
-<link rel="stylesheet" href="jgraduate/css/jPicker-1.0.9.css" type="text/css"/>
-<link rel="stylesheet" href="jgraduate/css/jGraduate-0.2.0.css" type="text/css"/>
-<link rel="stylesheet" href="svg-editor.css" type="text/css"/>
-<link rel="stylesheet" href="spinbtn/JQuerySpinBtn.css" type="text/css"/>
+<link rel="icon" type="image/png" href="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/logo.png">
+<link rel="stylesheet" href="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/jgraduate/css/jPicker-1.0.9.css" type="text/css"/>
+<link rel="stylesheet" href="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/jgraduate/css/jGraduate-0.2.0.css" type="text/css"/>
+<link rel="stylesheet" href="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/svg-editor.css" type="text/css"/>
+<link rel="stylesheet" href="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/spinbtn/JQuerySpinBtn.css" type="text/css"/>
 <!-- Development version of script tags: -->
-<script type="text/javascript" src="jquery.js"></script>
-<script type="text/javascript" src="js-hotkeys/jquery.hotkeys.min.js"></script>
-<script type="text/javascript" src="jgraduate/jquery.jgraduate.js"></script>
-<script type="text/javascript" src="svgicons/jquery.svgicons.js"></script>
-<script type="text/javascript" src="spinbtn/JQuerySpinBtn.js"></script>
-<script type="text/javascript" src="svgcanvas.js"></script>
-<script type="text/javascript" src="svg-editor.js"></script>
-<script type="text/javascript" src="locale/locale.js"></script>
+<script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/jquery.js"></script>
+<script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/js-hotkeys/jquery.hotkeys.min.js"></script>
+<script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/jgraduate/jquery.jgraduate.js"></script>
+<script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/svgicons/jquery.svgicons.js"></script>
+<script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/spinbtn/JQuerySpinBtn.js"></script>
+<script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/svgcanvas.js"></script>
+<script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/svg-editor.js"></script>
+<script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/locale/locale.js"></script>
 
 <!-- Release version of script tags: >
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
@@ -30,8 +30,8 @@ script type="text/javascript" src="locale/locale.min.js"></script-->
 
 
 <!-- always minified scripts -->
-<script type="text/javascript" src="jquery-ui/jquery-ui-1.7.2.custom.min.js"></script>
-<script type="text/javascript" src="jgraduate/jpicker-1.0.9.min.js"></script>
+<script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/jquery-ui/jquery-ui-1.7.2.custom.min.js"></script>
+<script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/jgraduate/jpicker-1.0.9.min.js"></script>
 
 <!-- feeds -->
 <link rel="alternate" type="application/atom+xml" title="SVG-edit General Discussion" href="http://groups.google.com/group/svg-edit/feed/atom_v1_0_msgs.xml" />
@@ -41,38 +41,18 @@ script type="text/javascript" src="locale/locale.min.js"></script-->
 <title>SVG-edit demo</title>
 </head>
 <body>
+<script type="text/javascript">
+	var svgeditor;
+	var myDataService;
+	$(document).ready(function() {
+	  svgeditor = new SVGEditor("assets/svgeditstep.json");
+ 	});
 
+	onExit = function () {
+		var svgString = svgeditor.saveToVLE();
+	};
+</script>
 <div id="svg_editor">
-
-<div id="workarea">
-<style id="styleoverrides" type="text/css" media="screen" scoped="scoped"></style>
-<div id="svgcanvas"></div>
-</div>
-
-<div id="sidepanels">
-	<div id="layerpanel">
-		<h3 id="layersLabel">Layers</h3>
-		<fieldset id="layerbuttons">
-			<div id="layer_new" class="layer_button"  title="New Layer"></div>
-			<div id="layer_delete" class="layer_button"  title="Delete Layer"></div>
-			<div id="layer_rename" class="layer_button"  title="Rename Layer"></div>
-			<div id="layer_up" class="layer_button"  title="Move Layer Up"></div>
-			<div id="layer_down" class="layer_button"  title="Move Layer Down"></div>
-		</fieldset>
-		
-		<table id="layerlist">
-			<tr class="layer">
-				<td class="layervis"></td>
-				<td class="layername">Layer 1</td>
-			</tr>
-		</table>
-		<span id="selLayerLabel">Move elements to:</span>
-		<select id="selLayerNames" title="Move selected elements to a different layer" disabled="disabled">
-			<option selected="selected" value="layer1">Layer 1</option>
-		</select>
-	</div>
-	<div id="sidepanel_handle" onselectstart="return false;" title="Drag left/right to resize side panel [X]">L a y e r s</div>
-</div>
 
 <div id="logo">
 	<a href="http://svg-edit.googlecode.com/" target="_blank" title="SVG-edit Home Page">
@@ -93,17 +73,17 @@ script type="text/javascript" src="locale/locale.min.js"></script-->
 
     <!-- History buttons -->
 	<div id="history_panel">
-		<div class="tool_sep"></div>
-		<div class="push_button tool_button_disabled" id="tool_undo" title="Undo [Z]"></div>
-		<div class="push_button tool_button_disabled" id="tool_redo" title="Redo [Y]"></div>
+		<!--<div class="tool_sep"></div>-->
+		<div class="push_button tool_button_disabled" id="tool_undo" title="Undo"></div>
+		<div class="push_button tool_button_disabled" id="tool_redo" title="Redo"></div>
 	</div>
 	
 	<!-- Buttons when a single element is selected -->
 	<div id="selected_panel">
 		<div class="toolset">
 			<div class="tool_sep"></div>
-			<div class="push_button" id="tool_clone" title="Clone Element [C]"></div>
-			<div class="push_button" id="tool_delete" title="Delete Element [Delete/Backspace]"></div>
+			<div class="push_button" id="tool_clone" title="Copy Object"></div>
+			<div class="push_button" id="tool_delete" title="Delete Object"></div>
 			<div class="tool_sep"></div>
 			<div class="push_button" id="tool_move_top" title="Move to Top [Shift+Up]"></div>
 			<div class="push_button" id="tool_move_bottom" title="Move to Bottom [Shift+Down]"></div>
@@ -112,7 +92,7 @@ script type="text/javascript" src="locale/locale.min.js"></script-->
 			<div class="tool_sep"></div>
 		</div>
 		<div class="toolset">
-			<label id="group_opacityLabel" class="selected_tool" for="group_opacity">opac:</label>
+			<label id="group_opacityLabel" class="selected_tool" for="group_opacity">Opacity: </label>
 			<input id="group_opacity" class="selected_tool" title="Change selected item opacity" size="3" value="100" type="text"/>
 			<div id="opacity_dropdown" class="dropdown">
 				<button></button>
@@ -128,10 +108,10 @@ script type="text/javascript" src="locale/locale.min.js"></script-->
 			</div>
 		</div>
 		<div class="toolset">
-			<label id="angleLabel" class="selected_tool">angle:</label>
+			<label id="angleLabel" class="selected_tool">Rotate:</label>
 			<input id="angle" class="selected_tool" title="Change rotation angle" size="2" value="0" type="text"/>
 		</div>
-		<div id="xy_panel" class="toolset">
+		<div id="xy_panel" class="toolset" style="display:none;">
 			<label class="selected_tool">x:</label>
 			<input id="selected_x" class="selected_tool attr_changer" title="Change X coordinate" size="3" data-attr="x"/>
 			<label class="selected_tool">y:</label>
@@ -142,41 +122,42 @@ script type="text/javascript" src="locale/locale.min.js"></script-->
 	<!-- Buttons when multiple elements are selected -->
 	<div id="multiselected_panel">
 		<div class="tool_sep"></div>
-		<div class="push_button" id="tool_clone_multi" title="Clone Elements [C]"></div>
-		<div class="push_button" id="tool_delete_multi" title="Delete Selected Elements [Delete/Backspace]"></div>
+		<div class="push_button" id="tool_clone_multi" title="Copy Selected Objects"></div>
+		<div class="push_button" id="tool_delete_multi" title="Delete Selected Objects"></div>
 		<div class="tool_sep"></div>
-		<div class="push_button" id="tool_group" title="Group Elements [G]"></div>
+		<div class="push_button" id="tool_group" title="Group Elements"></div>
+		<div class="tool_sep"></div>
+		<label id="alignLabel" class="selected_tool">Align Objects:</label>
 		<div class="push_button" id="tool_alignleft" title="Align Left"></div>
 		<div class="push_button" id="tool_aligncenter" title="Align Center"></div>
 		<div class="push_button" id="tool_alignright" title="Align Right"></div>
 		<div class="push_button" id="tool_aligntop" title="Align Top"></div>
 		<div class="push_button" id="tool_alignmiddle" title="Align Middle"></div>
 		<div class="push_button" id="tool_alignbottom" title="Align Bottom"></div>
-		<span id="relativeToLabel" class="selected_tool">relative to:</span>
+		<label id="relativeToLabel" class="selected_tool">Relative to:</label>
 		<select id="align_relative_to" class="selected_tool" title="Align relative to ...">
-		<option id="selected_objects" value="selected">selected objects</option>
-		<option id="largest_object" value="largest">largest object</option>
-		<option id="smallest_object" value="smallest">smallest object</option>
-		<option id="page" value="page">page</option>
+		<option id="selected_objects" value="selected">Selection</option>
+		<!--<option id="largest_object" value="largest">Largest Object</option>
+		<option id="smallest_object" value="smallest">Smallest Object</option>-->
+		<option id="page" value="page">Page</option>
 		</select>
-		<div class="tool_sep"></div>
 
 	</div>
 
 	<div id="g_panel">
 		<div class="tool_sep"></div>
-		<div class="push_button" id="tool_ungroup" title="Ungroup Elements [G]"></div>
+		<div class="push_button" id="tool_ungroup" title="Ungroup Elements"></div>
 	</div>
 
 	<div id="rect_panel">
-		<div class="toolset">
+		<div class="toolset" style="display:none;">
 			<label id="rwidthLabel" class="rect_tool">width:</label>
 			<input id="rect_width" class="rect_tool attr_changer" title="Change rectangle width" size="3" data-attr="width"/>
 			<label id="rheightLabel" class="rect_tool">height:</label>
 			<input id="rect_height" class="rect_tool attr_changer" title="Change rectangle height" size="3" data-attr="height"/>
 		</div>
 		<div class="toolset">
-			<label id="cornerRadiusLabel" class="rect_tool">Corner Radius:</label>
+			<label id="cornerRadiusLabel" class="rect_tool">Round Corners:</label>
 			<input id="rect_rx" size="3" value="0" class="rect_tool" type="text" title="Change Rectangle Corner Radius" data-attr="Corner Radius"/>
 		</div>	
 	</div>
@@ -240,10 +221,10 @@ script type="text/javascript" src="locale/locale.min.js"></script-->
 	</div>
 
 	<div id="text_panel">
-		<div class="tool_button" id="tool_bold" title="Bold Text [B]"><span></span>B</div>
-		<div class="tool_button" id="tool_italic" title="Italic Text [I]"><span></span>i</div>
+		<div class="tool_button" id="tool_bold" title="Bold Text"><span></span>B</div>
+		<div class="tool_button" id="tool_italic" title="Italic Text"><span></span>i</div>
 		
-		<div class="toolset">
+		<div class="toolset" style="display:none;">
 			<input id="font_family" class="text_tool" type="text" title="Change Font Family" size="12"/>
 			<div id="font_family_dropdown" class="dropdown">
 				<button></button>
@@ -258,43 +239,80 @@ script type="text/javascript" src="locale/locale.min.js"></script-->
 		</div>
 
 		<div class="toolset">
-			<label id="font_sizeLabel" class="text_tool" for="font_size">size:</label>
+			<label id="font_sizeLabel" class="text_tool" for="font_size">Size: </label>
 			<input id="font_size" class="text_tool" title="Change Font Size" size="3" value="0" type="text"/>
+		</div><br />
+		<div class="toolset">
+			<label id="textLabel" class="text_tool" for="text">Enter Text Here: </label>
+			<input id="text" class="text_tool" type="text" title="Change text contents" size="35"/>
 		</div>
-		<input id="text" class="text_tool" type="text" title="Change text contents" size="35"/>
 	</div>
 	
 	<div id="path_node_panel">
 		<div class="tool_sep"></div>
+		<div class="tool_button" id="tool_node_clone" title="Copy Object"></div>
+		<div class="tool_button" id="tool_node_delete" title="Delete Object"></div>
 		<div class="tool_button" id="tool_node_link" title="Link Control Points"></div>
 		<div class="tool_sep"></div>
-		<label class="path_node_tool">x:</label>
-		<input id="path_node_x" class="path_node_tool attr_changer" title="Change node's x coordinate" size="3" data-attr="x"/>
-		<label class="path_node_tool">y:</label>
-		<input id="path_node_y" class="path_node_tool attr_changer" title="Change node's y coordinate" size="3" data-attr="y"/>
+		<label class="path_node_tool" style="display:none;">x:</label>
+		<input id="path_node_x" class="path_node_tool attr_changer" style="display:none;" title="Change node's x coordinate" size="3" data-attr="x"/>
+		<label class="path_node_tool" style="display:none;">y:</label>
+		<input id="path_node_y" class="path_node_tool attr_changer" style="display:none;" title="Change node's y coordinate" size="3" data-attr="y"/>
+		<label class="path_node_tool">Line Segment Type:</label>
 		<select id="seg_type" class="path_node_tool" title="Change Segment type">
 			<option id="straight_segments" selected="selected" value="4">Straight</option>
 			<option id="curve_segments" value="6">Curve</option>
 		</select>
-		<div class="tool_button" id="tool_node_clone" title="Clone Node"></div>
-		<div class="tool_button" id="tool_node_delete" title="Delete Node"></div>
 	</div>
 	
 </div> <!-- tools_top -->
 
-<div id="tools_left" class="tools_panel">
-	<div class="tool_button_current" id="tool_select" title="Select Tool [1]"></div>
-	<div class="tool_button" id="tool_fhpath" title="Pencil Tool [2]"></div>
-	<div class="tool_button" id="tool_line" title="Line Tool [3]"></div>
-	<div class="tool_button" id="tools_rect_show" title="Square/Rect Tool [4/Shift+4]"></div>
-	<div class="flyout_arrow_horiz"></div>
-	<div class="tool_button" id="tools_ellipse_show" title="Ellipse/Circle Tool [5/Shift+5]"></div>
-	<div class="flyout_arrow_horiz"></div>
-	<div class="tool_button" id="tool_path" title="Path Tool [7]"></div>
-	<div class="tool_button" id="tool_text" title="Text Tool [6]"></div>
-	<div class="tool_button" id="tool_image" title="Image Tool [8]"></div>
-	<div class="tool_button" id="tool_zoom" title="Zoom Tool [Ctrl+Up/Down]"></div>
-</div> <!-- tools_left -->
+<div id="work_wrapper">
+	<div id="tools_left" class="tools_panel column">
+		<div class="tool_button_current" id="tool_select" title="Select Tool"></div>
+		<div class="tool_button" id="tool_fhpath" title="Pencil Tool"></div>
+		<div class="tool_button" id="tool_line" title="Line Tool"></div>
+		<div class="tool_button" id="tools_rect_show" title="Rectangle/Square Tool"></div>
+		<div class="flyout_arrow_horiz"></div>
+		<div class="tool_button" id="tools_ellipse_show" title="Circle/Oval Tool"></div>
+		<div class="flyout_arrow_horiz"></div>
+		<div class="tool_button" id="tool_path" title="Polygon Tool"></div>
+		<div class="tool_button" id="tool_text" title="Text Tool"></div>
+		<div class="tool_button" id="tool_image" title="Stamp Tool"></div>
+		<!--<div class="tool_button" id="tool_zoom" title="Zoom Tool [Ctrl+Up/Down]"></div>-->
+	</div> <!-- tools_left -->
+	
+	<div id="sidepanels" class="column">
+		<div id="layerpanel">
+			<h3 id="layersLabel">Layers</h3>
+			<fieldset id="layerbuttons">
+				<div id="layer_new" class="layer_button"  title="New Layer"></div>
+				<div id="layer_delete" class="layer_button"  title="Delete Layer"></div>
+				<div id="layer_rename" class="layer_button"  title="Rename Layer"></div>
+				<div id="layer_up" class="layer_button"  title="Move Layer Up"></div>
+				<div id="layer_down" class="layer_button"  title="Move Layer Down"></div>
+			</fieldset>
+			
+			<table id="layerlist">
+				<tr class="layer">
+					<td class="layervis"></td>
+					<td class="layername">Layer 1</td>
+				</tr>
+			</table>
+			<span id="selLayerLabel">Move elements to:</span>
+			<select id="selLayerNames" title="Move selected elements to a different layer" disabled="disabled">
+				<option selected="selected" value="layer1">Layer 1</option>
+			</select>
+		</div>
+		<div id="sidepanel_handle" onselectstart="return false;" title="Open Snapshots">S n a p s h o t s</div>
+	</div>
+	
+	<div id="workarea" class="column">
+		<style id="styleoverrides" type="text/css" media="screen" scoped="scoped"></style>
+		<div id="svgcanvas"></div>
+	</div>
+
+</div> <!-- work_wrapper -->
 
 <div id="tools_bottom" class="tools_panel">
 
@@ -324,14 +342,16 @@ script type="text/javascript" src="locale/locale.min.js"></script-->
 	<div id="tools_bottom_2">
 		<table>
 		<tr>
-			<td id="fill_tool_bottom" class="label">fill:</td>
-			<td><div id="fill_bg"></div><div id="fill_color" class="color_block"  title="Change fill color"></div></td>
-			<td colspan="3"><div id="fill_opacity" class="label">100%</div></td>
-		</tr><tr>
-			<td id="stroke_tool_bottom" class="label">stroke:</td>
-			<td><div id="stroke_bg"></div><div id="stroke_color" class="color_block" title="Change stroke color"></div></td>
-			<td><div id="stroke_opacity" class="label">100 %</div></td>
+			<td id="fill_tool_bottom" class="label">Fill Color:</td>
+			<td><div id="fill_bg"></div><div id="fill_color" name="fill" class="color_block"  title="Change fill color"></div></td>
+			<td colspan="3"><div id="fill_opacity" class="label"></div></td>
+		</tr>
+		<tr>
+			<td id="stroke_tool_bottom" class="label">Line Color:</td>
+			<td><div id="stroke_bg"></div><div id="stroke_color" name="stroke" class="color_block" title="Change stroke color"></div></td>
+			<td><div id="stroke_opacity" class="label"></div></td>
 			<td>
+				<label id="stroke_widthLabel">Thickness:</label>
 				<input id="stroke_width" title="Change stroke width" size="2" value="5" type="text" data-attr="Stroke Width"/>
 			</td>
 			<td>
@@ -348,9 +368,31 @@ script type="text/javascript" src="locale/locale.min.js"></script-->
 	</div>
 
 	<div id="tools_bottom_3">
-		<div id="palette_holder"><div id="palette" title="Click to change fill color, shift-click to change stroke color"></div></div>
+		<div id="tool_description">
+			<a class="label tool_description">Add Description</a>
+			<img class="tool_description"src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/document-properties.png" alt="icon" />
+		</div>
+		<div id="tool_snapshot">
+			<a class="label tool_snapshot">Take Snapshot</a>
+			<img class="tool_snapshot" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/snapshot.png" alt="icon" />
+		</div>
 	</div>
-	<div id="copyright">Powered by <a href="http://svg-edit.googlecode.com/" target="_blank">SVG-edit v2.5-preAlpha</a></div>
+	
+	<div id="copyright">Powered by <a href="http://svg-edit.googlecode.com/" target="_blank">SVG-edit v2.4-beta</a></div>
+</div> <!-- tools_bottom -->
+
+<div id="descriptionpanel">
+	<div id="description_wrapper">
+		<div id="description_header">
+			<h3>Add a Description to Your Drawing</h3>
+			<div id="close_button"><a id="close_description" title="Close">X</a></div>
+		</div>
+		<textarea id="description_content" rows="5"></textarea>
+		<div id="description_buttons">
+			<input type="button" id="description_commit" title="Save" value="Save Changes"/>
+			<input type="button" id="description_close" title="Save & Close" value=" Save & Close"/>
+		</div>
+	</div>
 </div>
 
 <!-- hidden divs -->
@@ -366,6 +408,18 @@ script type="text/javascript" src="locale/locale.min.js"></script-->
 	<div id="tool_ellipse" class="tool_flyout_button" title="Ellipse"></div>
 	<div id="tool_circle" class="tool_flyout_button" title="Circle"></div>
 	<div id="tool_fhellipse" class="tool_flyout_button" title="Free-Hand Ellipse"></div>
+</div>
+
+<div id="tools_stamps" class="tools_flyout">
+	<div class="tools_title">Choose a Stamp:</div>
+</div>
+
+<div id="palette_holder">
+	<div id="palette_preview">&nbsp;</div>
+	<input type="button" id="palette_commit" title="Change Color" value="OK"/>
+	<input type="button" id="palette_cancel" title="Cancel" value="Cancel"/>
+	<hr/>
+	<div id="palette" title="Click to change color"></div>
 </div>
 
 </div> <!-- svg_editor -->
