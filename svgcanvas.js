@@ -859,15 +859,15 @@ function BatchCommand(text) {
 	var idprefix = "svg_";
 	var svgdoc  = container.ownerDocument;
 	var svgroot = svgdoc.createElementNS(svgns, "svg");
-	svgroot.setAttribute("width", 640);
-	svgroot.setAttribute("height", 480);
+	svgroot.setAttribute("width", 600);
+	svgroot.setAttribute("height", 450);
 	svgroot.setAttribute("id", "svgroot");
 	svgroot.setAttribute("xmlns", svgns);
 	svgroot.setAttribute("xmlns:xlink", xlinkns);
 	container.appendChild(svgroot);
 	var svgcontent = svgdoc.createElementNS(svgns, "svg");
 	svgcontent.setAttribute('id', 'svgcontent');
-	svgcontent.setAttribute('viewBox', '0 0 640 480');
+	svgcontent.setAttribute('viewBox', '0 0 600 450');
 	svgcontent.setAttribute("xmlns", svgns);
 	svgcontent.setAttribute("xmlns:xlink", xlinkns);
 	svgroot.appendChild(svgcontent);
