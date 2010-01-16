@@ -57,3 +57,8 @@ var put_locale = function(svgCanvas, given_param){
 		svgCanvas.setLang(lang_param, js_strings);
 	},"json");
 };
+
+//used to notify scriptloader that this script has finished loading
+if(typeof eventManager != 'undefined'){
+	eventManager.fire('scriptLoaded', 'vle/node/draw/svg-edit-2.4rc1/locale/locale.js');
+};

@@ -5,34 +5,7 @@
 <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
 <link rel="icon" type="image/png" href="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/logo.png">
-<link rel="stylesheet" href="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/jgraduate/css/jPicker-1.0.9.css" type="text/css"/>
-<link rel="stylesheet" href="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/jgraduate/css/jGraduate-0.2.0.css" type="text/css"/>
-<link rel="stylesheet" href="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/svg-editor.css" type="text/css"/>
-<link rel="stylesheet" href="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/spinbtn/JQuerySpinBtn.css" type="text/css"/>
-<!-- Development version of script tags: -->
 <script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/jquery.js"></script>
-<script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/js-hotkeys/jquery.hotkeys.min.js"></script>
-<script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/jgraduate/jquery.jgraduate.js"></script>
-<script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/svgicons/jquery.svgicons.js"></script>
-<script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/spinbtn/JQuerySpinBtn.js"></script>
-<script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/svgcanvas.js"></script>
-<script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/svg-editor.js"></script>
-<script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/locale/locale.js"></script>
-
-<!-- Release version of script tags: >
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
-<script type="text/javascript" src="js-hotkeys/jquery.hotkeys-0.7.9.js"></script>
-<script type="text/javascript" src="jgraduate/jquery.jgraduate.min.js"></script>
-<script type="text/javascript" src="spinbtn/JQuerySpinBtn.min.js"></script>
-<script type="text/javascript" src="svgcanvas.min.js"></script>
-<script type="text/javascript" src="svg-editor.min.js"></script>
-script type="text/javascript" src="locale/locale.min.js"></script-->
-
-
-<!-- always minified scripts -->
-<script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/jquery-ui/jquery-ui-1.7.2.custom.min.js"></script>
-<script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/jgraduate/jpicker-1.0.9.min.js"></script>
-
 <!-- feeds -->
 <link rel="alternate" type="application/atom+xml" title="SVG-edit General Discussion" href="http://groups.google.com/group/svg-edit/feed/atom_v1_0_msgs.xml" />
 <link rel="alternate" type="application/atom+xml" title="SVG-edit Updates (Issues/Fixes/Commits)" href="http://code.google.com/feeds/p/svg-edit/updates/basic" />
@@ -42,15 +15,34 @@ script type="text/javascript" src="locale/locale.min.js"></script-->
 </head>
 <body>
 <script type="text/javascript">
+	/*
 	var svgeditor;
 	var myDataService;
 	$(document).ready(function() {
 	  svgeditor = new SVGEditor("assets/svgeditstep.json");
  	});
 
-	onExit = function () {
-		var svgString = svgeditor.saveToVLE();
+
+	*/
+
+    var svgdraw; // global variable so it can be accessed by other functions
+    
+    function loadContentAfterScriptsLoad(node){
+    	svgdraw = new SVGDRAW(node);
+    	//svgdraw.render();
+    };
+
+	function loadContent(node){
+		scriptloader.loadScripts('svgdraw', node.contentPanel.window.document, node.id, eventManager);
 	};
+
+	onExit = function () {
+		var svgString = svgdraw.saveToVLE();
+	};
+	
+    window.onload = function(){
+        eventManager.fire('pageRenderComplete', nodeId);
+    };
 </script>
 <div id="svg_editor">
 

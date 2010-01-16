@@ -252,3 +252,8 @@ $.fn.SpinButton = function(cfg){
 		return c;
 	}
 };
+
+//used to notify scriptloader that this script has finished loading
+if(typeof eventManager != 'undefined'){
+	eventManager.fire('scriptLoaded', 'vle/node/draw/svg-edit-2.4rc1/spinbtn/JQuerySpinBtn.js');
+};

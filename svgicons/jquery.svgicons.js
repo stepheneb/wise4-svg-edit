@@ -156,6 +156,7 @@ $(function() {
 				}
 			} else {
 				// check whether useFallback parameter was set to true (wise4)
+				
 				if (useFallbackImgs) {
 					$(setTimeout(function() {$(useFallback)},10)); // use fallback png icons
 				} else {
@@ -437,3 +438,8 @@ $(function() {
 	}
 	
 })(jQuery);
+
+//used to notify scriptloader that this script has finished loading
+if(typeof eventManager != 'undefined'){
+	eventManager.fire('scriptLoaded', 'vle/node/draw/svg-edit-2.4rc1/svgicons/jquery.svgicons.js');
+};
