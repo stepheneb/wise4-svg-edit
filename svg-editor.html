@@ -28,7 +28,9 @@
     var svgdraw; // global variable so it can be accessed by other functions
     
     function loadContentAfterScriptsLoad(node){
-    	svgdraw = new SVGDRAW(node);
+        if(svgdraw == null) {
+        	svgdraw = new SVGDRAW(node);    
+        }
     	//svgdraw.render();
     };
 
