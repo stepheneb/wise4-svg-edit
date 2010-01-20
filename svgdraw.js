@@ -57,19 +57,18 @@ SVGDRAW.prototype.setDataService = function(dataService) {
 };
 
 
-SVGDRAW.prototype.loadCallback = function(text, context) {
+SVGDRAW.prototype.loadCallback = function(studentWorkJSON, context) {
 		var annotationValue;
 		// check for previous work and load it
 		var data = null;
-		var svg;
-		if (text){
+		var svgString;
+		if (studentWorkJSON){
 			try{
-				data = yui.JSON.parse(text);
-				svg = data.svgString;
+				svgString = studentWorkJSON.svgString;
 			} catch(err) {
-				svg = text;
+				svgString = studentWorkJSON;
 			}
-			context.svgCanvas.setSvgString(svg);
+			context.svgCanvas.setSvgString(svgString);
 
 			//check if annotations were retrieved
 			if(context.dataService.vle.annotations != null) {
@@ -79,7 +78,7 @@ SVGDRAW.prototype.loadCallback = function(text, context) {
 					var annotationValue = annotation.value;
 					//annotationValue = '<g><title>teacher</title><text xml:space="preserve" text-anchor="middle" font-family="serif" font-size="24" stroke-width="0" stroke="#000000" fill="#000000" id="svg_3" y="55.5" x="103">annotation</text></g>';
 					this.teacherAnnotation = annotationValue;
-					context.svgCanvas.setSvgString(svg.replace("</svg>", this.teacherAnnotation + "</svg>"));
+					context.svgCanvas.setSvgString(svgString.replace("</svg>", this.teacherAnnotation + "</svg>"));
 					context.svgCanvas.setCurrentLayer('Layer 1');
 				}
 			}
@@ -90,7 +89,7 @@ SVGDRAW.prototype.loadCallback = function(text, context) {
 				vle.annotations;
 				var annotationValue = annotation.value;
 				//annotationValue = '<g><title>teacher</title><text xml:space="preserve" text-anchor="middle" font-family="serif" font-size="24" stroke-width="0" stroke="#000000" fill="#000000" id="svg_3" y="55.5" x="103">annotation</text></g>';
-				context.svgCanvas.setSvgString(svg.replace("</svg>", annotationValue + "</svg>"));
+				context.svgCanvas.setSvgString(svgString.replace("</svg>", annotationValue + "</svg>"));
 				context.svgCanvas.setCurrentLayer('Layer 1');
 			};
 			//context.dataService.vle.connectionManager.request('GET', 3, 'http://localhost:8080/vlewrapper/vle/echo.html', {}, processGetDrawAnnotationResponse);
@@ -120,7 +119,7 @@ SVGDRAW.prototype.saveToVLE = function() {
 	this.studentData.svgString = this.svgCanvas.getSvgString();
 	this.studentData.description = this.description;
 	this.studentData.snapshots = this.snapshots;
-	var data = yui.JSON.stringify(this.studentData);
+	var data = this.studentData;
 	//this.dataService.save(svgStringToSave);
 	this.dataService.save(data);
 };
