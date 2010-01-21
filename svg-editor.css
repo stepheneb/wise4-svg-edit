@@ -133,6 +133,7 @@ body {
 	background-color: #A0A0A0;
 	border: 1px solid #808080;
 	overflow: auto;
+	height:460px;
 }
 /*#svg_editor div#workarea {
 	display: inline-block;
@@ -154,8 +155,9 @@ body {
 	bottom: 60px;*/
 	height:470px;
 	float:right;
-	width: 2px;
+	width: 150px;
 	z-index:999;
+	display:none;
 	/*border-color: #808080;
 	border-style: solid;
 	border-width: 1px;
@@ -174,6 +176,48 @@ body {
 	border-width: 1px;
 	border-left: none;
 }*/
+
+/* Snapshots Panel (wise4)
+ ------------------------------------- */
+#svg_editor #snapshotpanel {
+	background-color:#333333;
+	margin:0 5px;
+	padding:5px;
+	height:470px;
+	width:135px;
+	border:1px solid #777777;
+}
+
+#svg_editor #snapshot_header {
+	color:#FFFFFF;
+	height:20px;
+}
+
+#svg_editor #snapshot_header a {
+	font-size:.9em;
+}
+
+#svg_editor #snapshot_tools div {
+	display:inline;
+}
+
+#svg_editor #snapshots {
+	background-color:#FFFFFF;
+	margin:5px 0;
+	padding:5px;
+	height:434px;
+	border:1px solid #777777;
+}
+
+#svg_editor #snapshotpanel .label {
+	margin:0 2px;
+}
+
+#svg_editor #snapshotpanel h3 {
+	margin:0;
+	font-weight:normal;
+	float:left;
+}
 
 /* wise4 */
 #svg_editor #layerpanel {
@@ -210,8 +254,8 @@ body {
 	/*display: inline-block;
 	position: absolute;*/
 	background-color: #E8E8E8;
-	margin-left: 0px;
-	top: 38%;
+	/*top: 38%;*/
+	height:100%;
 	position:relative;
 	width: 1em;
 	padding: 5px 1px 5px 5px;
@@ -761,19 +805,23 @@ span.zoom_tool {
 }
 
 /*wise4*/
-#svg_editor #tools_bottom_3 div a {
+#svg_editor a {
 	text-decoration:underline;
 }
 
 /*wise4*/
-#svg_editor #tools_bottom_3 img {
+#svg_editor #tools_bottom_3 img, #svg_editor #snapshot_tools img {
 	vertical-align:middle;
 	height:24px;
-	width:24px;
 }
 
 /*wise4*/
-#svg_editor .tool_description, #svg_editor .tool_snapshot {
+#svg_editor #snapshot_tools img {
+	height:18px;
+}
+
+/*wise4*/
+#svg_editor .tool_description, #svg_editor .tool_snapshot, #svg_editor .snapshot_new {
 	cursor:pointer;
 }
 
@@ -1089,17 +1137,19 @@ button#tool_docprops_cancel {
 	float:left;
 	margin-top:0;
 	color:#FFFFFF;
+	font-weight:normal;
 }
 
-#svg_editor #descriptionpanel #close_button {
+#svg_editor .close_button {
 	text-align:right;
 	font-size:1.3em;	
 }
 
-#svg_editor #descriptionpanel #close_button a {
+#svg_editor .close_button a {
 	padding:.2em;
 	color:#ccc;
 	cursor:pointer;
+	text-decoration:none;
 }
 
 #svg_editor #description_header {

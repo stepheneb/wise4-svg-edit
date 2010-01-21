@@ -636,6 +636,48 @@ function svg_edit_setup() {
 		});
 	}
 	
+	// Snapshot click handler (wise4)
+	// toggles sidepanel and zooms image (hard-coded at 85% for now)
+	// TODO: figure out how to not zoom image if in full screen mode in wise4
+	$('.tool_snapshot').click(function(){
+		var zoom = svgCanvas.getZoom();
+		var w_area = $('#workarea');
+		
+		if(!$('#sidepanels').is(':visible')){
+			$('#sidepanels').show();
+			zoomChanged(window, {
+				width: 0,
+				height: 0,
+				x: (w_area[0].scrollLeft + w_area.width()/2)/zoom,
+				y: (w_area[0].scrollTop + w_area.height()/2)/zoom,
+				zoom: .85
+			});
+		} else {
+			$('#sidepanels').hide();
+			zoomChanged(window, {
+				width: 0,
+				height: 0,
+				x: (w_area[0].scrollLeft + w_area.width()/2)/zoom,
+				y: (w_area[0].scrollTop + w_area.height()/2)/zoom,
+				zoom: 1
+			});
+		}
+	});
+	
+	$('#close_snapshots').click(function(){
+		var zoom = svgCanvas.getZoom();
+		var w_area = $('#workarea');
+		
+		$('#sidepanels').hide();
+		zoomChanged(window, {
+			width: 0,
+			height: 0,
+			x: (w_area[0].scrollLeft + w_area.width()/2)/zoom,
+			y: (w_area[0].scrollTop + w_area.height()/2)/zoom,
+			zoom: 1
+		});
+	});
+	
 	var changeOpacity = function(ctl, val) {
 		if(val == null) val = ctl.value;
 		$('#group_opacity').val(val);
@@ -1118,7 +1160,7 @@ function svg_edit_setup() {
 		$.confirm(uiStrings.QwantToClear, function(ok) {
 			if(!ok) return;
 			svgCanvas.clear();
-			svgCanvas.setResolution(640, 480);
+			svgCanvas.setResolution(600, 450);
 			zoomImage();
 			populateLayers();
 			updateContextPanel();
@@ -1940,16 +1982,17 @@ function svg_edit_setup() {
 		});
 	});
 	
+	// Not using the handle for now (wise4)
 	var SIDEPANEL_MAXWIDTH = 300;
 	var SIDEPANEL_OPENWIDTH = 150;
 	var sidedrag = -1, sidedragging = false;
-	$('#sidepanel_handle')
+	/*$('#sidepanel_handle')
 		.mousedown(function(evt) {sidedrag = evt.pageX;})
 		.mouseup(function(evt) {
 			if (!sidedragging) toggleSidePanel();
 			sidedrag = -1;
 			sidedragging = false;
-		});
+		});*/
 	
 	// Canvas click actions (wise4)
 	$('#svgcanvas').mousedown(function(){
@@ -2247,7 +2290,7 @@ function svg_edit_setup() {
 			{sel:'#tools_ellipse_show', fn: clickEllipse, evt: 'click'},
 			{sel:'#tool_bold', fn: clickBold, evt: 'mousedown'},
 			{sel:'#tool_italic', fn: clickItalic, evt: 'mousedown'},
-			{sel:'#sidepanel_handle', fn: toggleSidePanel, key: [modKey+'X']},
+			//{sel:'#sidepanel_handle', fn: toggleSidePanel, key: [modKey+'X']},
 			
 			// Shortcuts not associated with buttons
 			{key: 'shift+left', fn: function(){rotateSelected(0)}},

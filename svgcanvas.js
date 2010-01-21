@@ -920,7 +920,7 @@ function BatchCommand(text) {
 		fill: "#000000",
 		stroke_width: 0,
 		font_size: 24,
-		font_family: 'serif'
+		font_family: 'sans-serif' // changed from serif for wise4
 	});
 
 	var cur_shape = all_properties.shape;
