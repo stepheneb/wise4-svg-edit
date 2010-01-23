@@ -155,7 +155,7 @@ body {
 	bottom: 60px;*/
 	height:470px;
 	float:right;
-	width: 150px;
+	width: 180px;
 	z-index:999;
 	display:none;
 	/*border-color: #808080;
@@ -184,7 +184,7 @@ body {
 	margin:0 5px;
 	padding:5px;
 	height:470px;
-	width:135px;
+	width:165px;
 	border:1px solid #777777;
 }
 
@@ -414,8 +414,8 @@ body {
 #svg_editor #tools_top {
 	/*position: absolute;*/
 	margin-left: 34px;
-	padding-top: 2px;
 	margin-right:10px;
+	margin-top:-5px;
 	border-bottom: none;
 	float:left;
 	width:99%;
@@ -445,6 +445,7 @@ body {
 	width: 36px;
 	/*top: 75px;*/
 	margin-left: -4px;
+	margin-top:-2px;
 }
 
 /*#svg_editor #tools_left {

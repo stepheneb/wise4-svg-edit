@@ -637,7 +637,7 @@ function svg_edit_setup() {
 	}
 	
 	// Snapshot click handler (wise4)
-	// toggles sidepanel and zooms image (hard-coded at 85% for now)
+	// toggles sidepanel and zooms image (hard-coded at 80% for now)
 	// TODO: figure out how to not zoom image if in full screen mode in wise4
 	$('.tool_snapshot').click(function(){
 		var zoom = svgCanvas.getZoom();
@@ -650,7 +650,7 @@ function svg_edit_setup() {
 				height: 0,
 				x: (w_area[0].scrollLeft + w_area.width()/2)/zoom,
 				y: (w_area[0].scrollTop + w_area.height()/2)/zoom,
-				zoom: .85
+				zoom: .8
 			});
 		} else {
 			$('#sidepanels').hide();
