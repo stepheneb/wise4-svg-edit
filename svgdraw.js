@@ -4,13 +4,14 @@ function SVGDRAW(node) {
 	
 	this.svgCanvas = null;
 	this.teacherAnnotation = "";		
-	this.defaultImage = ""; // var to hold starting image
+	this.defaultImage = ""; // svg string to hold starting image
 	this.stamps  =  []; // array to hold stamp paths
-	this.snapshotsActive  =  false; // var to specify whether snapshots are active
+	this.snapshotsActive  =  false; // boolean to specify whether snapshots are active
 	this.snapshots  =  []; // array to hold snapshot images
-	this.descriptionActive =  false; // var to specify whether student annotation/description is active
-	this.description  =  null; // var to hold annotation/description text
-	this.defaultDescription = ""; //var to hold starting description text
+	this.descriptionActive =  false; // boolean to specify whether student annotation/description is active
+	this.description  =  null; // string to hold annotation/description text
+	this.defaultDescription = ""; // string to hold starting description text
+	this.instructions = ""; // string to hold prompt text
 	this.studentData = {
 					"svgString": null,
 					"description": null,
@@ -31,15 +32,28 @@ SVGDRAW.prototype.loadModules = function(jsonfilename, context) {
 	
 	$.getJSON(jsonfilename, 
 		function(data){
-			var images = data.stamps;
-			for (var item in images) {
-				//context.stamps.push(images[item].uri);
-				context.stamps.push(images[item]);
-			};
-			context.snapshotsActive = data.snapshots_active;
-			context.descriptionActive = data.description_active;
-			context.defaultDescription = data.description_default;
-			context.defaultImage = data.svg_text;				
+			if(data.stamps){
+				var images = data.stamps;
+				for (var item in images) {
+					//context.stamps.push(images[item].uri);
+					context.stamps.push(images[item]);
+				};
+			}
+			if(data.snapshots_active){
+				context.snapshotsActive = data.snapshots_active;
+			}
+			if(data.description_active){
+				context.descriptionActive = data.description_active;
+			}
+			if(data.description_default) {
+				context.defaultDescription = data.description_default;
+			}
+			if(data.prompt){
+				context.instructions = data.prompt;
+			}
+			if(data.svg_background){
+				context.defaultImage = data.svg_background;
+			}				
 			 var myDataService = new VleDS(vle);
 		 	   // or var myDataService = new DSSService(read,write);
 			 context.setDataService(myDataService);
@@ -60,7 +74,6 @@ SVGDRAW.prototype.setDataService = function(dataService) {
 SVGDRAW.prototype.loadCallback = function(studentWorkJSON, context) {
 		var annotationValue;
 		// check for previous work and load it
-		var data = null;
 		var svgString;
 		if (studentWorkJSON){
 			try{
@@ -104,10 +117,11 @@ SVGDRAW.prototype.loadCallback = function(studentWorkJSON, context) {
 			//get all the annotations (TODO: uncomment when using webapp/portal)
 			//context.dataService.vle.connectionManager.request('GET', 3, context.dataService.vle.getConfig().getConfigParam('getAnnotationsUrl'), getAnnotationsParams, processGetDrawAnnotationResponse);
 		} else if (context.defaultImage){ // if no previous work, load default (starting) drawing
-			context.svgCanvas.setSvgString(context.defaultImage);
+			var svgString = context.defaultImage.replace("</svg>", "<g><title>student</title></g></svg>"); // add blank student layer
+			context.svgCanvas.setSvgString(svgString);
 		}
 		
-		context.initDisplay(data,context); // initiate stamps, description, snapshots
+		context.initDisplay(studentWorkJSON,context); // initiate stamps, description, snapshots
 };
 
 SVGDRAW.prototype.saveToVLE = function() {
@@ -187,6 +201,25 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 	if(context.snapshotsActive){
 		$('#tool_snapshot').attr("style","display:inline");
 		
+		$('#new_snap_dialog').dialog({
+			bgiframe: true,
+			resizable: false,
+			modal: true,
+			autoOpen:false,
+			buttons: {
+				'Yes': function() {
+					$(this).dialog('close');
+				},
+				Cancel: function() {
+					$(this).dialog('close');
+				}
+			}
+		});
+
+		
+		$('.snapshot_new').click(function(){
+			//$('#new_snap_dialog').dialog('open');
+		});
 	}
 	
 	//initiate stamps
@@ -195,7 +228,9 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 		var stamptxt = "";
 		for (var i in context.stamps){
 			var num = i*1 + 1;
-			stamptxt += "<img id='" + i + "' class='tool_image' title='" + context.stamps[i].title + "' src=" + context.stamps[i].uri + " alt='Stamp " + num + "' height='" + context.stamps[i].height + "' width= '" + context.stamps[i].width + "'></div>";
+			//stamptxt += "<img id='" + i + "' class='tool_image' title='" + context.stamps[i].title + "' src=" + context.stamps[i].uri + " alt='Stamp " + num + "' height='" + height + "' width= '" + width + "'></div>";
+			// max stamp preview image height and width are hard-coded in css now (max 50px)
+			stamptxt += "<img id='" + i + "' class='tool_image' title='" + context.stamps[i].title + "' src=" + context.stamps[i].uri + " alt='Stamp " + num + "'></div>";
 		}
 		$('#tools_stamps').append(stamptxt);
 		// set first image as default (selected)
