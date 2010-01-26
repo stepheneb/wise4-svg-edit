@@ -947,6 +947,8 @@ function BatchCommand(text) {
 	var images = [];
 	// This holds the currently selected stamp image (wise4)
 	var currStamp = null;
+	// This holds the current state of the snapshot panel (wise4)
+	var snapshotOpen = false;
 
 	// This method rounds the incoming value to the nearest value based on the current_zoom
 	var round = function(val){
@@ -4826,7 +4828,9 @@ function BatchCommand(text) {
 			batchCmd.addSubCommand(new ChangeElementCommand(svgroot, changes));
 			
 			// reset zoom
-			current_zoom = 1;
+			if(snapshotOpen == false){ // if snapshots panel is closed, reset zoom (wise4)
+				current_zoom = 1;
+			}
 			
 			// identify layers
 			identifyLayers();
@@ -4863,6 +4867,23 @@ function BatchCommand(text) {
 	this.setStamp = function(index) {
 		currStamp = images[index];
 	}
+	
+	// Function: setSnapState (wise4)
+	// This function sets the current state of the snapshot panel.
+	//
+	// Parameters:
+	// state - boolean indicating whether snapshot panel is open or not.
+	this.setSnapState = function(state) {
+		snapshotOpen = state;
+	}
+	
+	// Function: getSnapState (wise4)
+	// This function returns the current state of the snapshot panel.
+	//
+	this.getSnapState = function() {
+		return snapshotOpen;
+	}
+	
 
 	// Layer API Functions
 
@@ -6486,6 +6507,13 @@ function BatchCommand(text) {
 	}
 
 	var resetUndoStack = function() {
+		undoStack = [];
+		undoStackPointer = 0;
+	};
+	
+	// Function resetUndo() (wise4)
+	// resets the undo stack
+	this.resetUndo = function() {
 		undoStack = [];
 		undoStackPointer = 0;
 	};

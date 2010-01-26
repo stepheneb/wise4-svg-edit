@@ -15,7 +15,7 @@ function SVGDRAW(node) {
 	this.studentData = {
 					"svgString": null,
 					"description": null,
-					"snapshots": null
+					"snapshots": []
 					};
 	this.init(node.getContent().getContentUrl());
 }
@@ -33,12 +33,12 @@ SVGDRAW.prototype.loadModules = function(jsonfilename, context) {
 	$.getJSON(jsonfilename, 
 		function(data){
 			if(data.stamps){
-				var images = data.stamps;
-				for (var item in images) {
+				for (var item in data.stamps) {
 					//context.stamps.push(images[item].uri);
-					context.stamps.push(images[item]);
+					context.stamps.push(data.stamps[item]);
 				};
 			}
+			
 			if(data.snapshots_active){
 				context.snapshotsActive = data.snapshots_active;
 			}
@@ -163,6 +163,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 				var height = $('#descriptionpanel').height();
 				var width = $('#descriptionpanel').width();
 				$('#descriptionpanel').css({top: $(window).height()/2-height/2, left: $(window).width()/2-width/2});
+				$("#overlay").show();
 				$('#descriptionpanel').show(); // show description panel
 			}
 		});
@@ -180,6 +181,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			var value = $('#description_content').val();
 			context.description = value;
 			$('#descriptionpanel').hide();
+			$("#overlay").hide();
 			context.saveToVLE(); // save changes to VLE
 			// TODO: add logic to check whether save button has been clicked already
 			// If it has, no need to resave the data to the vle
@@ -192,6 +194,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 		
 		$('#close_description').click(function(){
 			$('#descriptionpanel').hide();
+			$("#overlay").hide();
 		});
 		
 		$('#tool_description').attr("style","display:inline"); // show add description link
@@ -201,6 +204,25 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 	if(context.snapshotsActive){
 		$('#tool_snapshot').attr("style","display:inline");
 		
+		if(data.snapshots){
+			for (var i in data.snapshots) {
+				//context.stamps.push(images[item].uri);
+				context.snapshots.push(data.snapshots[i]);
+			};
+		}
+		
+		for (var item in context.snapshots){
+			var current = context.snapshots[item];
+			var res = context.svgCanvas.getResolution();
+			var multiplier = 150/res.w;
+			var snapHeight = res.h * multiplier;
+			var snapWidth = 150;
+			var snapshot = current.replace('<svg width="600" height="450"', '<svg width="' + snapWidth + '" height="' + snapHeight + '"');
+			snapshot = snapshot.replace(/<g>/gi,'<g transform="scale(' + multiplier + ')">');
+			snapshot = '<div id="snap' + item + '" class="snap">' + snapshot + '</div>';
+			$("#snap_images").append(snapshot);
+		}
+		
 		$('#new_snap_dialog').dialog({
 			bgiframe: true,
 			resizable: false,
@@ -208,6 +230,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			autoOpen:false,
 			buttons: {
 				'Yes': function() {
+					context.newSnapshot(context);
 					$(this).dialog('close');
 				},
 				Cancel: function() {
@@ -216,10 +239,11 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			}
 		});
 
-		
 		$('.snapshot_new').click(function(){
-			//$('#new_snap_dialog').dialog('open');
+			$('#new_snap_dialog').dialog('open');
 		});
+
+		context.bindSnapshot(context); // Bind snap thumbnail to click function that opens corresponding snapshot
 	}
 	
 	//initiate stamps
@@ -252,8 +276,52 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 	} else {
 		$('#tool_image').hide(); // if no stamps are defined, hide stamp tool button
 	}
-};
 	
+	// reset undo stack
+	this.svgCanvas.resetUndo();
+	$("#tool_undo").addClass("tool_button_disabled");
+};
+
+SVGDRAW.prototype.newSnapshot = function(context) {
+	var current = context.svgCanvas.getSvgString();
+	context.snapshots.push(current);
+	var num = context.snapshots.length-1;
+	var res = context.svgCanvas.getResolution();
+	var multiplier = 150/res.w;
+	var snapHeight = res.h * multiplier;
+	var snapWidth = 150;
+	var snapID = "snap" + num;
+	var snapshot = current.replace('<svg width="600" height="450"', '<svg width="' + snapWidth + '" height="' + snapHeight + '"');
+	snapshot = snapshot.replace(/<g>/gi,'<g transform="scale(' + multiplier + ')">');
+	snapshot = '<div id="' + snapID + '" class="snap" click=">' + snapshot + '</div>';
+	$("#snap_images").append(snapshot);
+	context.bindSnapshot(context); // Bind snap thumbnail to click function that opens corresponding snapshot
+	context.saveToVLE();
+	$("#" + snapID).effect("pulsate", { times:2 }, 800);
+	//alert(snapshot);
+};
+
+// Open a snapshot as current drawing
+SVGDRAW.prototype.openSnapshot = function(id) {
+	var snap = this.snapshots[id];
+	this.svgCanvas.setSvgString(snap);
+	this.svgCanvas.setZoom(.75);
+	// reset the undo/redo stack
+	// clicking undo or redo too much eventually breaks the svg editor
+	// TODO: figure out how to re-enable undo stack when correctly when a snapshot has been opened so that students
+	// can go back to their previous drawings
+	this.svgCanvas.resetUndo();
+	$("#tool_undo").addClass("tool_button_disabled");
+};
+
+// Bind snapshot thumbnail to click function that opens corresponding snapshot
+SVGDRAW.prototype.bindSnapshot = function(context) {
+	$('.snap').click(function(){
+		var id = $(this).attr('id');
+		id = id.replace("snap","");
+		context.openSnapshot(id);
+	});
+};
 
 //used to notify scriptloader that this script has finished loading
 if(typeof eventManager != 'undefined'){

@@ -636,46 +636,34 @@ function svg_edit_setup() {
 		});
 	}
 	
-	// Snapshot click handler (wise4)
-	// toggles sidepanel and zooms image (hard-coded at 80% for now)
+	// Snapshot link click handler (wise4)
+	// toggles sidepanel and zooms/restores image (hard-coded at 75% zoom for now)
 	// TODO: figure out how to not zoom image if in full screen mode in wise4
 	$('.tool_snapshot').click(function(){
-		var zoom = svgCanvas.getZoom();
-		var w_area = $('#workarea');
-		
+		var ctl = {
+				'value':100
+		};
 		if(!$('#sidepanels').is(':visible')){
 			$('#sidepanels').show();
-			zoomChanged(window, {
-				width: 0,
-				height: 0,
-				x: (w_area[0].scrollLeft + w_area.width()/2)/zoom,
-				y: (w_area[0].scrollTop + w_area.height()/2)/zoom,
-				zoom: .8
-			});
+			ctl.value = 75;
+			svgCanvas.setSnapState(true);
+			changeZoom(ctl);
 		} else {
 			$('#sidepanels').hide();
-			zoomChanged(window, {
-				width: 0,
-				height: 0,
-				x: (w_area[0].scrollLeft + w_area.width()/2)/zoom,
-				y: (w_area[0].scrollTop + w_area.height()/2)/zoom,
-				zoom: 1
-			});
+			svgCanvas.setSnapState(false);
+			changeZoom(ctl);
 		}
 	});
 	
+	// Close snapshots link(x) clickhandler (wise4)
 	$('#close_snapshots').click(function(){
-		var zoom = svgCanvas.getZoom();
-		var w_area = $('#workarea');
-		
+		var ctl = {
+				'value':100
+		};
 		$('#sidepanels').hide();
-		zoomChanged(window, {
-			width: 0,
-			height: 0,
-			x: (w_area[0].scrollLeft + w_area.width()/2)/zoom,
-			y: (w_area[0].scrollTop + w_area.height()/2)/zoom,
-			zoom: 1
-		});
+		svgCanvas.setSnapState(false);
+		changeZoom(ctl);
+		
 	});
 	
 	var changeOpacity = function(ctl, val) {

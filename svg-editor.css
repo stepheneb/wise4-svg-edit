@@ -155,7 +155,7 @@ body {
 	bottom: 60px;*/
 	height:470px;
 	float:right;
-	width: 180px;
+	width: 200px;
 	z-index:999;
 	display:none;
 	/*border-color: #808080;
@@ -180,17 +180,20 @@ body {
 /* Snapshots Panel (wise4)
  ------------------------------------- */
 #svg_editor #snapshotpanel {
-	background-color:#333333;
+	background-color:#A0A0A0;
 	margin:0 5px;
 	padding:5px;
 	height:470px;
-	width:165px;
+	width:185px;
 	border:1px solid #777777;
 }
 
 #svg_editor #snapshot_header {
-	color:#FFFFFF;
+	border:1px solid #777777;
+	color:#000000;
 	height:20px;
+	padding:2px 5px;
+	background-color:#E8E8E8;
 }
 
 #svg_editor #snapshot_header a {
@@ -205,8 +208,22 @@ body {
 	background-color:#FFFFFF;
 	margin:5px 0;
 	padding:5px;
-	height:434px;
+	height:427px;
 	border:1px solid #777777;
+}
+
+#svg_editor #snapshots div.snap {
+	background-color:#FFFFFF;
+	width:150px;
+	padding:2px;
+	margin:auto auto 5px;
+	border:1px solid #CCCCCC;
+	cursor:pointer;
+}
+
+#svg_editor #snapshots #snap_images {
+	overflow:auto;
+	height:395px;
 }
 
 #svg_editor #snapshotpanel .label {
@@ -214,8 +231,8 @@ body {
 }
 
 #svg_editor #snapshotpanel h3 {
-	margin:0;
-	font-weight:normal;
+	font-weight:bold;
+	margin:2px 0 0;
 	float:left;
 }
 
@@ -262,8 +279,8 @@ body {
 	margin-left: -10px;
 	cursor: pointer;
 	z-index:1000;
-	border-radius: 5px;
 	border:1px solid #777777;
+	border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	-moz-user-select: none;
@@ -1117,28 +1134,24 @@ button#tool_docprops_cancel {
 /* Note/Description panel (wise4) 
 -----------------------------------------*/
 #svg_editor #descriptionpanel {
-	padding:10px;
+	padding:0;
 	background-color:#333;
 	position:absolute;
 	top:32%;
 	left:8%;
 	width:84%;
 	border:1px solid #777;
-	border-radius:5px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	-moz-box-shadow: 0px 0px 6px #666;
-	-webkit-box-shadow: 0px 0px 6px #666;
-	box-shadow: 0px 0px 6px #666;
-	display:none;
-	z-index:999;
+	-moz-box-shadow: 0px 0px 10px #222;
+	-webkit-box-shadow: 0px 0px 10px #222;
+	box-shadow: 0px 0px 10px #222;
+	z-index:1001;
 }
 
 #svg_editor #descriptionpanel h3 {
 	float:left;
 	margin-top:0;
-	color:#FFFFFF;
-	font-weight:normal;
+	color:#000000;
+	font-weight:bold;
 }
 
 #svg_editor .close_button {
@@ -1148,24 +1161,45 @@ button#tool_docprops_cancel {
 
 #svg_editor .close_button a {
 	padding:.2em;
-	color:#ccc;
+	color:#777777;
 	cursor:pointer;
 	text-decoration:none;
 }
 
+#svg_editor #description_wrapper {
+	text-align:left;
+	background-color:#FFFFFF;
+	margin:5px;
+	padding:5px;
+}
+
+#svg_editor #description_text {
+	background-color:#FFD9AC;
+	padding:10px;
+	border-radius:5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	font-size:10pt;
+}
+
 #svg_editor #description_header {
 	cursor:move;
+	background:#E8E8E8 url(jquery-ui/images/ui-bg_highlight-hard_100_e8e8e8_1x100.png) repeat-x scroll 50% 50%;
+	border:1px solid #B8B8B8;
+	color:#000000;
+	font-weight:bold;
+	padding:5px;
 }
 
 #svg_editor #description_content {
-	padding:5px;
+	margin-top:10px;
+	padding:10px;
 	background-color:#eee;
 	height:100px;
 	border:1px solid #aaa;
-	font-size:1.3em;
+	font-size:1em;
 	line-height:1.4em;
-	padding:0.4em;
-	width:98%;
+	width:96%;
 }
 
 #svg_editor #description_content:focus {
@@ -1175,7 +1209,45 @@ button#tool_docprops_cancel {
 
 #svg_editor #description_buttons {
 	text-align:center;
-	padding-top:10px;
+	padding:5px 5px 0;
+}
+
+#svg_editor #description_buttons button {
+	margin: .5em .6em;
+	cursor: pointer;
+	padding: .2em .6em .3em;
+	line-height: 1.4em;
+	width:auto;
+	overflow:visible;
+	background:#1E69FF url(jquery-ui/images/ui-bg_highlight-hard_30_1E69FF_1x100.png) repeat-x scroll 50% 50%;
+	border:1px solid #1747C0;
+	color:#FFFFFF;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+
+#svg_editor #description_buttons button:hover {
+	color:#FFFA3D;
+}
+
+#svg_editor #description_buttons button[disabled] {
+	background:#CCCCCC;
+	color:#888888;
+	border-color:#AAAAAA;
+}
+
+/*wise4*/
+#overlay {
+	background:#000000 url(jquery-ui/images/ui-bg_flat_30_000000_40x100.png)
+	repeat-x scroll 50% 50%;
+	opacity:0.3;
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	z-index:1000;
 }
 
 /* wise4 */
@@ -1192,6 +1264,6 @@ button#tool_docprops_cancel {
 }
 
 /* wise4 default hidden regions*/
-#sidepanels, #notepanel {
+#sidepanels, #notepanel, #descriptionpanel, #overlay {
 	display:none;
 }

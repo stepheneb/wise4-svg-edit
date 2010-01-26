@@ -1,19 +1,20 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- removed for now, causes problems in Firefox: manifest="svg-editor.manifest" -->
 <head>
-<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+<meta http-equiv="Content-type" content="application/xhtml+xml;charset=UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
 <link rel="icon" type="image/png" href="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/logo.png">
 
 <!-- Development version of script tags: -->
 <script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/jquery.js"></script>
+
 <!-- feeds -->
 <link rel="alternate" type="application/atom+xml" title="SVG-edit General Discussion" href="http://groups.google.com/group/svg-edit/feed/atom_v1_0_msgs.xml" />
 <link rel="alternate" type="application/atom+xml" title="SVG-edit Updates (Issues/Fixes/Commits)" href="http://code.google.com/feeds/p/svg-edit/updates/basic" />
 
 <!-- Add script with custom handlers here -->
-<title>SVG-edit demo</title>
+<title></title>
 </head>
 <body>
 <script type="text/javascript">
@@ -294,6 +295,9 @@
 					<a class="label snapshot_new" title="Take a new snapshot">New Snapshot</a>
 					<hr />
 				</div>
+				<div id="snap_images">
+					
+				</div>
 			</div>
 		</div>
 		<!--<div id="layerpanel">
@@ -393,20 +397,6 @@
 	<div id="copyright">Powered by <a href="http://svg-edit.googlecode.com/" target="_blank">SVG-edit v2.4</a></div>
 </div> <!-- tools_bottom -->
 
-<div id="descriptionpanel">
-	<div id="description_wrapper">
-		<div id="description_header">
-			<h3>Add a Description to Your Drawing</h3>
-			<div class="close_button"><a id="close_description" title="Close">X</a></div>
-		</div>
-		<textarea id="description_content" rows="5"></textarea>
-		<div id="description_buttons">
-			<input type="button" id="description_commit" title="Save" value="Save Changes"/>
-			<input type="button" id="description_close" title="Save & Close" value=" Save & Close"/>
-		</div>
-	</div>
-</div>
-
 <!-- hidden divs -->
 <div id="color_picker"></div>
 
@@ -432,6 +422,23 @@
 	<input type="button" id="palette_cancel" title="Cancel" value="Cancel"/>
 	<hr/>
 	<div id="palette" title="Click to change color"></div>
+</div>
+
+<div id="descriptionpanel">
+	<div id="description_header">
+		<h3>Add Description</h3>
+		<div class="close_button"><a id="close_description" title="Close">X</a></div>
+	</div>
+	<div id="description_wrapper">
+		<div id="description_text">
+			<span>Enter text in the box below to attach a description to this drawing.</span>
+			<textarea id="description_content" rows="5"></textarea>
+		</div>
+		<div id="description_buttons">
+			<button id="description_commit" title="Save">Save Changes</button>
+			<button id="description_close" title="Save & Close">Save & Close</button>
+		</div>
+	</div>
 </div>
 
 </div> <!-- svg_editor -->
@@ -533,8 +540,10 @@
 </div>
 
 <div id="new_snap_dialog" title="New Snapshot">
-	<span>Create new snapshot from current drawing?</span>
+	<div class="ui-dialog-content-content">Create new snapshot from current drawing?</div>
 </div>
+
+<div id="overlay" />
 
 </body>
 </html>
