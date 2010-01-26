@@ -293,11 +293,11 @@ SVGDRAW.prototype.newSnapshot = function(context) {
 	var snapID = "snap" + num;
 	var snapshot = current.replace('<svg width="600" height="450"', '<svg width="' + snapWidth + '" height="' + snapHeight + '"');
 	snapshot = snapshot.replace(/<g>/gi,'<g transform="scale(' + multiplier + ')">');
-	snapshot = '<div id="' + snapID + '" class="snap" click=">' + snapshot + '</div>';
+	snapshot = '<div id="' + snapID + '" class="snap">' + snapshot + '</div>';
 	$("#snap_images").append(snapshot);
 	context.bindSnapshot(context); // Bind snap thumbnail to click function that opens corresponding snapshot
 	context.saveToVLE();
-	$("#" + snapID).effect("pulsate", { times:2 }, 800);
+	$("#" + snapID).effect("pulsate", { times:1 }, 800);
 	//alert(snapshot);
 };
 

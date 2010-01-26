@@ -212,18 +212,22 @@ body {
 	border:1px solid #777777;
 }
 
-#svg_editor #snapshots div.snap {
-	background-color:#FFFFFF;
-	width:150px;
-	padding:2px;
-	margin:auto auto 5px;
-	border:1px solid #CCCCCC;
-	cursor:pointer;
-}
-
 #svg_editor #snapshots #snap_images {
 	overflow:auto;
 	height:395px;
+}
+
+#svg_editor #snapshots div.snap {
+	-moz-broder-radius:4px;
+	-webkit-border-radius: 4px;
+	border-radius:4px;
+	background-color:#FFFFFF;
+	width:150px;
+	height:112.5px;
+	padding:2px;
+	margin:auto auto 5px;
+	border:1px solid #BBBBBB;
+	cursor:pointer;
 }
 
 #svg_editor #snapshotpanel .label {
@@ -542,7 +546,8 @@ body {
 	top: -13px;
 	left: -5px;
 	margin-top: -3px;
-	margin-bottom: -13px;
+	/*margin-bottom: -13px;*/
+	margin-bottom: -7px; /*wise4*/
 }
 
 .magic_field > * {
@@ -1264,6 +1269,6 @@ button#tool_docprops_cancel {
 }
 
 /* wise4 default hidden regions*/
-#sidepanels, #notepanel, #descriptionpanel, #overlay {
+#sidepanels, #notepanel, #descriptionpanel, #overlay, #new_snap_dialog {
 	display:none;
 }
