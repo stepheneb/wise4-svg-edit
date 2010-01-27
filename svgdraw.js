@@ -206,12 +206,14 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 		
 		if(data.snapshots){
 			for (var i in data.snapshots) {
-				//context.stamps.push(images[item].uri);
 				context.snapshots.push(data.snapshots[i]);
+				var current = context.snapshots[i];
+				var snapID = "snap" + i;
+				context.addSnapshot(current,snapID,context);
 			};
 		}
 		
-		for (var item in context.snapshots){
+		/*for (var item in context.snapshots){
 			var current = context.snapshots[item];
 			var res = context.svgCanvas.getResolution();
 			var multiplier = 150/res.w;
@@ -221,7 +223,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			snapshot = snapshot.replace(/<g>/gi,'<g transform="scale(' + multiplier + ')">');
 			snapshot = '<div id="snap' + item + '" class="snap">' + snapshot + '</div>';
 			$("#snap_images").append(snapshot);
-		}
+		}*/
 		
 		$('#new_snap_dialog').dialog({
 			bgiframe: true,
@@ -242,8 +244,6 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 		$('.snapshot_new').click(function(){
 			$('#new_snap_dialog').dialog('open');
 		});
-
-		context.bindSnapshot(context); // Bind snap thumbnail to click function that opens corresponding snapshot
 	}
 	
 	//initiate stamps
@@ -285,20 +285,29 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 SVGDRAW.prototype.newSnapshot = function(context) {
 	var current = context.svgCanvas.getSvgString();
 	context.snapshots.push(current);
+	context.saveToVLE();
 	var num = context.snapshots.length-1;
+	var snapID = "snap" + num;
+	context.addSnapshot(current,snapID,context);
+	$("#" + snapID).effect("pulsate", { times:1 }, 800);
+	//alert(snapshot);
+};
+
+SVGDRAW.prototype.addSnapshot = function(svgString,snapID,context) {
 	var res = context.svgCanvas.getResolution();
 	var multiplier = 150/res.w;
 	var snapHeight = res.h * multiplier;
 	var snapWidth = 150;
-	var snapID = "snap" + num;
-	var snapshot = current.replace('<svg width="600" height="450"', '<svg width="' + snapWidth + '" height="' + snapHeight + '"');
+	var snapHolder = '<div id="' + snapID + '" class="snap"></div>';
+	$("#snap_images").append(snapHolder);
+	
+	// create snapshot thumb
+	// TODO: Edit regex code to remove hard-coded width and height (600, 450)
+	var snapshot = svgString.replace('<svg width="600" height="450"', '<svg width="' + snapWidth + '" height="' + snapHeight + '"');
 	snapshot = snapshot.replace(/<g>/gi,'<g transform="scale(' + multiplier + ')">');
-	snapshot = '<div id="' + snapID + '" class="snap">' + snapshot + '</div>';
-	$("#snap_images").append(snapshot);
-	context.bindSnapshot(context); // Bind snap thumbnail to click function that opens corresponding snapshot
-	context.saveToVLE();
-	$("#" + snapID).effect("pulsate", { times:1 }, 800);
-	//alert(snapshot);
+	var snapSvgXml = text2xml(snapshot);
+	context.bindSnapshot($('#' + snapID),context); // Bind snap thumbnail to click function that opens corresponding snapshot
+	document.getElementById(snapID).appendChild(document.importNode(snapSvgXml.documentElement, true)); // add snapshot thumb to snapshots panel
 };
 
 // Open a snapshot as current drawing
@@ -312,15 +321,36 @@ SVGDRAW.prototype.openSnapshot = function(id) {
 	// can go back to their previous drawings
 	this.svgCanvas.resetUndo();
 	$("#tool_undo").addClass("tool_button_disabled");
+	$('#svgcanvas').effect("pulsate", { times:1 }, 800);
 };
 
 // Bind snapshot thumbnail to click function that opens corresponding snapshot
-SVGDRAW.prototype.bindSnapshot = function(context) {
-	$('.snap').click(function(){
+SVGDRAW.prototype.bindSnapshot = function(item,context) {
+	$(item).click(function(){
 		var id = $(this).attr('id');
 		id = id.replace("snap","");
 		context.openSnapshot(id);
 	});
+};
+
+// from svg-edit code (svgcanvas.js)
+//found this function http://groups.google.com/group/jquery-dev/browse_thread/thread/c6d11387c580a77f
+var text2xml = function(sXML) {
+	// NOTE: I'd like to use jQuery for this, but jQuery makes all tags uppercase
+	//return $(xml)[0];
+	var out;
+	try{
+		var dXML = ($.browser.msie)?new ActiveXObject("Microsoft.XMLDOM"):new DOMParser();
+		dXML.async = false;
+	} catch(e){ 
+		throw new Error("XML Parser could not be instantiated"); 
+	};
+	try{
+		if($.browser.msie) out = (dXML.loadXML(sXML))?dXML:false;
+		else out = dXML.parseFromString(sXML, "text/xml");
+	}
+	catch(e){ throw new Error("Error parsing XML string"); };
+	return out;
 };
 
 //used to notify scriptloader that this script has finished loading

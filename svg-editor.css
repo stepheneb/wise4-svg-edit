@@ -155,7 +155,7 @@ body {
 	bottom: 60px;*/
 	height:470px;
 	float:right;
-	width: 200px;
+	width: 205px;
 	z-index:999;
 	display:none;
 	/*border-color: #808080;
@@ -184,7 +184,7 @@ body {
 	margin:0 5px;
 	padding:5px;
 	height:470px;
-	width:185px;
+	width:190px;
 	border:1px solid #777777;
 }
 
@@ -226,7 +226,7 @@ body {
 	height:112.5px;
 	padding:2px;
 	margin:auto auto 5px;
-	border:1px solid #BBBBBB;
+	border:1px solid #999999;
 	cursor:pointer;
 }
 
@@ -547,7 +547,7 @@ body {
 	left: -5px;
 	margin-top: -3px;
 	/*margin-bottom: -13px;*/
-	margin-bottom: -7px; /*wise4*/
+	margin-bottom: -13px; /*wise4*/
 }
 
 .magic_field > * {
