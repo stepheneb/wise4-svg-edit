@@ -11,7 +11,8 @@ function SVGDRAW(node) {
 	this.descriptionActive =  false; // boolean to specify whether student annotation/description is active
 	this.description  =  null; // string to hold annotation/description text
 	this.defaultDescription = ""; // string to hold starting description text
-	this.instructions = ""; // string to hold prompt text
+	this.instructions = ""; // string to hold prompt/instructions text
+	this.id = null; // var to hold currently selected snapshot
 	this.studentData = {
 					"svgString": null,
 					"description": null,
@@ -134,7 +135,6 @@ SVGDRAW.prototype.saveToVLE = function() {
 	this.studentData.description = this.description;
 	this.studentData.snapshots = this.snapshots;
 	var data = this.studentData;
-	//this.dataService.save(svgStringToSave);
 	this.dataService.save(data);
 };
 
@@ -142,8 +142,36 @@ SVGDRAW.prototype.load = function() {
 	this.dataService.load(this, this.loadCallback);	
 };
 
-// populate stamp images, description/annotation text, and snapshots (wise4)
+// populate instructions, stamp images, description/annotation text, and snapshots (wise4)
 SVGDRAW.prototype.initDisplay = function(data,context) {
+	// initiate prompt/instructions
+	if(context.instructions != ""){
+		$('#prompt_text').html(context.instructions);
+		
+		$('#prompt_dialog').dialog({
+			bgiframe: true,
+			resizable: false,
+			modal: true,
+			autoOpen:false,
+			width:400,
+			buttons: {
+				'OK': function() {
+					$(this).dialog('close');
+				}
+			}
+		});
+
+		$('#tool_prompt').click(function(){
+			$('#prompt_dialog').dialog('open');
+		});
+		
+		$('#tool_prompt').attr("style","display:inline");
+		
+		if(!vle.getLatestStateForCurrentNode()){
+			$('#prompt_dialog').dialog('open');
+		}
+	}
+	
 	// initiate description/annotation
 	if(context.descriptionActive){
 		// TODO: add vle check for saved description logic
@@ -158,8 +186,8 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			if (!$('#descriptionpanel').is(':visible')){ // prevent text from being overridden if panel is already visible
 				$('#description_commit').attr("disabled", "disabled");
 				$('#description_close').attr("disabled", "disabled");
-				$('#description_content').val(context.description); // populate note text
-				// center panel in window
+				$('#description_content').val(context.description); // populate description text
+				// center description panel in window
 				var height = $('#descriptionpanel').height();
 				var width = $('#descriptionpanel').width();
 				$('#descriptionpanel').css({top: $(window).height()/2-height/2, left: $(window).width()/2-width/2});
@@ -213,18 +241,6 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			};
 		}
 		
-		/*for (var item in context.snapshots){
-			var current = context.snapshots[item];
-			var res = context.svgCanvas.getResolution();
-			var multiplier = 150/res.w;
-			var snapHeight = res.h * multiplier;
-			var snapWidth = 150;
-			var snapshot = current.replace('<svg width="600" height="450"', '<svg width="' + snapWidth + '" height="' + snapHeight + '"');
-			snapshot = snapshot.replace(/<g>/gi,'<g transform="scale(' + multiplier + ')">');
-			snapshot = '<div id="snap' + item + '" class="snap">' + snapshot + '</div>';
-			$("#snap_images").append(snapshot);
-		}*/
-		
 		$('#new_snap_dialog').dialog({
 			bgiframe: true,
 			resizable: false,
@@ -243,6 +259,23 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 
 		$('.snapshot_new').click(function(){
 			$('#new_snap_dialog').dialog('open');
+		});
+		
+		$('#snapwarning_dialog').dialog({
+			bgiframe: true,
+			resizable: false,
+			modal: true,
+			autoOpen:false,
+			width:490,
+			buttons: {
+				'Continue': function() {
+					context.openSnapshot(context.id);
+					$(this).dialog('close');
+				},
+				Cancel: function() {
+					$(this).dialog('close');
+				}
+			}
 		});
 	}
 	
@@ -317,7 +350,7 @@ SVGDRAW.prototype.openSnapshot = function(id) {
 	this.svgCanvas.setZoom(.75);
 	// reset the undo/redo stack
 	// clicking undo or redo too much eventually breaks the svg editor
-	// TODO: figure out how to re-enable undo stack when correctly when a snapshot has been opened so that students
+	// TODO: Possibly figure out how to re-enable undo stack when correctly when a snapshot has been opened so that students
 	// can go back to their previous drawings
 	this.svgCanvas.resetUndo();
 	$("#tool_undo").addClass("tool_button_disabled");
@@ -329,11 +362,13 @@ SVGDRAW.prototype.bindSnapshot = function(item,context) {
 	$(item).click(function(){
 		var id = $(this).attr('id');
 		id = id.replace("snap","");
-		context.openSnapshot(id);
+		//context.openSnapshot(id);
+		context.id = id;
+		$('#snapwarning_dialog').dialog("open");
 	});
 };
 
-// from svg-edit code (svgcanvas.js)
+// from svg-edit code (svgcanvas.js), converts text to xml (svg xml)
 //found this function http://groups.google.com/group/jquery-dev/browse_thread/thread/c6d11387c580a77f
 var text2xml = function(sXML) {
 	// NOTE: I'd like to use jQuery for this, but jQuery makes all tags uppercase

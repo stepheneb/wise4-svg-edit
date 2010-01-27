@@ -68,7 +68,7 @@
 ----------------------------------*/
 .ui-state-highlight, .ui-widget-content .ui-state-highlight {border: 1px solid #e6b500; background: #ffe45c url(images/ui-bg_highlight-soft_75_ffe45c_1x100.png) 50% top repeat-x; color: #363636; }
 .ui-state-highlight a, .ui-widget-content .ui-state-highlight a { color: #363636; }
-.ui-state-error, .ui-widget-content .ui-state-error {border: 1px solid #cd0a0a; background: #ffc2c5 url(images/ui-bg_diagonals-medium_20_ffc2c5_40x40.png) 50% 50% repeat; color: #000000; }
+.ui-state-error, .ui-widget-content .ui-state-error { margin-bottom:10px; padding:5px; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; /*border: 1px solid #cd0a0a;*/ background: #ffc2c5 url(images/ui-bg_diagonals-medium_20_ffc2c5_40x40.png) 50% 50% repeat; color: #000000; }
 .ui-state-error a, .ui-widget-content .ui-state-error a { color: #000000; }
 .ui-state-error-text, .ui-widget-content .ui-state-error-text { color: #000000; }
 .ui-state-disabled, .ui-widget-content .ui-state-disabled { opacity: .35; filter:Alpha(Opacity=35); background-image: none; }
@@ -351,7 +351,7 @@
     height: 200px; /*must have*/
 }/* Dialog
 ----------------------------------*/
-.ui-dialog { position: relative; padding: 0; width: 300px; background:#333333; border:1px solid #666666; -moz-box-shadow: 0px 0px 10px #222; -webkit-box-shadow: 0px 0px 10px #222; box-shadow: 0px 0px 10px #222; }
+.ui-dialog { position: relative; padding: 0; width: 300px; background:#333333; border:1px solid #666666; text-align:center; -moz-box-shadow: 0px 0px 10px #222; -webkit-box-shadow: 0px 0px 10px #222; box-shadow: 0px 0px 10px #222; }
 .ui-dialog .ui-dialog-titlebar { padding: 0.5em 0.5em 0.3em 0.7em; position: relative;  }
 .ui-dialog .ui-dialog-title { float: left; margin: .1em 0 .2em; } 
 .ui-dialog .ui-dialog-titlebar-close { position: absolute; right: .3em; top: 50%; width: 19px; margin: -10px 0 0 0 !important; padding: 1px !important; height: 18px; border:none !important; background:none !important; }

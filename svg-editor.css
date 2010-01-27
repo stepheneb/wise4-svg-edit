@@ -844,8 +844,17 @@ span.zoom_tool {
 }
 
 /*wise4*/
-#svg_editor .tool_description, #svg_editor .tool_snapshot, #svg_editor .snapshot_new {
+#svg_editor .tool_description, #svg_editor .tool_snapshot,
+#svg_editor .snapshot_new {
 	cursor:pointer;
+}
+
+/*wise4*/
+#svg_editor #tool_prompt {
+	display:none;
+	position:absolute;
+	right:12px;
+	top:48px;
 }
 
 /*wise4*/
@@ -1269,6 +1278,7 @@ button#tool_docprops_cancel {
 }
 
 /* wise4 default hidden regions*/
-#sidepanels, #notepanel, #descriptionpanel, #overlay, #new_snap_dialog {
+#sidepanels, #notepanel, #descriptionpanel, #overlay,
+#new_snap_dialog, #prompt_dialog, #snapwarning_dialog {
 	display:none;
 }

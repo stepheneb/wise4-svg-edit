@@ -59,6 +59,10 @@
 
 <div id="tools_top" class="tools_panel">
 	
+	<div id="tool_prompt">
+		<a class="label tool_prompt" title="Review Step Instructions">Review Instructions</a>
+	</div>
+	
 	<!-- File-like buttons: New, Save, Source -->
 	<div id="file_panel">
 		<div class="push_button" id="tool_clear" title="New Image [N]"></div>
@@ -541,6 +545,21 @@
 
 <div id="new_snap_dialog" title="New Snapshot">
 	<div class="ui-dialog-content-content">Create new snapshot from current drawing?</div>
+</div>
+
+<div id="prompt_dialog" title="Instructions">
+	<div id="prompt_text" class="ui-dialog-content-content"></div>
+</div>
+
+<div id="snapwarning_dialog" title="Open Snapshot">
+	<div class="ui-state-error">
+		<span class="ui-icon ui-icon-alert" style="float:left"></span>
+		Warning! Opening this snapshot will delete your current drawing.
+	</div>
+	<div class="ui-dialog-content-content">If you would like to save this drawing, click 'Cancel' and create a new snapshot.
+		<br /><br />Otherwise, click 'Continue'.
+	</div>
+	</div>
 </div>
 
 <div id="overlay" />
