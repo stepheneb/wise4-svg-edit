@@ -269,7 +269,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			width:490,
 			buttons: {
 				'Continue': function() {
-					context.openSnapshot(context.id);
+					context.openSnapshot(context.id,context);
 					$(this).dialog('close');
 				},
 				Cancel: function() {
@@ -277,6 +277,26 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 				}
 			}
 		});
+		
+		$('#deletesnap_dialog').dialog({
+			bgiframe: true,
+			resizable: false,
+			modal: true,
+			autoOpen:false,
+			width:350,
+			buttons: {
+				'Yes': function() {
+					context.snapshots.splice(context.id,1);
+					$(".snap:eq(" + context.id + ")").fadeOut(1200, function(){$(this).remove()});
+					$(this).dialog('close');
+				},
+				Cancel: function() {
+					$(this).dialog('close');
+					$(".snap:eq(" + context.id + ")").click(function(){context.snapClick(this,context);}, 300);
+				}
+			}
+		});
+		
 		context.warningStackSize = 0;
 	}
 	
@@ -334,8 +354,10 @@ SVGDRAW.prototype.addSnapshot = function(svgString,num,context) {
 	var multiplier = 150/res.w;
 	var snapHeight = res.h * multiplier;
 	var snapWidth = 150;
-	var snapHolder = '<div class="snap" title="Click to Open">' +
-	'<div class="snap_delete" title="Delete Snapshot">Delete X</div></div>';
+	var snapHolder = '<div class="snap" title="Click to Open; Click and Drag to Reorder">' +
+	'<div class="snap_wrapper"></div>' + 
+	'<div class="snap_delete" title="Delete Snapshot"><span class="snap_delete">X</span></div>' + 
+	'</div>';
 	$("#snap_images").append(snapHolder);
 	
 	// create snapshot thumb
@@ -345,36 +367,27 @@ SVGDRAW.prototype.addSnapshot = function(svgString,num,context) {
 	var snapSvgXml = text2xml(snapshot);
 	var $snap = $("div.snap:eq(" + num + ")");
 	context.bindSnapshot($snap,context); // Bind snap thumbnail to click function that opens corresponding snapshot
-	document.getElementsByClassName("snap")[num].appendChild(document.importNode(snapSvgXml.documentElement, true)); // add snapshot thumb to snapshots panel
+	document.getElementsByClassName("snap_wrapper")[num].appendChild(document.importNode(snapSvgXml.documentElement, true)); // add snapshot thumb to snapshots panel
+	context.updateClass(num,context);
 };
 
 // Open a snapshot as current drawing
-SVGDRAW.prototype.openSnapshot = function(id) {
-	var snap = this.snapshots[id];
-	this.svgCanvas.setSvgString(snap);
-	this.svgCanvas.setZoom(.75);
+SVGDRAW.prototype.openSnapshot = function(index,context) {
+	var snap = this.snapshots[index];
+	context.svgCanvas.setSvgString(snap);
+	context.svgCanvas.setZoom(.75);
 	// reset the undo/redo stack
 	// clicking undo or redo too much (when in snpashot mode) eventually breaks the svg editor
-	this.svgCanvas.resetUndo();
-	this.warningStackSize = 0;
+	context.svgCanvas.resetUndo();
+	context.warningStackSize = 0;
 	$("#tool_undo").addClass("tool_button_disabled");
-	$('#svgcanvas').effect("pulsate", { times:1 }, 700); // pulsate new snapshot
+	$('#svgcanvas').effect("pulsate", {times: '1'}, 700); // pulsate new canvas
+	context.updateClass(index,context);
 };
 
 // Bind snapshot thumbnail to click function that opens corresponding snapshot
 SVGDRAW.prototype.bindSnapshot = function(item,context) {
-	var snapClick = function(item){
-	//$(item).click(function(){
-		var index = $("div.snap").index(item);
-		context.id = index;
-		if(context.warningStackSize != context.svgCanvas.getUndoStackSize()){
-			$('#snapwarning_dialog').dialog("open");
-		} else {
-			context.openSnapshot(index);
-		}
-	};
-	
-	$(item).click(function(){snapClick(this);});
+	$(item).click(function(){context.snapClick(this,context);});
 	
 	$("#snap_images").sortable({
 		start: function(event, ui) {
@@ -383,7 +396,7 @@ SVGDRAW.prototype.bindSnapshot = function(item,context) {
 	    },
 	    stop: function(event, ui) {
 	        setTimeout(function(){
-	        	ui.item.click(function(){snapClick(this);}, 300);
+	        	ui.item.click(function(){context.snapClick(this,context);}, 300);
 	        });
 	    },
 	    update: function(event, ui) {
@@ -401,11 +414,42 @@ SVGDRAW.prototype.bindSnapshot = function(item,context) {
 			$(this).children('.snap_delete').css("opacity","1");
 		}, 
 		function () {
-			$(this).children('.snap_delete').css("opacity",".3");
-			$(this).removeClass('hover');
+			if (!$(this).hasClass("active")){
+				$(this).children('.snap_delete').css("opacity",".25");
+				$(this).removeClass('hover');
+			}
 		}
 	);
+	
+	$(item).children(".snap_delete").click(function(){
+		$(this).parent().unbind("click");
+		var index = $("div.snap").index(item);
+		context.id = index;
+		$("#deletesnap_dialog").dialog('open');
+	});
 
+};
+
+SVGDRAW.prototype.snapClick = function(item,context){
+	var index = $("div.snap").index(item);
+	context.id = index;
+	if(context.warningStackSize != context.svgCanvas.getUndoStackSize()){
+		$('#snapwarning_dialog').dialog("open");
+	} else {
+		context.openSnapshot(index,context);
+	}
+};
+
+SVGDRAW.prototype.updateClass = function(num,context){
+	$(".snap").each(function(index){
+		if(index != num){
+			$(this).removeClass("hover active");
+			$(this).children(".snap_delete").css("opacity",".25");
+		} else {
+			$(this).addClass("hover active");
+			$(this).children(".snap_delete").css("opacity","1");
+		}
+	});
 };
 
 // from svg-edit code (svgcanvas.js), converts text to xml (svg xml)
