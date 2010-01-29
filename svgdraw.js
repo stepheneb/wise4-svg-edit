@@ -237,7 +237,12 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			for (var i in data.snapshots) {
 				context.snapshots.push(data.snapshots[i]);
 				var current = context.snapshots[i];
-				context.addSnapshot(current,i,context);
+				context.addSnapshot(current,i,context); // add snap to snapshot panel
+				// remove focus from all snapshots
+				$('.snap').each(function(index){
+					$(this).removeClass("hover active");
+					$(this).children(".snap_delete").css("opacity",".25");
+				});
 			};
 		}
 		
@@ -297,7 +302,9 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			}
 		});
 		
-		context.warningStackSize = 0;
+		context.warningStackSize = 0; // set warning stack to 0 on intial load
+		
+		$("#svgcanvas").mouseup(function(){ context.canvasClick(context); });  // bind canvas mouseup to stack checker function
 	}
 	
 	//initiate stamps
@@ -450,6 +457,20 @@ SVGDRAW.prototype.updateClass = function(num,context){
 			$(this).children(".snap_delete").css("opacity","1");
 		}
 	});
+};
+
+SVGDRAW.prototype.canvasClick = function(context){
+	setTimeout(function(){
+		$(".snap").each(function(index){
+			if($(this).hasClass("active")){
+				if(context.warningStackSize != context.svgCanvas.getUndoStackSize()){
+					$(this).removeClass("hover active");
+					$(this).children(".snap_delete").css("opacity",".25");
+				}
+			}
+		});
+	}, 500);
+	
 };
 
 // from svg-edit code (svgcanvas.js), converts text to xml (svg xml)
