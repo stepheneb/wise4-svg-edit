@@ -13,6 +13,7 @@ function SVGDRAW(node) {
 	this.defaultDescription = ""; // string to hold starting description text
 	this.instructions = ""; // string to hold prompt/instructions text
 	this.id = null; // var to hold currently selected snapshot
+	this.warningStackSize = 0;
 	this.studentData = {
 					"svgString": null,
 					"description": null,
@@ -236,8 +237,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			for (var i in data.snapshots) {
 				context.snapshots.push(data.snapshots[i]);
 				var current = context.snapshots[i];
-				var snapID = "snap" + i;
-				context.addSnapshot(current,snapID,context);
+				context.addSnapshot(current,i,context);
 			};
 		}
 		
@@ -277,6 +277,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 				}
 			}
 		});
+		context.warningStackSize = 0;
 	}
 	
 	//initiate stamps
@@ -320,18 +321,21 @@ SVGDRAW.prototype.newSnapshot = function(context) {
 	context.snapshots.push(current);
 	context.saveToVLE();
 	var num = context.snapshots.length-1;
-	var snapID = "snap" + num;
-	context.addSnapshot(current,snapID,context);
-	$("#" + snapID).effect("pulsate", { times:1 }, 800);
-	//alert(snapshot);
+	//var snapID = "snap" + num;
+	context.addSnapshot(current,num,context);
+	$("#snap_images").attr({ scrollTop: $("#snap_images").attr("scrollHeight") });
+	$(".snap:eq(" + num + ")").effect("pulsate", { times:1 }, 800);
+	context.warningStackSize = context.svgCanvas.getUndoStackSize();
 };
 
-SVGDRAW.prototype.addSnapshot = function(svgString,snapID,context) {
+SVGDRAW.prototype.addSnapshot = function(svgString,num,context) {
+	context.warningStackSize = context.svgCanvas.getUndoStackSize();
 	var res = context.svgCanvas.getResolution();
 	var multiplier = 150/res.w;
 	var snapHeight = res.h * multiplier;
 	var snapWidth = 150;
-	var snapHolder = '<div id="' + snapID + '" class="snap"></div>';
+	var snapHolder = '<div class="snap" title="Click to Open">' +
+	'<div class="snap_delete" title="Delete Snapshot">Delete X</div></div>';
 	$("#snap_images").append(snapHolder);
 	
 	// create snapshot thumb
@@ -339,8 +343,9 @@ SVGDRAW.prototype.addSnapshot = function(svgString,snapID,context) {
 	var snapshot = svgString.replace('<svg width="600" height="450"', '<svg width="' + snapWidth + '" height="' + snapHeight + '"');
 	snapshot = snapshot.replace(/<g>/gi,'<g transform="scale(' + multiplier + ')">');
 	var snapSvgXml = text2xml(snapshot);
-	context.bindSnapshot($('#' + snapID),context); // Bind snap thumbnail to click function that opens corresponding snapshot
-	document.getElementById(snapID).appendChild(document.importNode(snapSvgXml.documentElement, true)); // add snapshot thumb to snapshots panel
+	var $snap = $("div.snap:eq(" + num + ")");
+	context.bindSnapshot($snap,context); // Bind snap thumbnail to click function that opens corresponding snapshot
+	document.getElementsByClassName("snap")[num].appendChild(document.importNode(snapSvgXml.documentElement, true)); // add snapshot thumb to snapshots panel
 };
 
 // Open a snapshot as current drawing
@@ -349,23 +354,58 @@ SVGDRAW.prototype.openSnapshot = function(id) {
 	this.svgCanvas.setSvgString(snap);
 	this.svgCanvas.setZoom(.75);
 	// reset the undo/redo stack
-	// clicking undo or redo too much eventually breaks the svg editor
-	// TODO: Possibly figure out how to re-enable undo stack when correctly when a snapshot has been opened so that students
-	// can go back to their previous drawings
+	// clicking undo or redo too much (when in snpashot mode) eventually breaks the svg editor
 	this.svgCanvas.resetUndo();
+	this.warningStackSize = 0;
 	$("#tool_undo").addClass("tool_button_disabled");
-	$('#svgcanvas').effect("pulsate", { times:1 }, 800);
+	$('#svgcanvas').effect("pulsate", { times:1 }, 700); // pulsate new snapshot
 };
 
 // Bind snapshot thumbnail to click function that opens corresponding snapshot
 SVGDRAW.prototype.bindSnapshot = function(item,context) {
-	$(item).click(function(){
-		var id = $(this).attr('id');
-		id = id.replace("snap","");
-		//context.openSnapshot(id);
-		context.id = id;
-		$('#snapwarning_dialog').dialog("open");
+	var snapClick = function(item){
+	//$(item).click(function(){
+		var index = $("div.snap").index(item);
+		context.id = index;
+		if(context.warningStackSize != context.svgCanvas.getUndoStackSize()){
+			$('#snapwarning_dialog').dialog("open");
+		} else {
+			context.openSnapshot(index);
+		}
+	};
+	
+	$(item).click(function(){snapClick(this);});
+	
+	$("#snap_images").sortable({
+		start: function(event, ui) {
+			context.id = $("div.snap").index(ui.item);
+			ui.item.unbind("click");
+	    },
+	    stop: function(event, ui) {
+	        setTimeout(function(){
+	        	ui.item.click(function(){snapClick(this);}, 300);
+	        });
+	    },
+	    update: function(event, ui) {
+	    	var newIndex = $("div.snap").index(ui.item);
+	    	var svgtext = context.snapshots.splice(context.id,1);
+	    	context.snapshots.splice(newIndex,0,svgtext[0]);
+	    },
+	    opacity: .6,
+	    placeholder: 'placeholder'
 	});
+	
+	$(item).hover(
+		function () {
+			$(this).addClass('hover');
+			$(this).children('.snap_delete').css("opacity","1");
+		}, 
+		function () {
+			$(this).children('.snap_delete').css("opacity",".3");
+			$(this).removeClass('hover');
+		}
+	);
+
 };
 
 // from svg-edit code (svgcanvas.js), converts text to xml (svg xml)
