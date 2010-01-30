@@ -219,21 +219,30 @@ body {
 
 #svg_editor #snapshots div.snap_delete {
 	-moz-border-radius-bottomleft:4px;
-	-moz-border-radius-bottomright:0;
-	-moz-border-radius-topleft:0;
-	-moz-border-radius-topright:0;
 	background:#333333 none repeat scroll 0 0;
 	width:7px;
 	float:right;
 	margin-right:-2px;
 	margin-top:-115px;
-	opacity:0.25;
+	opacity:0.5;
 	padding:2px 5px 2px 6px;
 	color:#FFFFFF;
 }
 
 #svg_editor #snapshots div.snap_delete span:hover {
 	opacity:1;
+}
+
+#svg_editor #snapshots div.snap_num {
+	-moz-border-radius-topright:4px;
+	background:#333333;
+	color:#FFFFFF;
+	float:left;
+	font-size:1.2em;
+	margin-left:-2px;
+	margin-top:-18px;
+	opacity:0.5;
+	padding:2px 6px 2px 4px;
 }
 
 #svg_editor #snapshots div.snap_wrapper {
@@ -246,7 +255,7 @@ body {
 	height:112.5px;
 	padding:2px;
 	margin:auto auto 5px;
-	border:2px solid #BBBBBB;
+	border:2px solid #999999;
 	cursor:pointer;
 	-moz-border-radius:4px;
 	-webkit-border-radius:4px;
@@ -254,11 +263,12 @@ body {
 }
 
 #svg_editor #snapshots div.hover {
-	border:2px solid #333333;
+	border:2px solid #555555;
 }
 
-#svg_editor #snapshots div.active {
-	background-color:#EFEFEF !important;	
+#svg_editor #snapshots div.snap.active {
+	background-color:#EFEFEF !important;
+	border-color:#333333 !important;	
 }
 
 #svg_editor #snapshotpanel .label {

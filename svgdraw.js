@@ -241,7 +241,8 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 				// remove focus from all snapshots
 				$('.snap').each(function(index){
 					$(this).removeClass("hover active");
-					$(this).children(".snap_delete").css("opacity",".25");
+					$(this).children(".snap_delete").css("opacity",".5");
+					$(this).children(".snap_num").css("opacity",".5");
 				});
 			};
 		}
@@ -294,6 +295,9 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 					context.snapshots.splice(context.id,1);
 					$(".snap:eq(" + context.id + ")").fadeOut(1200, function(){$(this).remove()});
 					$(this).dialog('close');
+					setTimeout(function(){
+			    		context.updateNumbers();
+			    	},1500);
 				},
 				Cancel: function() {
 					$(this).dialog('close');
@@ -304,7 +308,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 		
 		context.warningStackSize = 0; // set warning stack to 0 on intial load
 		
-		$("#svgcanvas").mouseup(function(){ context.canvasClick(context); });  // bind canvas mouseup to stack checker function
+		$("#svg_editor").mouseup(function(){ context.snapCheck(context); });  // bind mouseup events to stack checker function
 	}
 	
 	//initiate stamps
@@ -361,9 +365,11 @@ SVGDRAW.prototype.addSnapshot = function(svgString,num,context) {
 	var multiplier = 150/res.w;
 	var snapHeight = res.h * multiplier;
 	var snapWidth = 150;
+	var snapNum = num*1 + 1;
 	var snapHolder = '<div class="snap" title="Click to Open; Click and Drag to Reorder">' +
 	'<div class="snap_wrapper"></div>' + 
-	'<div class="snap_delete" title="Delete Snapshot"><span class="snap_delete">X</span></div>' + 
+	'<div class="snap_delete" title="Delete Snapshot"><span>X</span></div>' +
+	'<div class="snap_num"><span>' + snapNum + '</span></div>'
 	'</div>';
 	$("#snap_images").append(snapHolder);
 	
@@ -398,7 +404,7 @@ SVGDRAW.prototype.bindSnapshot = function(item,context) {
 	
 	$("#snap_images").sortable({
 		start: function(event, ui) {
-			context.id = $("div.snap").index(ui.item);
+			context.id = $(".snap").index(ui.item);
 			ui.item.unbind("click");
 	    },
 	    stop: function(event, ui) {
@@ -407,9 +413,12 @@ SVGDRAW.prototype.bindSnapshot = function(item,context) {
 	        });
 	    },
 	    update: function(event, ui) {
-	    	var newIndex = $("div.snap").index(ui.item);
+	    	var newIndex = $(".snap").index(ui.item);
 	    	var svgtext = context.snapshots.splice(context.id,1);
 	    	context.snapshots.splice(newIndex,0,svgtext[0]);
+	    	setTimeout(function(){
+	    		context.updateNumbers();
+	    	},400);
 	    },
 	    opacity: .6,
 	    placeholder: 'placeholder'
@@ -417,12 +426,16 @@ SVGDRAW.prototype.bindSnapshot = function(item,context) {
 	
 	$(item).hover(
 		function () {
-			$(this).addClass('hover');
-			$(this).children('.snap_delete').css("opacity","1");
+			if (!$(this).hasClass("active")){
+				$(this).addClass('hover');
+				$(this).children('.snap_delete').css("opacity",".75");
+				$(this).children('.snap_num').css("opacity",".75");
+			}
 		}, 
 		function () {
 			if (!$(this).hasClass("active")){
-				$(this).children('.snap_delete').css("opacity",".25");
+				$(this).children('.snap_delete').css("opacity",".5");
+				$(this).children('.snap_num').css("opacity",".5");
 				$(this).removeClass('hover');
 			}
 		}
@@ -451,26 +464,36 @@ SVGDRAW.prototype.updateClass = function(num,context){
 	$(".snap").each(function(index){
 		if(index != num){
 			$(this).removeClass("hover active");
-			$(this).children(".snap_delete").css("opacity",".25");
+			$(this).children(".snap_delete").css("opacity",".5");
+			$(this).children(".snap_num").css("opacity",".5");
 		} else {
 			$(this).addClass("hover active");
 			$(this).children(".snap_delete").css("opacity","1");
+			$(this).children(".snap_num").css("opacity","1");
 		}
 	});
 };
 
-SVGDRAW.prototype.canvasClick = function(context){
+SVGDRAW.prototype.snapCheck = function(context){
 	setTimeout(function(){
 		$(".snap").each(function(index){
 			if($(this).hasClass("active")){
 				if(context.warningStackSize != context.svgCanvas.getUndoStackSize()){
 					$(this).removeClass("hover active");
-					$(this).children(".snap_delete").css("opacity",".25");
+					$(this).children(".snap_delete").css("opacity",".5");
+					$(this).children(".snap_num").css("opacity",".5");
 				}
 			}
 		});
 	}, 500);
 	
+};
+
+SVGDRAW.prototype.updateNumbers = function(){
+	$(".snap_num > span").each(function(index){
+		var num = "" + (index*1 + 1);
+		$(this).text(num);
+	});
 };
 
 // from svg-edit code (svgcanvas.js), converts text to xml (svg xml)
