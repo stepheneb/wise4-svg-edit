@@ -645,9 +645,13 @@ function svg_edit_setup() {
 		};
 		if(!$('#sidepanels').is(':visible')){
 			$('#sidepanels').show();
-			ctl.value = 75;
-			svgCanvas.setSnapState(true);
-			changeZoom(ctl);
+			//if(document.getElementById("workarea").offsetWidth < 700){
+				ctl.value = 75;
+				svgCanvas.setSnapState(true);
+				changeZoom(ctl);
+			//} else {
+				//changeZoom(ctl);
+			//}
 		} else {
 			$('#sidepanels').hide();
 			svgCanvas.setSnapState(false);

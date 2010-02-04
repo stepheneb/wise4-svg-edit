@@ -182,8 +182,8 @@ body {
 #svg_editor #snapshotpanel {
 	background-color:#A0A0A0;
 	margin:0 5px;
-	padding:5px;
-	height:470px;
+	padding:3px;
+	height:474px;
 	width:190px;
 	border:1px solid #777777;
 }
@@ -191,7 +191,7 @@ body {
 #svg_editor #snapshot_header {
 	border:1px solid #777777;
 	color:#000000;
-	height:20px;
+	height:17px;
 	padding:2px 5px;
 	background-color:#E8E8E8;
 }
@@ -206,15 +206,15 @@ body {
 
 #svg_editor #snapshots {
 	background-color:#FFFFFF;
-	margin:5px 0;
+	margin:3px 0;
 	padding:5px;
-	height:427px;
+	height:410px;
 	border:1px solid #777777;
 }
 
 #svg_editor #snapshots #snap_images {
 	overflow:auto;
-	height:395px;
+	height:380px;
 }
 
 #svg_editor #snapshots div.snap_delete {
@@ -271,13 +271,27 @@ body {
 	border-color:#333333 !important;	
 }
 
+#svg_editor #play_controls {
+	border:1px solid #777777;
+	color:#000000;
+	height:17px;
+	padding:2px 5px;
+	background-color:#E8E8E8;
+}
+
+#svg_editor .snap_controls {
+	display:inline;
+	margin:4px 5px 0 0;
+	cursor:pointer;
+}
+
 #svg_editor #snapshotpanel .label {
 	margin:0 2px;
 }
 
 #svg_editor #snapshotpanel h3 {
 	font-weight:bold;
-	margin:2px 0 0;
+	margin:0;
 	float:left;
 }
 

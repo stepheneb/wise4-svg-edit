@@ -4,16 +4,19 @@ function SVGDRAW(node) {
 	
 	this.svgCanvas = null;
 	this.teacherAnnotation = "";		
-	this.defaultImage = ""; // svg string to hold starting image
+	this.defaultImage = ""; // svg string to hold starting (or background) svg image
 	this.stamps  =  []; // array to hold stamp paths
 	this.snapshotsActive  =  false; // boolean to specify whether snapshots are active
 	this.snapshots  =  []; // array to hold snapshot images
-	this.descriptionActive =  false; // boolean to specify whether student annotation/description is active
+	this.descriptionActive =  false; // boolean to specify whether student annotations/descriptions are active
 	this.description  =  null; // string to hold annotation/description text
 	this.defaultDescription = ""; // string to hold starting description text
 	this.instructions = ""; // string to hold prompt/instructions text
-	this.id = null; // var to hold currently selected snapshot
+	this.id = null; // var to hold currently selected snapshot id
 	this.warningStackSize = 0;
+	this.selected = false; // boolean to specify whether a snapshot is currently selected
+	
+	// json object to hold student data for the node
 	this.studentData = {
 					"svgString": null,
 					"description": null,
@@ -275,7 +278,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			width:490,
 			buttons: {
 				'Continue': function() {
-					context.openSnapshot(context.id,context);
+					context.openSnapshot(context.id,true,context);
 					$(this).dialog('close');
 				},
 				Cancel: function() {
@@ -298,6 +301,10 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 					setTimeout(function(){
 			    		context.updateNumbers();
 			    	},1500);
+					context.id = -1; // This is a cludge to ensure that selecting undo doesn't result
+			    	// in wrong snap being highlighted after deleting has occured
+			    	// TODO: Fix me - Perhaps make snapshots array an object that holds snapshot svg,
+			    	// creation id, and description text for each snapshot
 				},
 				Cancel: function() {
 					$(this).dialog('close');
@@ -305,6 +312,9 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 				}
 			}
 		});
+		
+		// Bind snapshot playback controls
+		$('img.snap_controls').click(function(){ context.snapPlayback($(this),context); });
 		
 		context.warningStackSize = 0; // set warning stack to 0 on intial load
 		
@@ -357,6 +367,7 @@ SVGDRAW.prototype.newSnapshot = function(context) {
 	$("#snap_images").attr({ scrollTop: $("#snap_images").attr("scrollHeight") });
 	$(".snap:eq(" + num + ")").effect("pulsate", { times:1 }, 800);
 	context.warningStackSize = context.svgCanvas.getUndoStackSize();
+	context.id = num;
 };
 
 SVGDRAW.prototype.addSnapshot = function(svgString,num,context) {
@@ -385,8 +396,9 @@ SVGDRAW.prototype.addSnapshot = function(svgString,num,context) {
 };
 
 // Open a snapshot as current drawing
-SVGDRAW.prototype.openSnapshot = function(index,context) {
-	var snap = this.snapshots[index];
+SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
+	$('#svgcanvas').stop(true,true); // stop and remove any currently running animations
+	var snap = context.snapshots[index];
 	context.svgCanvas.setSvgString(snap);
 	context.svgCanvas.setZoom(.75);
 	// reset the undo/redo stack
@@ -394,35 +406,16 @@ SVGDRAW.prototype.openSnapshot = function(index,context) {
 	context.svgCanvas.resetUndo();
 	context.warningStackSize = 0;
 	$("#tool_undo").addClass("tool_button_disabled");
-	$('#svgcanvas').effect("pulsate", {times: '1'}, 700); // pulsate new canvas
+	if (pulsate==true){
+		$('#svgcanvas').effect("pulsate", {times: '1'}, 700); // pulsate new canvas
+	}
 	context.updateClass(index,context);
+	context.selected = true;
 };
 
-// Bind snapshot thumbnail to click function that opens corresponding snapshot
+// Bind snapshot thumbnail to click function that opens corresponding snapshot, delete function, hover function, sorting function
 SVGDRAW.prototype.bindSnapshot = function(item,context) {
 	$(item).click(function(){context.snapClick(this,context);});
-	
-	$("#snap_images").sortable({
-		start: function(event, ui) {
-			context.id = $(".snap").index(ui.item);
-			ui.item.unbind("click");
-	    },
-	    stop: function(event, ui) {
-	        setTimeout(function(){
-	        	ui.item.click(function(){context.snapClick(this,context);}, 300);
-	        });
-	    },
-	    update: function(event, ui) {
-	    	var newIndex = $(".snap").index(ui.item);
-	    	var svgtext = context.snapshots.splice(context.id,1);
-	    	context.snapshots.splice(newIndex,0,svgtext[0]);
-	    	setTimeout(function(){
-	    		context.updateNumbers();
-	    	},400);
-	    },
-	    opacity: .6,
-	    placeholder: 'placeholder'
-	});
 	
 	$(item).hover(
 		function () {
@@ -447,16 +440,44 @@ SVGDRAW.prototype.bindSnapshot = function(item,context) {
 		context.id = index;
 		$("#deletesnap_dialog").dialog('open');
 	});
+	
+	// TODO: Make this sortable binder initiate only once (after first snapshot has been saved)
+	$("#snap_images").sortable({
+		start: function(event, ui) {
+			context.id = $(".snap").index(ui.item);
+			ui.item.unbind("click"); // unbind click function
+	    },
+	    stop: function(event, ui) {
+	        setTimeout(function(){
+	        	ui.item.click(function(){context.snapClick(this,context);}, 300); // rebind click function
+	        });
+	    },
+	    update: function(event, ui) {
+	    	var newIndex = $(".snap").index(ui.item);
+	    	// reorder snapshots array
+	    	var svgtext = context.snapshots.splice(context.id,1);
+	    	context.snapshots.splice(newIndex,0,svgtext[0]);
+	    	setTimeout(function(){
+	    		context.updateNumbers();  // reorder snapshot thumbnail labels
+	    	},400);
+	    	context.id = -1; // This is a cludge to ensure that selecting undo doesn't result
+	    	// in wrong snap being highlighted after reordering has occured
+	    	// TODO: Fix me - Perhaps make snapshots array an object that holds snapshot svg,
+	    	// creation id, and description text for each snapshot
+	    },
+	    opacity: .6,
+	    placeholder: 'placeholder'
+	});
 
 };
 
 SVGDRAW.prototype.snapClick = function(item,context){
-	var index = $("div.snap").index(item);
-	context.id = index;
+	context.id = $("div.snap").index(item);
+	//context.id = index;
 	if(context.warningStackSize != context.svgCanvas.getUndoStackSize()){
 		$('#snapwarning_dialog').dialog("open");
 	} else {
-		context.openSnapshot(index,context);
+		context.openSnapshot(context.id,true,context);
 	}
 };
 
@@ -476,17 +497,54 @@ SVGDRAW.prototype.updateClass = function(num,context){
 
 SVGDRAW.prototype.snapCheck = function(context){
 	setTimeout(function(){
-		$(".snap").each(function(index){
-			if($(this).hasClass("active")){
-				if(context.warningStackSize != context.svgCanvas.getUndoStackSize()){
+		if(context.warningStackSize == context.svgCanvas.getUndoStackSize()){
+			$current = $("div.snap:eq(" + context.id + ")");
+			$current.addClass("hover active");
+			$current.children(".snap_delete").css("opacity","1");
+			$current.children(".snap_num").css("opacity","1");
+		} else {
+			$(".snap").each(function(index){
+				if($(this).hasClass("active")){
 					$(this).removeClass("hover active");
 					$(this).children(".snap_delete").css("opacity",".5");
 					$(this).children(".snap_num").css("opacity",".5");
 				}
-			}
-		});
+			});
+			context.selected = false;
+			//context.id = undefined;
+		}
 	}, 500);
 	
+};
+
+SVGDRAW.prototype.snapPlayback = function($item,context){
+	var mode = $item.attr('id');
+	if(context.selected == true){
+		var index = context.id;
+	} else {
+		index = 0;
+	}
+	if (mode=="play" && context.snapshots.length > 1){
+		$('#play').hide();
+		$('#previous').hide();
+		$('#next').hide();
+		$('#pause').attr("style","display:inline");
+		$("#svgcanvas").everyTime(1000,'play',function(){
+			context.openSnapshot(index,false,context);
+			index = index+1;
+			context.id = index-1;
+			if(index > context.snapshots.length-1){
+				index = 0;
+				context.id = context.snapshots.length-1;
+			}
+		},0);
+	} else if (mode=="pause") {
+		$('#pause').hide();
+		$('#play').attr("style","display:inline");
+		$('#next').attr("style","display:inline");
+		$('#previous').attr("style","display:inline");
+		$("#svgcanvas").stopTime('play');
+	}
 };
 
 SVGDRAW.prototype.updateNumbers = function(){
