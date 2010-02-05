@@ -17,7 +17,7 @@ function SVGDRAW(node) {
 	this.warningStackSize = 0;
 	this.selected = false; // boolean to specify whether a snapshot is currently selected
 	this.warning = false;  // boolean for initial (load) warning state (if snapshots have been saved, not currently selected)
-	this.mode = "normal";
+	this.snapTotal = 0;
 	
 	// json object to hold student data for the node
 	this.studentData = {
@@ -35,7 +35,7 @@ function Snapshot(svg, id, context){
 	//if (description){
 		//this.description = description;
 	//} else {
-		this.description = context.defaultDescription;
+		this.description = context.defaultDescription;  // set snapshot initial description to default
 	//};
 }
 
@@ -343,9 +343,10 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 		// Bind snapshot playback controls
 		$('img.snap_controls').click(function(){ context.snapPlayback($(this),context); });
 		
-		context.warningStackSize = 0; // set warning stack to 0 on intial load
+		context.warningStackSize = 0; // set warning stack checker to 0 on intial load
 		
-		$("#svg_editor").mouseup(function(){ context.snapCheck(context); });  // bind mouseup events to stack checker function
+		// bind mouseup events to stack checker function
+		$("#tools_top,#tools_left,#workarea,#tools_bottom").mouseup(function(){ context.snapCheck(context);	});
 	}
 	
 	//initiate stamps
@@ -385,13 +386,16 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 
 SVGDRAW.prototype.newSnapshot = function(context) {
 	var current = context.svgCanvas.getSvgString();
-	if(context.snapshots.length > 0) {
+	var id = context.snapTotal;
+	/*if(context.snapshots.length > 0) {
 		var newSnap = new Snapshot(current,context.snapshots.length,context);
 	} else {
 		var newSnap = new Snapshot(current,0,context);
-	}
+	}*/
+	var newSnap = new Snapshot(current,context.snapTotal,context);
 	//context.snapshots.push(current);
 	context.snapshots.push(newSnap);
+	context.snapTotal = id + 1;
 	var num = context.snapshots.length-1;
 	//var snapID = "snap" + num;
 	context.addSnapshot(current,num,context);
@@ -401,6 +405,7 @@ SVGDRAW.prototype.newSnapshot = function(context) {
 	context.active = num;
 	context.index = num;
 	context.selected = true;
+	context.warning = false;
 	context.saveToVLE();
 };
 
@@ -446,7 +451,6 @@ SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
 	context.index = index;
 	context.active = context.snapshots[index].id;
 	context.warning = false;
-	context.mode = "normal";
 };
 
 // Bind snapshot thumbnail to click function that opens corresponding snapshot, delete function, hover function, sorting function
@@ -471,7 +475,6 @@ SVGDRAW.prototype.bindSnapshot = function(item,context) {
 	);
 	
 	$(item).children(".snap_delete").click(function(){
-		context.mode = "delete";
 		$(this).parent().unbind("click");
 		var index = $("div.snap").index(item);
 		context.index = index;
@@ -506,8 +509,6 @@ SVGDRAW.prototype.bindSnapshot = function(item,context) {
 
 SVGDRAW.prototype.snapClick = function(item,context){
 	context.index = $("div.snap").index(item);
-	context.mode = "open";
-	//context.index = index;
 	if(context.warningStackSize == context.svgCanvas.getUndoStackSize() && context.warning == false){
 		context.openSnapshot(context.index,true,context);
 	} else {
@@ -530,27 +531,24 @@ SVGDRAW.prototype.updateClass = function(num,context){
 };
 
 SVGDRAW.prototype.snapCheck = function(context){
-	if(context.mode != "delete"  || context.mode != "open"){
-		setTimeout(function(){
-			if(context.warningStackSize == context.svgCanvas.getUndoStackSize()){
-				for (var i in context.snapshots){
-					if(context.snapshots[i].id == context.active){
-						context.index = i;
-						break;
-					}
-					else {
-						context.index = -1;
-					}
+	setTimeout(function(){
+		if(context.warningStackSize == context.svgCanvas.getUndoStackSize()){
+			for (var i in context.snapshots){
+				if(context.snapshots[i].id == context.active){
+					context.index = i;
+					break;
 				}
-				context.selected = true;
-				context.updateClass(context.index,context);
-			} else {
-				context.selected = false;
-				context.updateClass(-1,context);
+				else {
+					context.index = -1;
+				}
 			}
-		}, 500);
-	}
-	
+			context.selected = true;
+			context.updateClass(context.index,context);
+		} else {
+			context.selected = false;
+			context.updateClass(-1,context);
+		}
+	}, 500);
 };
 
 SVGDRAW.prototype.snapPlayback = function($item,context){
@@ -567,7 +565,8 @@ SVGDRAW.prototype.snapPlayback = function($item,context){
 		$('#pause').attr("style","display:inline");
 		$("#svgcanvas").everyTime(1000,'play',function(){
 			context.openSnapshot(index,false,context);
-			$("#snap_images").attr({ scrollTop: $("#snap_images").attr("scrollHeight") });
+			var page = Math.floor(index/3);
+			$("#snap_images").attr({ scrollTop: page * 375 });
 			index = index+1;
 			context.index = index-1;
 			if(index > context.snapshots.length-1){
