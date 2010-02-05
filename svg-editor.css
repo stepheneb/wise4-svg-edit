@@ -285,6 +285,14 @@ body {
 	cursor:pointer;
 }
 
+#svg_editor #play_controls #snap_browse {
+	float:right;
+}
+
+#svg_editor #play_controls #previous {
+	margin: 4px 0 0;
+}
+
 #svg_editor #snapshotpanel .label {
 	margin:0 2px;
 }
@@ -1341,13 +1349,13 @@ button#tool_docprops_cancel {
 #file_panel, #xy_panel, #image_panel, #circle_panel,
 #ellipse_panel, #line_panel, #tool_node_link,
 #layerpanel, #tool_fhrect, #tool_fhellipse,
-#stroke_style, #zoom_panel {
+#stroke_style, #zoom_panel, #pause {
 	display:none !important;
 }
 
 /* wise4 default hidden regions*/
 #sidepanels, #notepanel, #descriptionpanel, #overlay,
 #new_snap_dialog, #prompt_dialog, #snapwarning_dialog,
-#deletesnap_dialog {
+#deletesnap_dialog, #playback {
 	display:none;
 }

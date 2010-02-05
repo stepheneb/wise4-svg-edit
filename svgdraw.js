@@ -12,7 +12,7 @@ function SVGDRAW(node) {
 	this.description  =  ""; // string to hold annotation/description text
 	this.defaultDescription = ""; // string to hold starting description text
 	this.instructions = ""; // string to hold prompt/instructions text
-	this.active = null; // var to hold last selected snapshot.id
+	this.active = -1; // var to hold last selected snapshot.id
 	this.index = null; // var to hold currently selected snapshot
 	this.warningStackSize = 0;
 	this.selected = false; // boolean to specify whether a snapshot is currently selected
@@ -194,64 +194,10 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 		}
 	}
 	
-	// initiate description/annotation
-	if(context.descriptionActive){
-		// TODO: add vle check for saved description logic
-		if (data){
-			context.description = data.description;
-		} else if (context.defaultDescription){
-			context.description = context.defaultDescription;
-		}
-		
-		// Show description panel on link click
-		$('.tool_description').click(function(){
-			if (!$('#descriptionpanel').is(':visible')){ // prevent text from being overridden if panel is already visible
-				$('#description_commit').attr("disabled", "disabled");
-				$('#description_close').attr("disabled", "disabled");
-				$('#description_content').val(context.description); // populate description text
-				// center description panel in window
-				var height = $('#descriptionpanel').height();
-				var width = $('#descriptionpanel').width();
-				$('#descriptionpanel').css({top: $(window).height()/2-height/2, left: $(window).width()/2-width/2});
-				$("#overlay").show();
-				$('#descriptionpanel').show(); // show description panel
-			}
-		});
-		
-		// Save description text
-		$('#description_commit').click(function(){
-			var value = $('#description_content').val();
-			context.description = value;
-			$(this).attr("disabled", "disabled");
-			context.saveToVLE(); // save changes to VLE
-		});
-		
-		// Save description text and close dialogue
-		$('#description_close').click(function(){
-			var value = $('#description_content').val();
-			context.description = value;
-			$('#descriptionpanel').hide();
-			$("#overlay").hide();
-			context.saveToVLE(); // save changes to VLE
-			// TODO: add logic to check whether save button has been clicked already
-			// If it has, no need to resave the data to the vle
-		});
-		
-		$('#description_content').keyup(function(){
-			$('#description_commit').removeAttr("disabled");
-			$('#description_close').removeAttr("disabled");
-		});
-		
-		$('#close_description').click(function(){
-			$('#descriptionpanel').hide();
-			$("#overlay").hide();
-		});
-		
-		$('#tool_description').attr("style","display:inline"); // show add description link
-	}
-	
 	//initiate snapshots
 	if(context.snapshotsActive){
+		$('#tool_description a').text('Add Description to Snapshot');
+		
 		$('#tool_snapshot').attr("style","display:inline");
 		
 		if(data.snapshots){
@@ -323,17 +269,18 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 						context.warning = true;
 					}
 					context.snapshots.splice(context.index,1);
-					$(".snap:eq(" + context.index + ")").fadeOut(1200, function(){$(this).remove()});
+					$(".snap:eq(" + context.index + ")").fadeOut(1000, function(){$(this).remove()});
 					$(this).dialog('close');
 					setTimeout(function(){
 						context.snapCheck(context);
 			    		context.updateNumbers();
-			    		context.mode = "normal";
-			    	},1300);
+						if(context.snapshots.length < 2){
+							$('#playback').hide();
+						}
+			    	},1100);
 				},
 				Cancel: function() {
 					$(this).dialog('close');
-					context.mode = "normal";
 					context.snapCheck(context);
 					$(".snap:eq(" + context.index + ")").click(function(){context.snapClick(this,context);}, 300);
 				}
@@ -346,7 +293,69 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 		context.warningStackSize = 0; // set warning stack checker to 0 on intial load
 		
 		// bind mouseup events to stack checker function
-		$("#tools_top,#tools_left,#workarea,#tools_bottom").mouseup(function(){ context.snapCheck(context);	});
+		$("#tools_top,#tools_left,#workarea,#tools_bottom").mouseup(function(){
+			if (context.snapshotsActive == true){
+				context.snapCheck(context);
+			}
+		});
+	}
+	
+	// initiate description/annotation
+	if(context.descriptionActive){
+		// TODO: add vle check for saved description logic
+		if (data){
+			context.description = data.description;
+		} else if (context.defaultDescription){
+			context.description = context.defaultDescription;
+		}
+		
+		// Show description panel on link click
+		$('.tool_description').click(function(){
+			if (!$('#descriptionpanel').is(':visible')){ // prevent text from being overridden if panel is already visible
+				$('#description_commit').attr("disabled", "disabled");
+				$('#description_close').attr("disabled", "disabled");
+				$('#description_content').val(context.description); // populate description text
+				// center description panel in window
+				var height = $('#descriptionpanel').height();
+				var width = $('#descriptionpanel').width();
+				$('#descriptionpanel').css({top: $(window).height()/2-height/2, left: $(window).width()/2-width/2});
+				$("#overlay").show();
+				$('#descriptionpanel').show(); // show description panel
+			}
+		});
+		
+		// Save description text
+		$('#description_commit').click(function(){
+			var value = $('#description_content').val();
+			context.description = value;
+			$(this).attr("disabled", "disabled");
+			context.saveToVLE(); // save changes to VLE
+		});
+		
+		// Save description text and close dialogue
+		$('#description_close').click(function(){
+			var value = $('#description_content').val();
+			context.description = value;
+			$('#descriptionpanel').hide();
+			$("#overlay").hide();
+			context.saveToVLE(); // save changes to VLE
+			// TODO: add logic to check whether save button has been clicked already
+			// If it has, no need to resave the data to the vle
+		});
+		
+		$('#description_content').keyup(function(){
+			$('#description_commit').removeAttr("disabled");
+			$('#description_close').removeAttr("disabled");
+		});
+		
+		$('#close_description').click(function(){
+			$('#descriptionpanel').hide();
+			$("#overlay").hide();
+		});
+		
+		if (context.snapshotsActive != true){ // check whether snapshots are active
+			$('#tool_description').attr("style","display:inline"); // show add description link
+		}
 	}
 	
 	//initiate stamps
@@ -406,6 +415,12 @@ SVGDRAW.prototype.newSnapshot = function(context) {
 	context.index = num;
 	context.selected = true;
 	context.warning = false;
+	if(context.snapshots.length > 1){
+		$('#playback').show();
+	}
+	if (context.descriptionActive == true) {
+		$('#tool_description').attr("style", "display:inline"); // show description link
+	}
 	context.saveToVLE();
 };
 
@@ -439,7 +454,9 @@ SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
 	$('#svgcanvas').stop(true,true); // stop and remove any currently running animations
 	var snap = context.snapshots[index].svg;
 	context.svgCanvas.setSvgString(snap);
-	context.svgCanvas.setZoom(.75);
+	if($('#sidepanels').is(':visible')){
+		context.svgCanvas.setZoom(.75);
+	}
 	context.svgCanvas.resetUndo(); // reset the undo/redo stack
 	context.warningStackSize = 0;
 	$("#tool_undo").addClass("tool_button_disabled");
@@ -533,6 +550,9 @@ SVGDRAW.prototype.updateClass = function(num,context){
 SVGDRAW.prototype.snapCheck = function(context){
 	setTimeout(function(){
 		if(context.warningStackSize == context.svgCanvas.getUndoStackSize()){
+			if (context.active > -1 && context.descriptionActive == true) {
+				$('#tool_description').attr("style", "display:inline"); // show description link
+			}
 			for (var i in context.snapshots){
 				if(context.snapshots[i].id == context.active){
 					context.index = i;
@@ -546,9 +566,12 @@ SVGDRAW.prototype.snapCheck = function(context){
 			context.updateClass(context.index,context);
 		} else {
 			context.selected = false;
+			if (context.descriptionActive == true) {
+				$('#tool_description').hide(); // hide description link
+			}
 			context.updateClass(-1,context);
 		}
-	}, 500);
+	}, 300);
 };
 
 SVGDRAW.prototype.snapPlayback = function($item,context){
@@ -560,9 +583,8 @@ SVGDRAW.prototype.snapPlayback = function($item,context){
 	}
 	if (mode=="play" && context.snapshots.length > 1){
 		$('#play').hide();
-		$('#previous').hide();
-		$('#next').hide();
-		$('#pause').attr("style","display:inline");
+		$('#snap_browse').hide();
+		$('#pause').attr("style","display:inline !important");
 		$("#svgcanvas").everyTime(1000,'play',function(){
 			context.openSnapshot(index,false,context);
 			var page = Math.floor(index/3);
@@ -575,10 +597,9 @@ SVGDRAW.prototype.snapPlayback = function($item,context){
 			}
 		},0);
 	} else if (mode=="pause") {
-		$('#pause').hide();
+		$('#pause').attr("style","display:none !important");
 		$('#play').attr("style","display:inline");
-		$('#next').attr("style","display:inline");
-		$('#previous').attr("style","display:inline");
+		$('#snap_browse').show();
 		$("#svgcanvas").stopTime('play');
 	}
 };
