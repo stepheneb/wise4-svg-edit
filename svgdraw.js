@@ -102,40 +102,43 @@ SVGDRAW.prototype.loadCallback = function(studentWorkJSON, context) {
 				svgString = studentWorkJSON;
 			}
 			context.svgCanvas.setSvgString(svgString);
-
-			//check if annotations were retrieved
-			if(context.dataService.vle.annotations != null) {
-				//see if there were any annotations for this step
-				var annotation = context.dataService.vle.annotations.getLatestAnnotationForNodeId(context.dataService.vle.getCurrentNode().id);
-				if (annotation != null) {
+			
+			if(context.dataService.vle.getConfig().getConfigParam('mode') == 'run'){
+				//check if annotations were retrieved
+				if(context.dataService.vle.annotations != null) {
+					//see if there were any annotations for this step
+					var annotation = context.dataService.vle.annotations.getLatestAnnotationForNodeId(context.dataService.vle.getCurrentNode().id);
+					if (annotation != null) {
+						var annotationValue = annotation.value;
+						//annotationValue = '<g><title>teacher</title><text xml:space="preserve" text-anchor="middle" font-family="serif" font-size="24" stroke-width="0" stroke="#000000" fill="#000000" id="svg_3" y="55.5" x="103">annotation</text></g>';
+						this.teacherAnnotation = annotationValue;
+						context.svgCanvas.setSvgString(svgString.replace("</svg>", this.teacherAnnotation + "</svg>"));
+						context.svgCanvas.setCurrentLayer('Layer 1');
+					}
+				}
+	
+				var processGetDrawAnnotationResponse = function(responseText, responseXML) {
+					//parse the xml annotations object that contains all the annotations
+					var annotation = annotations.getLatestAnnotationForNodeId(context.dataService.vle.getCurrentNode().id);
+					vle.annotations;
 					var annotationValue = annotation.value;
 					//annotationValue = '<g><title>teacher</title><text xml:space="preserve" text-anchor="middle" font-family="serif" font-size="24" stroke-width="0" stroke="#000000" fill="#000000" id="svg_3" y="55.5" x="103">annotation</text></g>';
-					this.teacherAnnotation = annotationValue;
-					context.svgCanvas.setSvgString(svgString.replace("</svg>", this.teacherAnnotation + "</svg>"));
+					context.svgCanvas.setSvgString(svgString.replace("</svg>", annotationValue + "</svg>"));
 					context.svgCanvas.setCurrentLayer('Layer 1');
-				}
+				};
+				//context.dataService.vle.connectionManager.request('GET', 3, 'http://localhost:8080/vlewrapper/vle/echo.html', {}, processGetDrawAnnotationResponse);
+				
+				var getAnnotationsParams = {
+												runId: context.dataService.vle.getConfig().getConfigParam('runId'),
+												toWorkgroup: context.dataService.vle.getUserAndClassInfo().getWorkgroupId(),
+												fromWorkgroup: context.dataService.vle.getUserAndClassInfo().getTeacherWorkgroupId(),
+												periodId: context.dataService.vle.getUserAndClassInfo().getPeriodId()
+										   };
+				
+				//get all the annotations (TODO: uncomment when using webapp/portal)
+				//context.dataService.vle.connectionManager.request('GET', 3, context.dataService.vle.getConfig().getConfigParam('getAnnotationsUrl'), getAnnotationsParams, processGetDrawAnnotationResponse);
 			}
 
-			var processGetDrawAnnotationResponse = function(responseText, responseXML) {
-				//parse the xml annotations object that contains all the annotations
-				var annotation = annotations.getLatestAnnotationForNodeId(context.dataService.vle.getCurrentNode().id);
-				vle.annotations;
-				var annotationValue = annotation.value;
-				//annotationValue = '<g><title>teacher</title><text xml:space="preserve" text-anchor="middle" font-family="serif" font-size="24" stroke-width="0" stroke="#000000" fill="#000000" id="svg_3" y="55.5" x="103">annotation</text></g>';
-				context.svgCanvas.setSvgString(svgString.replace("</svg>", annotationValue + "</svg>"));
-				context.svgCanvas.setCurrentLayer('Layer 1');
-			};
-			//context.dataService.vle.connectionManager.request('GET', 3, 'http://localhost:8080/vlewrapper/vle/echo.html', {}, processGetDrawAnnotationResponse);
-			
-			var getAnnotationsParams = {
-											runId: context.dataService.vle.getConfig().getConfigParam('runId'),
-											toWorkgroup: context.dataService.vle.getUserAndClassInfo().getWorkgroupId(),
-											fromWorkgroup: context.dataService.vle.getUserAndClassInfo().getTeacherWorkgroupId(),
-											periodId: context.dataService.vle.getUserAndClassInfo().getPeriodId()
-									   };
-			
-			//get all the annotations (TODO: uncomment when using webapp/portal)
-			//context.dataService.vle.connectionManager.request('GET', 3, context.dataService.vle.getConfig().getConfigParam('getAnnotationsUrl'), getAnnotationsParams, processGetDrawAnnotationResponse);
 		} else if (context.defaultImage){ // if no previous work, load default (starting) drawing
 			var svgString = context.defaultImage.replace("</svg>", "<g><title>student</title></g></svg>"); // add blank student layer
 			context.svgCanvas.setSvgString(svgString);
@@ -202,8 +205,6 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 	
 	//initiate snapshots
 	if(context.snapshotsActive){
-		//$('#tool_description a').text('Add Description to Snapshot');
-		
 		$('#tool_snapshot').attr("style","display:inline");
 		
 		if(data.snapshots){
@@ -220,8 +221,6 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 						context.index = i;
 					}
 				}
-				//context.updateClass(context.index,context);
-				//context.snapCheck(context);
 			} else {
 				context.warning = true;
 			}
@@ -347,7 +346,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			
 			// Save description text
 			$('#snap_description_commit').click(function(){
-			var value = $('#snap_description_content').val();
+				var value = $('#snap_description_content').val();
 				for (var i in context.snapshots) {
 					if (context.snapshots[i].id == context.active) {
 						context.snapshots[i].description = value;
@@ -362,6 +361,10 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			
 			setTimeout(function(){
 				context.snapCheck(context);
+				// scroll snap images panel depending on selected snapshot
+				// TODO: figure out why this isn't working
+				var page = Math.floor(context.index/3);
+				$("#snap_images").attr({ scrollTop: page * 375 });
 			},100);
 		} else {
 			// TODO: add vle check for saved description logic
