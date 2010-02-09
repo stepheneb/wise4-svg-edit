@@ -17,13 +17,15 @@ function SVGDRAW(node) {
 	this.warningStackSize = 0;
 	this.selected = false; // boolean to specify whether a snapshot is currently selected
 	this.warning = false;  // boolean for initial (load) warning state (if snapshots have been saved, not currently selected)
-	this.snapTotal = 0;
+	this.snapTotal = 0; // var to hold total number of snapshots created
+	this.playback = false; // boolean to specify whether snapshot playback mode is active
 	
 	// json object to hold student data for the node
 	this.studentData = {
 					"svgString": "",
 					"description": "",
 					"snapshots": [],
+					"snapTotal": 0,
 					"selected": null
 					};
 	this.init(node.getContent().getContentUrl());
@@ -35,7 +37,7 @@ function Snapshot(svg, id, context){
 	//if (description){
 		//this.description = description;
 	//} else {
-		this.description = context.defaultDescription;  // set snapshot initial description to default
+	this.description = context.defaultDescription;  // set snapshot initial description to default
 	//};
 }
 
@@ -151,6 +153,7 @@ SVGDRAW.prototype.saveToVLE = function() {
 	this.studentData.svgString = this.svgCanvas.getSvgString();
 	this.studentData.description = this.description;
 	this.studentData.snapshots = this.snapshots;
+	this.studentData.snapTotal = this.snapTotal;
 	if(this.selected == true){
 		this.studentData.selected = this.active;
 	} else {
@@ -166,6 +169,9 @@ SVGDRAW.prototype.load = function() {
 
 // populate instructions, stamp images, description/annotation text, and snapshots (wise4)
 SVGDRAW.prototype.initDisplay = function(data,context) {
+	if(data.snapTotal){
+		context.snapTotal = data.snapTotal;	
+	}
 	// initiate prompt/instructions
 	if(context.instructions != ""){
 		$('#prompt_text').html(context.instructions);
@@ -196,7 +202,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 	
 	//initiate snapshots
 	if(context.snapshotsActive){
-		$('#tool_description a').text('Add Description to Snapshot');
+		//$('#tool_description a').text('Add Description to Snapshot');
 		
 		$('#tool_snapshot').attr("style","display:inline");
 		
@@ -214,7 +220,8 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 						context.index = i;
 					}
 				}
-				context.updateClass(context.index,context);
+				//context.updateClass(context.index,context);
+				//context.snapCheck(context);
 			} else {
 				context.warning = true;
 			}
@@ -295,66 +302,104 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 		// bind mouseup events to stack checker function
 		$("#tools_top,#tools_left,#workarea,#tools_bottom").mouseup(function(){
 			if (context.snapshotsActive == true){
-				context.snapCheck(context);
+				setTimeout(function(){
+					context.snapCheck(context);
+				},50);
 			}
 		});
 	}
 	
 	// initiate description/annotation
 	if(context.descriptionActive){
-		// TODO: add vle check for saved description logic
-		if (data){
-			context.description = data.description;
-		} else if (context.defaultDescription){
-			context.description = context.defaultDescription;
-		}
-		
-		// Show description panel on link click
-		$('.tool_description').click(function(){
-			if (!$('#descriptionpanel').is(':visible')){ // prevent text from being overridden if panel is already visible
-				$('#description_commit').attr("disabled", "disabled");
-				$('#description_close').attr("disabled", "disabled");
-				$('#description_content').val(context.description); // populate description text
-				// center description panel in window
-				var height = $('#descriptionpanel').height();
-				var width = $('#descriptionpanel').width();
-				$('#descriptionpanel').css({top: $(window).height()/2-height/2, left: $(window).width()/2-width/2});
-				$("#overlay").show();
-				$('#descriptionpanel').show(); // show description panel
+		if (context.snapshotsActive == true) { // check whether snapshots are active
+			// TODO: Check if this is necessary - context.description should already be set correctly
+			if (data.selected > -1) {
+				for (var i in data.snapshots) {
+					if (data.snapshots[i].id == data.selected) {
+						context.description = data.snapshots[i].description;
+					}
+				}
+			//$('#tool_description').attr("style", "display:inline"); // show description link
+			} else if (context.defaultDescription) {
+				context.description = context.defaultDescription;
 			}
-		});
-		
-		// Save description text
-		$('#description_commit').click(function(){
-			var value = $('#description_content').val();
-			context.description = value;
-			$(this).attr("disabled", "disabled");
-			context.saveToVLE(); // save changes to VLE
-		});
-		
-		// Save description text and close dialogue
-		$('#description_close').click(function(){
-			var value = $('#description_content').val();
-			context.description = value;
-			$('#descriptionpanel').hide();
-			$("#overlay").hide();
-			context.saveToVLE(); // save changes to VLE
+			
+			$('#snap_description_content').keyup(function(){
+				$('#snap_description_commit').removeAttr("disabled");
+			});
+			
+			// Save description text
+			$('#snap_description_commit').click(function(){
+			var value = $('#snap_description_content').val();
+				for (var i in context.snapshots) {
+					if (context.snapshots[i].id == context.active) {
+						context.snapshots[i].description = value;
+						context.saveToVLE();
+						$(this).attr("disabled", "disabled");
+						//context.snapCheck(context);
+					}
+				}
+			});
+			
+			$('#snap_description_commit').attr("disabled", "disabled");
+			
+			setTimeout(function(){
+				context.snapCheck(context);
+			},100);
+		} else {
+			// TODO: add vle check for saved description logic
+			if (context.defaultDescription) {
+				context.description = context.defaultDescription;
+			}
+			
+			// Show description panel on link click
+			$('.tool_description').click(function(){
+				if (!$('#descriptionpanel').is(':visible')) { // prevent text from being overridden if panel is already visible
+					$('#description_commit').attr("disabled", "disabled");
+					$('#description_close').attr("disabled", "disabled");
+					$('#description_content').val(context.description); // populate description text
+					// center description panel in window
+					var height = $('#descriptionpanel').height();
+					var width = $('#descriptionpanel').width();
+					$('#descriptionpanel').css({
+						top: $(window).height() / 2 - height / 2,
+						left: $(window).width() / 2 - width / 2
+					});
+					$("#overlay").show();
+					$('#descriptionpanel').show(); // show description panel
+				}
+			});
+			
+			// Save description text
+			$('#description_commit').click(function(){
+				var value = $('#description_content').val();
+				context.description = value;
+				$(this).attr("disabled", "disabled");
+				context.saveToVLE(); // save changes to VLE
+			});
+			
+			// Save description text and close dialogue
+			$('#description_close').click(function(){
+				var value = $('#description_content').val();
+				context.description = value;
+				$('#descriptionpanel').hide();
+				$("#overlay").hide();
+				context.saveToVLE(); // save changes to VLE
 			// TODO: add logic to check whether save button has been clicked already
 			// If it has, no need to resave the data to the vle
-		});
-		
-		$('#description_content').keyup(function(){
-			$('#description_commit').removeAttr("disabled");
-			$('#description_close').removeAttr("disabled");
-		});
-		
-		$('#close_description').click(function(){
-			$('#descriptionpanel').hide();
-			$("#overlay").hide();
-		});
-		
-		if (context.snapshotsActive != true){ // check whether snapshots are active
-			$('#tool_description').attr("style","display:inline"); // show add description link
+			});
+			
+			$('#description_content').keyup(function(){
+				$('#description_commit').removeAttr("disabled");
+				$('#description_close').removeAttr("disabled");
+			});
+			
+			$('#close_description').click(function(){
+				$('#descriptionpanel').hide();
+				$("#overlay").hide();
+			});
+			
+			$('#tool_description').attr("style", "display:inline"); // show add description link
 		}
 	}
 	
@@ -396,31 +441,20 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 SVGDRAW.prototype.newSnapshot = function(context) {
 	var current = context.svgCanvas.getSvgString();
 	var id = context.snapTotal;
-	/*if(context.snapshots.length > 0) {
-		var newSnap = new Snapshot(current,context.snapshots.length,context);
-	} else {
-		var newSnap = new Snapshot(current,0,context);
-	}*/
 	var newSnap = new Snapshot(current,context.snapTotal,context);
-	//context.snapshots.push(current);
 	context.snapshots.push(newSnap);
 	context.snapTotal = id + 1;
 	var num = context.snapshots.length-1;
-	//var snapID = "snap" + num;
-	context.addSnapshot(current,num,context);
-	$("#snap_images").attr({ scrollTop: $("#snap_images").attr("scrollHeight") });
-	$(".snap:eq(" + num + ")").effect("pulsate", { times:1 }, 800);
 	context.warningStackSize = context.svgCanvas.getUndoStackSize();
-	context.active = num;
+	context.active = id;
 	context.index = num;
 	context.selected = true;
 	context.warning = false;
-	if(context.snapshots.length > 1){
-		$('#playback').show();
-	}
-	if (context.descriptionActive == true) {
+	context.addSnapshot(current,num,context);
+	/*if (context.descriptionActive == true) {
 		$('#tool_description').attr("style", "display:inline"); // show description link
-	}
+	}*/
+	context.description = context.descriptionDefault;
 	context.saveToVLE();
 };
 
@@ -439,14 +473,22 @@ SVGDRAW.prototype.addSnapshot = function(svgString,num,context) {
 	$("#snap_images").append(snapHolder);
 	
 	// create snapshot thumb
-	// TODO: Edit regex code to remove hard-coded width and height (600, 450)
+	// TODO: Edit regex code to remove hard-coded width and height (600, 450) if we decide to allow authors to specify canvas dimensions
 	var snapshot = svgString.replace('<svg width="600" height="450"', '<svg width="' + snapWidth + '" height="' + snapHeight + '"');
 	snapshot = snapshot.replace(/<g>/gi,'<g transform="scale(' + multiplier + ')">');
 	var snapSvgXml = text2xml(snapshot);
 	var $snap = $("div.snap:eq(" + num + ")");
 	context.bindSnapshot($snap,context); // Bind snap thumbnail to click function that opens corresponding snapshot
 	document.getElementsByClassName("snap_wrapper")[num].appendChild(document.importNode(snapSvgXml.documentElement, true)); // add snapshot thumb to snapshots panel
-	context.updateClass(num,context);
+	$("#snap_images").attr({ scrollTop: $("#snap_images").attr("scrollHeight") });
+	$(".snap:eq(" + num + ")").effect("pulsate", { times:1 }, 800);
+	if(context.snapshots.length > 1){
+		$('#playback').show();
+	}
+	//context.updateClass(context.index,context);
+	setTimeout(function(){
+		context.snapCheck(context);
+	},100);
 };
 
 // Open a snapshot as current drawing
@@ -463,11 +505,17 @@ SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
 	if (pulsate==true){
 		$('#svgcanvas').effect("pulsate", {times: '1'}, 700); // pulsate new canvas
 	}
-	context.updateClass(index,context);
 	context.selected = true;
 	context.index = index;
 	context.active = context.snapshots[index].id;
+	context.description = context.snapshots[index].description;
 	context.warning = false;
+	//context.updateClass(index,context);
+	setTimeout(function(){
+		context.snapCheck(context);
+	},50);
+	//$('.snap_description_wrapper').show(); // show snap description box
+	//$('#tool_description').attr("style", "display:inline"); // show description link
 };
 
 // Bind snapshot thumbnail to click function that opens corresponding snapshot, delete function, hover function, sorting function
@@ -548,42 +596,51 @@ SVGDRAW.prototype.updateClass = function(num,context){
 };
 
 SVGDRAW.prototype.snapCheck = function(context){
-	setTimeout(function(){
-		if(context.warningStackSize == context.svgCanvas.getUndoStackSize()){
-			if (context.active > -1 && context.descriptionActive == true) {
-				$('#tool_description').attr("style", "display:inline"); // show description link
-			}
-			for (var i in context.snapshots){
-				if(context.snapshots[i].id == context.active){
-					context.index = i;
-					break;
+	if(context.warningStackSize == context.svgCanvas.getUndoStackSize()){
+		for (var i in context.snapshots){
+			if(context.snapshots[i].id == context.active){
+				context.index = i;
+				//$('#tool_description').attr("style", "display:inline"); // show description link
+				if(context.playback == false){
+					$('#snap_description_content').val(context.snapshots[i].description); // show corresponding description text
+					$('.snap_description_wrapper').show();
 				}
-				else {
-					context.index = -1;
-				}
+				break;
 			}
-			context.selected = true;
-			context.updateClass(context.index,context);
-		} else {
-			context.selected = false;
-			if (context.descriptionActive == true) {
-				$('#tool_description').hide(); // hide description link
+			else {
+				context.index = -1;
 			}
-			context.updateClass(-1,context);
 		}
-	}, 300);
+		context.selected = true;
+		context.updateClass(context.index,context);
+	} else {
+		context.selected = false;
+		if (context.descriptionActive == true) {
+			//$('#tool_description').hide(); // hide description link
+			$('.snap_description_wrapper').hide();
+		}
+		context.updateClass(-1,context);
+	}
 };
 
 SVGDRAW.prototype.snapPlayback = function($item,context){
 	var mode = $item.attr('id');
+	var index = 0;
 	if(context.selected == true){
-		var index = context.index;
-	} else {
-		index = 0;
+		for (var i in context.snapshots) {
+			if (context.snapshots[i].id == context.active) {
+				index = i*1+1;
+			}
+		}
+		if (index > context.snapshots.length - 1) {
+			index = 0;
+		}
 	}
-	if (mode=="play" && context.snapshots.length > 1){
+	if (mode=="play"){
+		context.playback = true;
 		$('#play').hide();
 		$('#snap_browse').hide();
+		$('.snap_description_wrapper').hide();
 		$('#pause').attr("style","display:inline !important");
 		$("#svgcanvas").everyTime(1000,'play',function(){
 			context.openSnapshot(index,false,context);
@@ -597,9 +654,12 @@ SVGDRAW.prototype.snapPlayback = function($item,context){
 			}
 		},0);
 	} else if (mode=="pause") {
+		context.playback = false;
+		context.snapCheck(context);
 		$('#pause').attr("style","display:none !important");
 		$('#play').attr("style","display:inline");
 		$('#snap_browse').show();
+		$('.snap_description_wrapper').show();
 		$("#svgcanvas").stopTime('play');
 	}
 };

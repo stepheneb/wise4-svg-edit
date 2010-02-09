@@ -645,15 +645,17 @@ function svg_edit_setup() {
 		};
 		if(!$('#sidepanels').is(':visible')){
 			$('#sidepanels').show();
+			$('#snap_description').show();
 			//if(document.getElementById("workarea").offsetWidth < 700){
-				ctl.value = 75;
-				svgCanvas.setSnapState(true);
-				changeZoom(ctl);
+			ctl.value = 75;
+			svgCanvas.setSnapState(true);
+			changeZoom(ctl);
 			//} else {
 				//changeZoom(ctl);
 			//}
 		} else {
 			$('#sidepanels').hide();
+			$('#snap_description').hide();
 			svgCanvas.setSnapState(false);
 			changeZoom(ctl);
 		}
@@ -665,6 +667,7 @@ function svg_edit_setup() {
 				'value':100
 		};
 		$('#sidepanels').hide();
+		$('#snap_description').hide();
 		svgCanvas.setSnapState(false);
 		changeZoom(ctl);
 		

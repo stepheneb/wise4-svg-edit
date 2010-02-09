@@ -71,7 +71,6 @@ body {
 	border: 1px solid #808080;
 	border-top: none;
 	margin-top: 2px;
-	display:none; /* wise4 */
 }*/
 
 #svg_editor #stroke_bg, 
@@ -81,23 +80,14 @@ body {
 	margin: 2px;
 }
 
-/* wise4 */
 #svg_editor #fill_color, #svg_editor #stroke_color {
-	height: 16px;
-	width: 16px;
-	border: 1px solid #808080;
-	cursor: pointer;
-	margin-top: -2px;
-	margin-left: 1px;
-}
-/*#svg_editor #fill_color, #svg_editor #stroke_color {
 	height: 16px;
 	width: 16px;
 	border: 1px solid #808080;
 	cursor: pointer;
 	margin-top: -19px;
 	margin-left: 1px;
-}*/
+}
 
 /* wise4 */
 #svg_editor div#palette {
@@ -146,6 +136,62 @@ body {
 	border: 1px solid #808080;
 	overflow: auto;
 }*/
+
+/* wise4 */
+#svg_editor div#workarea #snap_description {
+}
+
+#svg_editor #snap_description .snap_description_wrapper {
+	/*background-color:#FFD9AC;*/
+	background-color:#E8E8E8;
+	padding:5px;
+	border-radius:5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	height:102px;
+	width:90%;
+	margin:10px auto 0;
+	text-align:left;
+}
+
+#svg_editor #snap_description .snap_description_header {
+	font-weight:bold;
+	margin:0 0 5px;
+	padding:0;
+	font-size:12px;
+}
+
+#svg_editor div#workarea .description_header_text {
+	float:left;
+}
+
+#svg_editor div#workarea .description_header_text span {
+	font-weight:normal;
+	font-size:10px;
+}
+
+/* wise4 */
+#svg_editor div#workarea #snap_description_content {
+	width:97%;
+	height:65px;
+	padding:5px;
+	font-size:1.2em;
+	line-height:1.3em;
+	margin-top:5px;
+	background-color:#FFFFFF;
+}
+
+#svg_editor div#workarea #description_buttons {
+	padding:0;
+	margin-left:10px;
+	float:right;
+}
+
+#svg_editor div#workarea #description_buttons button {
+	margin:0;
+	overflow:visible;
+	padding:0.1em 0.2em 0.1em;
+}
 
 /* wise4 */
 #svg_editor #sidepanels {
@@ -1256,14 +1302,14 @@ button#tool_docprops_cancel {
 	text-decoration:none;
 }
 
-#svg_editor #description_wrapper {
+#svg_editor .description_wrapper {
 	text-align:left;
 	background-color:#FFFFFF;
 	margin:5px;
 	padding:5px;
 }
 
-#svg_editor #description_text {
+#svg_editor .description_text {
 	background-color:#FFD9AC;
 	padding:10px;
 	border-radius:5px;
@@ -1272,7 +1318,7 @@ button#tool_docprops_cancel {
 	font-size:10pt;
 }
 
-#svg_editor #description_header {
+#svg_editor .description_header {
 	cursor:move;
 	background:#E8E8E8 url(jquery-ui/images/ui-bg_highlight-hard_100_e8e8e8_1x100.png) repeat-x scroll 50% 50%;
 	border:1px solid #B8B8B8;
@@ -1284,15 +1330,18 @@ button#tool_docprops_cancel {
 #svg_editor #description_content {
 	margin-top:10px;
 	padding:10px;
-	background-color:#eee;
 	height:100px;
-	border:1px solid #aaa;
 	font-size:1em;
 	line-height:1.4em;
 	width:96%;
 }
 
-#svg_editor #description_content:focus {
+#svg_editor .description_input {
+	background-color:#eee;
+	border:1px solid #aaa;
+}
+
+#svg_editor .description_input:focus {
 	background-color:#FFFFFF;
 	border-color:#3CB371;
 }
@@ -1356,6 +1405,6 @@ button#tool_docprops_cancel {
 /* wise4 default hidden regions*/
 #sidepanels, #notepanel, #descriptionpanel, #overlay,
 #new_snap_dialog, #prompt_dialog, #snapwarning_dialog,
-#deletesnap_dialog, #playback {
+#deletesnap_dialog, #playback, #snap_description, .snap_description_wrapper {
 	display:none;
 }

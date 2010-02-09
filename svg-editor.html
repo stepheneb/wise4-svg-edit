@@ -340,6 +340,20 @@
 	<div id="workarea" class="column">
 		<style id="styleoverrides" type="text/css" media="screen" scoped="scoped"></style>
 		<div id="svgcanvas"></div>
+		<div id="snap_description">
+			<div class="snap_description_wrapper">
+				<div class="snap_description_header">
+					<div class="description_header_text">Snapshot Description
+						<span>(Enter your text in the box below)</span>
+					</div>
+					<div id="description_buttons">
+						<button id="snap_description_commit" title="Save Description">Save</button>
+					</div>
+				</div>
+				<!--<span>Enter text in the box below to attach a description to this snapshot.</span>-->
+				<textarea id="snap_description_content" class="description_input" rows="4"></textarea>
+			</div>
+		</div>
 	</div>
 
 </div> <!-- work_wrapper -->
@@ -439,14 +453,14 @@
 </div>
 
 <div id="descriptionpanel">
-	<div id="description_header">
+	<div class="description_header">
 		<h3>Add Description</h3>
 		<div class="close_button"><a id="close_description" title="Close">X</a></div>
 	</div>
-	<div id="description_wrapper">
-		<div id="description_text">
+	<div class="description_wrapper">
+		<div class="description_text">
 			<span>Enter text in the box below to attach a description to this drawing.</span>
-			<textarea id="description_content" rows="5"></textarea>
+			<textarea id="description_content" class="description_input" rows="5"></textarea>
 		</div>
 		<div id="description_buttons">
 			<button id="description_commit" title="Save">Save Changes</button>
