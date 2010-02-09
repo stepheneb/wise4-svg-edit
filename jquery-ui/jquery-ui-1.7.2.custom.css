@@ -61,7 +61,7 @@
 .ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #1747c0; text-decoration: none; outline: none; }
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus { border: 1px solid #1747C0; background: #ffd58a url(images/ui-bg_highlight-hard_30_1E69FF_1x100.png) 50% 50% repeat-x; font-weight: normal; color: #FFFA3D; outline: none; }
 .ui-state-hover a, .ui-state-hover a:hover { color: #fffa3d; text-decoration: none; outline: none; }
-.ui-state-active, .ui-widget-content .ui-state-active { border: 1px solid #fbd850; background: #ffffff url(images/ui-bg_highlight-hard_65_ffffff_1x100.png) 50% 50% repeat-x; font-weight: bold; color: #eb8f00; outline: none; }
+.ui-state-active, .ui-widget-content .ui-state-active { border: 1px solid #fbd850; opacity: .8; /*background: #ffffff url(images/ui-bg_highlight-hard_65_ffffff_1x100.png) 50% 50% repeat-x;*/ font-weight: bold; color: #eb8f00; outline: none; }
 .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited { color: #eb8f00; outline: none; text-decoration: none; }
 
 /* Interaction Cues
@@ -71,7 +71,7 @@
 .ui-state-error, .ui-widget-content .ui-state-error { margin-bottom:10px; padding:5px; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; /*border: 1px solid #cd0a0a;*/ background: #ffc2c5 url(images/ui-bg_diagonals-medium_20_ffc2c5_40x40.png) 50% 50% repeat; color: #000000; }
 .ui-state-error a, .ui-widget-content .ui-state-error a { color: #000000; }
 .ui-state-error-text, .ui-widget-content .ui-state-error-text { color: #000000; }
-.ui-state-disabled, .ui-widget-content .ui-state-disabled { opacity: .35; filter:Alpha(Opacity=35); background-image: none; }
+.ui-state-disabled, .ui-widget-content .ui-state-disabled { /*opacity: .35; filter:Alpha(Opacity=35);*/ background-image: none; }
 .ui-priority-primary, .ui-widget-content .ui-priority-primary { font-weight: bold; }
 .ui-priority-secondary, .ui-widget-content .ui-priority-secondary { opacity: .7; filter:Alpha(Opacity=70); font-weight: normal; }
 

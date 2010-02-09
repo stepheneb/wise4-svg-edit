@@ -327,12 +327,32 @@ body {
 
 #svg_editor .snap_controls {
 	display:inline;
-	margin:4px 5px 0 0;
+	margin:4px 2px 0 0;
 	cursor:pointer;
 }
 
 #svg_editor #play_controls #snap_browse {
 	float:right;
+}
+
+#svg_editor #play_controls #play {
+	float:left;
+}
+
+#svg_editor #play_controls #pause {
+	float:left;
+}
+
+#svg_editor #play_controls #play_speed {
+	width:70px;
+	float:left;
+	margin:5px 5px 0 8px;
+	cursor:pointer;
+}
+
+#svg_editor #play_controls #current_speed {
+	float:left;
+	margin:1px 5px 0;
 }
 
 #svg_editor #play_controls #previous {
@@ -630,6 +650,12 @@ body {
 
 #svg_editor #multiselected_panel .selected_tool {
 	vertical-align: 12px;
+}
+
+/*wise4*/
+#svg_editor #opac_slider {
+	width:92%;
+	margin:auto;
 }
 
 #svg_editor #tools_top > div, #tools_top {
@@ -1235,11 +1261,11 @@ button#tool_docprops_cancel {
 /* Slider
 ----------------------------------*/
 .ui-slider { position: relative; text-align: left; }
-.ui-slider .ui-slider-handle { position: absolute; z-index: 2; width: 1.2em; height: 1.2em; cursor: default; }
+.ui-slider .ui-slider-handle { position: absolute; z-index: 2; width: .85em; height: .85em; cursor: default; }
 .ui-slider .ui-slider-range { position: absolute; z-index: 1; font-size: .7em; display: block; border: 0; }
 
-.ui-slider-horizontal { height: .8em; }
-.ui-slider-horizontal .ui-slider-handle { top: -.3em; margin-left: -.6em; }
+.ui-slider-horizontal { height: .5em; }
+.ui-slider-horizontal .ui-slider-handle { top: -.25em; margin-left: -.5em; cursor:pointer; }
 .ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; }
 .ui-slider-horizontal .ui-slider-range-min { left: 0; }
 .ui-slider-horizontal .ui-slider-range-max { right: 0; }

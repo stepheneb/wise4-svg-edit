@@ -2292,6 +2292,7 @@ function svg_edit_setup() {
 			{key: 'shift+right', fn: function(){rotateSelected(1)}},
 			{key: 'shift+O', fn: selectPrev},
 			{key: 'shift+P', fn: selectNext},
+			{key: 'shift+M', fn: function(){return;}}, // override wise4 full screen keystroke - TODO: figure out how why this isn't working 
 			//{key: ['ctrl+up', true], fn: function(){zoomImage(2);}},
 			//{key: ['ctrl+down', true], fn: function(){zoomImage(.5);}},
 			{key: ['up', true], fn: function(){moveSelected(0,-1);}},

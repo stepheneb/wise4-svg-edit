@@ -294,13 +294,30 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			}
 		});
 		
+		// initialize playback speed slider
+		$('#play_speed').slider({
+			max: 10,
+			min: 1,
+			step: 1,
+			value: 1,
+			change: function(event, ui) {
+				context.changeSpeed(ui.value,context);
+			}
+		});
+		
+		context.changeSpeed($('#play_speed').slider('value'),context); // update playback speed
+		
 		// Bind snapshot playback controls
-		$('img.snap_controls').click(function(){ context.snapPlayback($(this),context); });
+		$('img.snap_controls').click(function(){
+			var mode = $(this).attr('id');
+			var speed = 1000/$('#play_speed').slider('value');
+			context.snapPlayback(mode,speed,context);
+		});
 		
 		context.warningStackSize = 0; // set warning stack checker to 0 on intial load
 		
 		// bind mouseup events to stack checker function
-		$("#tools_top,#tools_left,#workarea,#tools_bottom").mouseup(function(){
+		$("#tools_top,#tools_left,#svgcanvas,#tools_bottom").mouseup(function(){
 			if (context.snapshotsActive == true){
 				setTimeout(function(){
 					context.snapCheck(context);
@@ -348,7 +365,10 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			},100);
 		} else {
 			// TODO: add vle check for saved description logic
-			if (context.defaultDescription) {
+			if(data.description){
+				context.description = data.description;
+			}
+			else if (context.defaultDescription) {
 				context.description = context.defaultDescription;
 			}
 			
@@ -551,11 +571,12 @@ SVGDRAW.prototype.bindSnapshot = function(item,context) {
 		start: function(event, ui) {
 			context.index = $(".snap").index(ui.item);
 			ui.item.unbind("click"); // unbind click function
+			$("#svgcanvas").stopTime('play'); // stop snap playback
 	    },
 	    stop: function(event, ui) {
 	        setTimeout(function(){
-	        	ui.item.click(function(){context.snapClick(this,context);}, 300); // rebind click function
-	        });
+	        	ui.item.click(function(){context.snapClick(this,context);}); // rebind click function
+	        }, 300);
 	    },
 	    update: function(event, ui) {
 	    	var newIndex = $(".snap").index(ui.item);
@@ -601,7 +622,7 @@ SVGDRAW.prototype.snapCheck = function(context){
 			if(context.snapshots[i].id == context.active){
 				context.index = i;
 				//$('#tool_description').attr("style", "display:inline"); // show description link
-				if(context.playback == false){
+				if(context.playback == false && context.descriptionActive == true){
 					$('#snap_description_content').val(context.snapshots[i].description); // show corresponding description text
 					$('.snap_description_wrapper').show();
 				}
@@ -615,7 +636,7 @@ SVGDRAW.prototype.snapCheck = function(context){
 		context.updateClass(context.index,context);
 	} else {
 		context.selected = false;
-		if (context.descriptionActive == true) {
+		if (context.descriptionActive == true && context.descriptionActive == true) {
 			//$('#tool_description').hide(); // hide description link
 			$('.snap_description_wrapper').hide();
 		}
@@ -623,8 +644,7 @@ SVGDRAW.prototype.snapCheck = function(context){
 	}
 };
 
-SVGDRAW.prototype.snapPlayback = function($item,context){
-	var mode = $item.attr('id');
+SVGDRAW.prototype.snapPlayback = function(mode,speed,context){
 	var index = 0;
 	if(context.selected == true){
 		for (var i in context.snapshots) {
@@ -637,12 +657,16 @@ SVGDRAW.prototype.snapPlayback = function($item,context){
 		}
 	}
 	if (mode=="play"){
+		$('.snap').unbind("click"); // unbind click function
+		$('#snap_images').sortable('disable');
 		context.playback = true;
 		$('#play').hide();
-		$('#snap_browse').hide();
-		$('.snap_description_wrapper').hide();
+		//$('#snap_browse').hide();
+		if(context.descriptionActive == true){
+			$('.snap_description_wrapper').hide();	
+		}
 		$('#pause').attr("style","display:inline !important");
-		$("#svgcanvas").everyTime(1000,'play',function(){
+		$("#svgcanvas").everyTime(speed,'play',function(){
 			context.openSnapshot(index,false,context);
 			var page = Math.floor(index/3);
 			$("#snap_images").attr({ scrollTop: page * 375 });
@@ -658,11 +682,28 @@ SVGDRAW.prototype.snapPlayback = function($item,context){
 		context.snapCheck(context);
 		$('#pause').attr("style","display:none !important");
 		$('#play').attr("style","display:inline");
-		$('#snap_browse').show();
-		$('.snap_description_wrapper').show();
+		//$('#snap_browse').show();
 		$("#svgcanvas").stopTime('play');
+		setTimeout(function(){
+        	$('.snap').click(function(){context.snapClick(this,context);}); // rebind click function
+        	$('#snap_images').sortable('enable');
+        }, 300);
 	}
 };
+
+SVGDRAW.prototype.changeSpeed = function(value, context){
+	var speed = 1000/value;
+	if (value == 1){
+		var label = value + " snap/sec";
+	} else {
+		var label = value + " snaps/sec";
+	}
+	$('#current_speed').text(label); // update speed display
+	if(context.playback == true){ // if in playback mode, change current playback speed
+		context.snapPlayback("pause",speed,context);
+		context.snapPlayback("play",speed,context);
+	}
+}
 
 SVGDRAW.prototype.updateNumbers = function(){
 	$(".snap_num > span").each(function(index){
