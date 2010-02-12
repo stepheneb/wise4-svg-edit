@@ -2436,7 +2436,7 @@ function svg_edit_setup() {
 
 // This process starts before document.ready so the icons appear ASAP
 (function() {
-	// edit to wise4 path
+	// edited to wise4 path
 	$.svgIcons('/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/svg_edit_icons.svg', {
 		w:24, h:24,
 		id_match: false,
@@ -2660,7 +2660,7 @@ $(function() {
 	    },
 	    
 	    loadAnnotations: function(context,callback) {
-	    	this.annotations = this.vle.get
+	    	//this.annotations = this.vle.get
 	    },
 	    toString: function() {
 	      return "VLE Data Service (" + this.vle + ")";

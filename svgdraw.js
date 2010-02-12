@@ -207,8 +207,8 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 	if(context.snapshotsActive){
 		$('#tool_snapshot').attr("style","display:inline");
 		
-		if(data.snapshots){
-			for (var i in data.snapshots) {
+		if(data.snapshots && data.snapshots.length > 0){
+			for (var i=0; i<data.snapshots.length; i++) {
 				context.snapshots.push(data.snapshots[i]);
 				var current = context.snapshots[i].svg;
 				context.addSnapshot(current,i,context); // add snap to snapshot panel
@@ -216,7 +216,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			if(data.selected > -1){
 				context.active = data.selected;
 				context.selected = true;
-				for(var i in data.snapshots){
+				for(var i=0; i<data.snapshots.length; i++){
 					if(data.snapshots[i].id == context.active){
 						context.index = i;
 					}
@@ -330,7 +330,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 		if (context.snapshotsActive == true) { // check whether snapshots are active
 			// TODO: Check if this is necessary - context.description should already be set correctly
 			if (data.selected > -1) {
-				for (var i in data.snapshots) {
+				for (var i=0; i<data.snapshots.length; i++) {
 					if (data.snapshots[i].id == data.selected) {
 						context.description = data.snapshots[i].description;
 					}
@@ -347,7 +347,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			// Save description text
 			$('#snap_description_commit').click(function(){
 				var value = $('#snap_description_content').val();
-				for (var i in context.snapshots) {
+				for (var i=0; i<context.snapshots.length; i++) {
 					if (context.snapshots[i].id == context.active) {
 						context.snapshots[i].description = value;
 						context.saveToVLE();
@@ -430,7 +430,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 	if(context.stamps.length > 0){
 		this.svgCanvas.setStampImages(context.stamps);
 		var stamptxt = "";
-		for (var i in context.stamps){
+		for (var i=0; i<context.stamps.length; i++){
 			var num = i*1 + 1;
 			//stamptxt += "<img id='" + i + "' class='tool_image' title='" + context.stamps[i].title + "' src=" + context.stamps[i].uri + " alt='Stamp " + num + "' height='" + height + "' width= '" + width + "'></div>";
 			// max stamp preview image height and width are hard-coded in css now (max 50px)
@@ -479,6 +479,7 @@ SVGDRAW.prototype.newSnapshot = function(context) {
 	}*/
 	context.description = context.descriptionDefault;
 	context.saveToVLE();
+	$('#snap_description_commit').attr("disabled","disabled");
 };
 
 SVGDRAW.prototype.addSnapshot = function(svgString,num,context) {
@@ -533,6 +534,7 @@ SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
 	context.active = context.snapshots[index].id;
 	context.description = context.snapshots[index].description;
 	context.warning = false;
+	$('#snap_description_commit').attr("disabled","disabled");
 	//context.updateClass(index,context);
 	setTimeout(function(){
 		context.snapCheck(context);
@@ -621,7 +623,7 @@ SVGDRAW.prototype.updateClass = function(num,context){
 
 SVGDRAW.prototype.snapCheck = function(context){
 	if(context.warningStackSize == context.svgCanvas.getUndoStackSize()){
-		for (var i in context.snapshots){
+		for (var i=0; i<context.snapshots.length; i++){
 			if(context.snapshots[i].id == context.active){
 				context.index = i;
 				//$('#tool_description').attr("style", "display:inline"); // show description link
@@ -650,7 +652,7 @@ SVGDRAW.prototype.snapCheck = function(context){
 SVGDRAW.prototype.snapPlayback = function(mode,speed,context){
 	var index = 0;
 	if(context.selected == true){
-		for (var i in context.snapshots) {
+		for (var i=0; i<context.snapshots.length; i++) {
 			if (context.snapshots[i].id == context.active) {
 				index = i*1+1;
 			}
