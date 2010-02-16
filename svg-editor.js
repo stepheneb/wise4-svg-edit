@@ -45,7 +45,7 @@ function svg_edit_setup() {
 	var default_img_url = "images/logo.png";
 
 	// Store and retrieve preferences
-	$.pref = function(key, val) {
+	jQuery.pref = function(key, val) {
 		if(val) curPrefs[key] = val;
 		key = 'svg-edit-'+key;
 		var host = location.hostname;
@@ -130,15 +130,15 @@ function svg_edit_setup() {
 			if(type == 'prompt') input.focus();
 		}
 		
-		$.alert = function(msg, cb) { dbox('alert', msg, cb);};
-		$.confirm = function(msg, cb) {	dbox('confirm', msg, cb);};
-		$.prompt = function(msg, txt, cb) { dbox('prompt', msg, cb, txt);};
+		jQuery.alert = function(msg, cb) { dbox('alert', msg, cb);};
+		jQuery.confirm = function(msg, cb) {	dbox('confirm', msg, cb);};
+		jQuery.prompt = function(msg, txt, cb) { dbox('prompt', msg, cb, txt);};
 	}());
 	
 	// Load the icons - moved this into the svg_edit_setup function for wise4 instead of running before document.ready
 	(function() {
 		// edited to wise4 path
-		$.svgIcons('/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/svg_edit_icons.svg', {
+		jQuery.svgIcons('/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/svg_edit_icons.svg', {
 			w:24, h:24,
 			id_match: false,
 			no_img: false,
@@ -269,7 +269,7 @@ function svg_edit_setup() {
 				// Use small icons by default if not all left tools are visible
 				var tleft = $('#tools_left');
 				var min_height = tleft.offset().top + tleft.outerHeight();
-				var size = $.pref('iconsize');
+				var size = jQuery.pref('iconsize');
 				if(size && size != 'm') {
 					svgCanvas.setIconSize(size);				
 				} else if($(window).height() < min_height) {
@@ -305,8 +305,8 @@ function svg_edit_setup() {
 	var length_attrs = ['x','y','x1','x2','y1','y2','cx','cy','width','height','r','rx','ry','width','height','radius'];
 	var length_types = ['em','ex','px','cm','mm','in','pt','pc','%'];
 	
-	var fillPaint = new $.jGraduate.Paint({solidColor: "FF0000"}); // solid red
-	var strokePaint = new $.jGraduate.Paint({solidColor: "000000"}); // solid black
+	var fillPaint = new jQuery.jGraduate.Paint({solidColor: "FF0000"}); // solid red
+	var strokePaint = new jQuery.jGraduate.Paint({solidColor: "000000"}); // solid black
 	
 	var picker = "fill"; // color picker mode ("stroke" or "fill") var (wise4)
 
@@ -347,11 +347,11 @@ function svg_edit_setup() {
 			// Change select icon
 			$('.tool_button').removeClass('tool_button_current');
 			$('#tool_select').addClass('tool_button_current')
-				.empty().append($.getSvgIcon('select_node'));
+				.empty().append(jQuery.getSvgIcon('select_node'));
 		} else {
-			$('#tool_select').empty().append($.getSvgIcon('select'));
+			$('#tool_select').empty().append(jQuery.getSvgIcon('select'));
 		}
-		$.resizeSvgIcons({'#tool_select .svg_icon':size});
+		jQuery.resizeSvgIcons({'#tool_select .svg_icon':size});
 
 		updateContextPanel(); 
 	};
@@ -464,7 +464,7 @@ function svg_edit_setup() {
 						solidColor: color.substr(1)
 					};
 				}
-				return new $.jGraduate.Paint(opts);
+				return new jQuery.jGraduate.Paint(opts);
 			}
 			
 			fillPaint = getPaint(fillColor, fillOpacity);
@@ -578,12 +578,12 @@ function svg_edit_setup() {
 			if(!is_node && currentMode != 'pathedit') {
 				$('#selected_panel').show();
 				// Elements in this array already have coord fields
-				if($.inArray(elname, ['line', 'circle', 'ellipse']) != -1) {
+				if(jQuery.inArray(elname, ['line', 'circle', 'ellipse']) != -1) {
 					$('#xy_panel').hide();
 				} else {
 					var x,y;
 					// Get BBox vals for g, polyline and path
-					if($.inArray(elname, ['g', 'polyline', 'path']) != -1) {
+					if(jQuery.inArray(elname, ['g', 'polyline', 'path']) != -1) {
 						var bb = svgCanvas.getStrokedBBox([elem]);
 						if(bb) {
 							x = bb.x;
@@ -599,7 +599,7 @@ function svg_edit_setup() {
 				}
 				
 				// Elements in this array cannot be converted to a path
-				var no_path = $.inArray(elname, ['image', 'text', 'path', 'g']) == -1;
+				var no_path = jQuery.inArray(elname, ['image', 'text', 'path', 'g']) == -1;
 				$('#tool_topath').toggle(no_path);
 				$('#tool_reorient').toggle(elname == 'path');
 				$('#tool_reorient').toggleClass('tool_button_disabled', angle == 0);
@@ -637,7 +637,7 @@ function svg_edit_setup() {
 				
 				$('#' + el_name + '_panel').show();
 	
-				$.each(cur_panel, function(i, item) {
+				jQuery.each(cur_panel, function(i, item) {
 					$('#' + el_name + '_' + item).val(elem.getAttribute(item) || 0);
 				});
 				
@@ -709,7 +709,7 @@ function svg_edit_setup() {
 	svgCanvas.bind("zoomed", zoomChanged);
 
 	var str = '<div class="palette_item" data-rgb="none"></div>'
-	$.each(palette, function(i,item){
+	jQuery.each(palette, function(i,item){
 		str += '<div class="palette_item" style="background-color: ' + item + ';" data-rgb="' + item + '"></div>';
 	});
 	$('#palette').append(str);
@@ -720,7 +720,7 @@ function svg_edit_setup() {
 	// Set up editor background functionality
 	var color_blocks = ['#FFF','#888','#000','url(data:image/gif;base64,R0lGODlhEAAQAIAAAP%2F%2F%2F9bW1iH5BAAAAAAALAAAAAAQABAAAAIfjG%2Bgq4jM3IFLJgpswNly%2FXkcBpIiVaInlLJr9FZWAQA7)'];
 	var str = '';
-	$.each(color_blocks, function() {
+	jQuery.each(color_blocks, function() {
 		str += '<div class="color_block" style="background:' + this + ';"></div>';
 	});
 	$('#bg_blocks').append(str);
@@ -734,12 +734,12 @@ function svg_edit_setup() {
 		});
 	});
 
-	if($.pref('bg_color')) {
-		setBackground($.pref('bg_color'), $.pref('bg_url'));
+	if(jQuery.pref('bg_color')) {
+		setBackground(jQuery.pref('bg_color'), jQuery.pref('bg_url'));
 	}
 	
-	if($.pref('img_save')) {
-		curPrefs.img_save = $.pref('img_save');
+	if(jQuery.pref('img_save')) {
+		curPrefs.img_save = jQuery.pref('img_save');
 		$('#image_save_opts input').val([curPrefs.img_save]);
 	}
 
@@ -765,7 +765,7 @@ function svg_edit_setup() {
 	
 	var changeStrokeWidth = function(ctl) {
 		var val = ctl.value;
-		if(val == 0 && selectedElement && $.inArray(selectedElement.nodeName, ['line', 'polyline']) != -1) {
+		if(val == 0 && selectedElement && jQuery.inArray(selectedElement.nodeName, ['line', 'polyline']) != -1) {
 			val = ctl.value = 1;
 		}
 		svgCanvas.setStrokeWidth(val);
@@ -858,7 +858,7 @@ function svg_edit_setup() {
 			if(promptMoveLayerOnce) {
 				moveToLayer(true);
 			} else {
-				$.confirm(confirm_str, moveToLayer);
+				jQuery.confirm(confirm_str, moveToLayer);
 			}
 		}
 	});
@@ -883,13 +883,13 @@ function svg_edit_setup() {
 		var attr = this.getAttribute("data-attr");
 		var val = this.value;
 		var valid = false;
-		if($.inArray(attr, length_attrs) != -1) {
+		if(jQuery.inArray(attr, length_attrs) != -1) {
 			if(!isNaN(val)) {
 				valid = true;
 			} else {
 				//TODO: Allow the values in length_types, then uncomment this:  
 // 				val = val.toLowerCase();
-// 				$.each(length_types, function(i, unit) {
+// 				jQuery.each(length_types, function(i, unit) {
 // 					if(valid) return;
 // 					var re = new RegExp('^-?[\\d\\.]+' + unit + '$');
 // 					if(re.test(val)) valid = true;
@@ -898,7 +898,7 @@ function svg_edit_setup() {
 		} else valid = true;
 		
 		if(!valid) {
-			$.alert(uiStrings.invalidAttrValGiven);
+			jQuery.alert(uiStrings.invalidAttrValGiven);
 			this.value = selectedElement.getAttribute(attr);
 			return false;
 		} 
@@ -934,10 +934,10 @@ function svg_edit_setup() {
 			//$(id + "opacity").html("N/A");
 			// Make opacity identifier clearer for students (wise4)
 			$(id + "opacity").html("None");
-			paint = new $.jGraduate.Paint();
+			paint = new jQuery.jGraduate.Paint();
 		}
 		else {
-			paint = new $.jGraduate.Paint({alpha: 100, solidColor: color.substr(1)});
+			paint = new jQuery.jGraduate.Paint({alpha: 100, solidColor: color.substr(1)});
 		}
 		
 		// actual color change moved to palette_commit.click function (wise4)
@@ -1101,7 +1101,7 @@ function svg_edit_setup() {
 	}, true);
 	
 	var setIcon = function(holder_sel, id) {
-		var icon = $.getSvgIcon(id).clone();
+		var icon = jQuery.getSvgIcon(id).clone();
 		var holder = $(holder_sel);
 		icon[0].setAttribute('width',holder.width());
 		icon[0].setAttribute('height',holder.height());
@@ -1305,7 +1305,7 @@ function svg_edit_setup() {
 	}
 	
 	var clickClear = function(){
-		$.confirm(uiStrings.QwantToClear, function(ok) {
+		jQuery.confirm(uiStrings.QwantToClear, function(ok) {
 			if(!ok) return;
 			svgCanvas.clear();
 			svgCanvas.setResolution(600, 450);
@@ -1474,7 +1474,7 @@ function svg_edit_setup() {
 		}
 
 		if (!svgCanvas.setSvgString($('#svg_source_textarea').val())) {
-			$.confirm(uiStrings.QerrorsRevertToSource, function(ok) {
+			jQuery.confirm(uiStrings.QerrorsRevertToSource, function(ok) {
 				if(!ok) return false;
 				saveChanges();
 			});
@@ -1503,13 +1503,13 @@ function svg_edit_setup() {
 			x ='fit';
 		}
 		if(!svgCanvas.setResolution(x,y)) {
-			$.alert(uiStrings.noContentToFitTo);
+			jQuery.alert(uiStrings.noContentToFitTo);
 			return false;
 		}
 		
 		// set image save option
 		curPrefs.img_save = $('#image_save_opts :checked').val();
-		$.pref('img_save',curPrefs.img_save);
+		jQuery.pref('img_save',curPrefs.img_save);
 		
 		// set background
 		var color = $('#bg_blocks div.cur_background').css('background') || '#FFF';
@@ -1529,8 +1529,8 @@ function svg_edit_setup() {
 	
 	function setBackground(color, url) {
 		if(color == curPrefs.bg_color && url == curPrefs.bg_url) return;
-		$.pref('bg_color', color);
-		$.pref('bg_url', url);
+		jQuery.pref('bg_color', color);
+		jQuery.pref('bg_url', url);
 		$('#svgcanvas').css('background',color);
 		if(url) {
 			if(!$('#background_img').length) {
@@ -1546,7 +1546,7 @@ function svg_edit_setup() {
 
 	var setIconSize = function(size) {
 		if(size == curPrefs.size) return;
-		$.pref('iconsize', size);
+		jQuery.pref('iconsize', size);
 		$('#iconsize').val(size);
 		var icon_sizes = { s:16, m:24, l:32, xl:48 };
 		var size_num = icon_sizes[size];
@@ -1558,12 +1558,12 @@ function svg_edit_setup() {
 			this.setAttribute('height',size_num);
 		});
 		
-		$.resizeSvgIcons({
+		jQuery.resizeSvgIcons({
 			'.flyout_arrow_horiz svg, .flyout_arrow_horiz img': size_num / 3,
 			'#logo a > svg, #logo a > img': size_num * 1.3
 		});
 		if(size != 's') {
-			$.resizeSvgIcons({'#layerbuttons svg, #layerbuttons img': size_num * .6});
+			jQuery.resizeSvgIcons({'#layerbuttons svg, #layerbuttons img': size_num * .6});
 		}
 		
 		// Note that all rules will be prefixed with '#svg_editor' when parsed
@@ -1674,10 +1674,10 @@ function svg_edit_setup() {
 		
 		if(size != 'm') {
 			var style_str = '';
-			$.each(cssResizeRules, function(selector, rules) {
+			jQuery.each(cssResizeRules, function(selector, rules) {
 				selector = '#svg_editor ' + selector.replace(/,/g,', #svg_editor');
 				style_str += selector + '{';
-				$.each(rules, function(prop, values) {
+				jQuery.each(rules, function(prop, values) {
 					if(values[size]) {
 						style_str += (prop + ':' + values[size] + ';');
 					}
@@ -1700,7 +1700,7 @@ function svg_edit_setup() {
 		if (editingsource) {
 			var oldString = svgCanvas.getSvgString();
 			if (oldString != $('#svg_source_textarea').val()) {
-				$.confirm(uiStrings.QignoreSourceChanges, function(ok) {
+				jQuery.confirm(uiStrings.QignoreSourceChanges, function(ok) {
 					if(ok) hideSourceEditor();
 				});
 			} else {
@@ -1734,13 +1734,13 @@ function svg_edit_setup() {
 	});
 	
 	$('#url_notice').click(function() {
-		$.alert(this.title);
+		jQuery.alert(this.title);
 	});
 	
 	$('#change_image_url').click(promptImgURL);
 	
 	function promptImgURL() {
-		$.prompt(uiStrings.enterNewImgURL, default_img_url, function(url) {
+		jQuery.prompt(uiStrings.enterNewImgURL, default_img_url, function(url) {
 			if(url) setImageURL(url);
 		});
 	}
@@ -1778,7 +1778,7 @@ function svg_edit_setup() {
 		var all_tools = '';
 		var cur_class = 'tool_button_current';
 		
-		$.each(toolnames, function(i,item) {
+		jQuery.each(toolnames, function(i,item) {
 			all_tools += '#tool_' + item + (i==toolnames.length-1?',':'');
 		});
 		
@@ -1851,7 +1851,7 @@ function svg_edit_setup() {
 		var was_none = false;
 		if (paint.type == "none") {
 			// if it was none, then set to solid white
-			paint = new $.jGraduate.Paint({solidColor: 'ffffff'});
+			paint = new jQuery.jGraduate.Paint({solidColor: 'ffffff'});
 			was_none = true;
 		}
 		var pos = elem.position();
@@ -1865,7 +1865,7 @@ function svg_edit_setup() {
 				images: { clientPath: "jgraduate/images/" }
 			},
 			function(p) {
-				paint = new $.jGraduate.Paint(p);
+				paint = new jQuery.jGraduate.Paint(p);
 				
 				var oldgrad = document.getElementById("gradbox_"+picker);
 				var svgbox = oldgrad.parentNode;
@@ -2050,14 +2050,14 @@ function svg_edit_setup() {
 		
 		var j = (curNames.length+1);
 		var uniqName = uiStrings.layer + " " + j;
-		while ($.inArray(uniqName, curNames) != -1) {
+		while (jQuery.inArray(uniqName, curNames) != -1) {
 			j++;
 			uniqName = uiStrings.layer + " " + j;
 		}
-		$.prompt(uiStrings.enterUniqueLayerName,uniqName, function(newName) {
+		jQuery.prompt(uiStrings.enterUniqueLayerName,uniqName, function(newName) {
 			if (!newName) return;
-			if ($.inArray(newName, curNames) != -1) {
-				$.alert(uiStrings.dupeLayerName);
+			if (jQuery.inArray(newName, curNames) != -1) {
+				jQuery.alert(uiStrings.dupeLayerName);
 				return;
 			}
 			svgCanvas.createLayer(newName);
@@ -2109,17 +2109,17 @@ function svg_edit_setup() {
 	$('#layer_rename').click(function() {
 		var curIndex = $('#layerlist tr.layersel').prevAll().length;
 		var oldName = $('#layerlist tr.layersel td.layername').text();
-		$.prompt(uiStrings.enterNewLayerName,"", function(newName) {
+		jQuery.prompt(uiStrings.enterNewLayerName,"", function(newName) {
 			if (!newName) return;
 			if (oldName == newName) {
-				$.alert(uiStrings.layerHasThatName);
+				jQuery.alert(uiStrings.layerHasThatName);
 				return;
 			}
 	
 			var curNames = new Array(svgCanvas.getNumLayers());
 			for (var i = 0; i < curNames.length; ++i) { curNames[i] = svgCanvas.getLayer(i); }
-			if ($.inArray(newName, curNames) != -1) {
-				$.alert(uiStrings.layerHasThatName);
+			if (jQuery.inArray(newName, curNames) != -1) {
+				jQuery.alert(uiStrings.layerHasThatName);
 				return;
 			}
 			
@@ -2230,7 +2230,7 @@ function svg_edit_setup() {
 		selLayerNames.empty();
 		var currentlayer = svgCanvas.getCurrentLayer();
 		var layer = svgCanvas.getNumLayers();
-		var icon = $.getSvgIcon('eye');
+		var icon = jQuery.getSvgIcon('eye');
 		// we get the layers in the reverse z-order (the layer rendered on top is listed first)
 		while (layer--) {
 			var name = svgCanvas.getLayer(layer);
@@ -2253,7 +2253,7 @@ function svg_edit_setup() {
 		if(icon !== undefined) {
 			var copy = icon.clone();
 			$('td.layervis',layerlist).append(icon.clone());
-			$.resizeSvgIcons({'td.layervis .svg_icon':14});
+			jQuery.resizeSvgIcons({'td.layervis .svg_icon':14});
 		}
 		// handle selection of layer
 		$('#layerlist td.layername')
@@ -2462,7 +2462,7 @@ function svg_edit_setup() {
 	
 		return {
 			setAll: function() {
-				$.each(tool_buttons, function(i, opts)  {
+				jQuery.each(tool_buttons, function(i, opts)  {
 					// Bind function to button
 					if(opts.sel) {
 						var btn = $(opts.sel);
@@ -2474,7 +2474,7 @@ function svg_edit_setup() {
 					if(opts.key) {
 						// Set shortcut based on options
 						var keyval, shortcut = '', disInInp = true, fn = opts.fn, pd = false;
-						if($.isArray(opts.key)) {
+						if(jQuery.isArray(opts.key)) {
 							keyval = opts.key[0];
 							if(opts.key.length > 1) pd = opts.key[1];
 							if(opts.key.length > 2) disInInp = opts.key[2];
@@ -2483,7 +2483,7 @@ function svg_edit_setup() {
 						}
 						keyval += '';
 						
-						$.each(keyval.split('/'), function(i, key) {
+						jQuery.each(keyval.split('/'), function(i, key) {
 							$(document).bind('keydown', {combi: key, disableInInput: disInInp}, function(e) {
 								fn();
 								if(pd) {
@@ -2513,12 +2513,12 @@ function svg_edit_setup() {
 				$('#tool_zoom').dblclick(dblclickZoom);
 			},
 			setTitles: function() {
-				$.each(key_assocs, function(keyval, sel)  {
+				jQuery.each(key_assocs, function(keyval, sel)  {
 					$(sel).each(function() {
 						var t = this.title.split(' [')[0];
 						var key_str = '';
 						// Shift+Up
-						$.each(keyval.split('/'), function(i, key) {
+						jQuery.each(keyval.split('/'), function(i, key) {
 							var mod_bits = key.split('+'), mod = '';
 							if(mod_bits.length > 1) {
 								mod = mod_bits[0] + '+';
@@ -2546,14 +2546,14 @@ function svg_edit_setup() {
 	
 	svgCanvas.setLang = function(lang, strings) {
 		curPrefs.lang = lang;
-		$.pref('lang', lang);
+		jQuery.pref('lang', lang);
 		$('#lang_select').val(lang);
 		if(strings) {
 			// $.extend will only replace the given strings
 			var oldLayerName = $('#layerlist tr.layersel td.layername').text();
 			var rename_layer = (oldLayerName == uiStrings.layer + ' 1');
 			
-			$.extend(uiStrings,strings);
+			jQuery.extend(uiStrings,strings);
 			svgCanvas.setUiStrings(strings);
 			Actions.setTitles();
 			
@@ -2590,7 +2590,7 @@ function svg_edit_setup() {
 // This process starts before document.ready so the icons appear ASAP
 /*(function() {
 	// edited to wise4 path
-	$.svgIcons('/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/svg_edit_icons.svg', {
+	jQuery.svgIcons('/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/svg_edit_icons.svg', {
 		w:24, h:24,
 		id_match: false,
 		no_img: false,
@@ -2721,7 +2721,7 @@ function svg_edit_setup() {
 			// Use small icons by default if not all left tools are visible
 			var tleft = $('#tools_left');
 			var min_height = tleft.offset().top + tleft.outerHeight();
-			var size = $.pref('iconsize');
+			var size = jQuery.pref('iconsize');
 			if(size && size != 'm') {
 				svgCanvas.setIconSize(size);				
 			} else if($(window).height() < min_height) {

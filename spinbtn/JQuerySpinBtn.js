@@ -60,7 +60,7 @@
 	});
  
  */
-$.fn.SpinButton = function(cfg){
+jQuery.fn.SpinButton = function(cfg){
 	return this.each(function(){
 
 		this.repeating = false;
@@ -92,7 +92,7 @@ $.fn.SpinButton = function(cfg){
 			var v;
 			if(isNaN(this.value)) {
 				v = this.spinCfg.reset;
-			} else if($.isFunction(this.spinCfg.stepfunc)) {
+			} else if(jQuery.isFunction(this.spinCfg.stepfunc)) {
 				v = this.spinCfg.stepfunc(this, i);
 			} else {
 				v = Number(this.value) + Number(i);
@@ -100,7 +100,7 @@ $.fn.SpinButton = function(cfg){
 			if (this.spinCfg.min !== null) v = Math.max(v, this.spinCfg.min);
 			if (this.spinCfg.max !== null) v = Math.min(v, this.spinCfg.max);
 			this.value = v;
-			if ($.isFunction(this.spinCfg.callback)) this.spinCfg.callback(this);
+			if (jQuery.isFunction(this.spinCfg.callback)) this.spinCfg.callback(this);
 		};
 		
 		$(this)
@@ -166,7 +166,7 @@ $.fn.SpinButton = function(cfg){
 		})
 		
 		.dblclick(function(e) {
-			if ($.browser.msie)
+			if (jQuery.browser.msie)
 				this.adjustValue(this.spinCfg._direction * this.spinCfg.step);
 		})
 		
@@ -245,7 +245,7 @@ $.fn.SpinButton = function(cfg){
 		var c = el[prop], b = document.body;
 		
 		while ((el = el.offsetParent) && (el != b)) {
-			if (!$.browser.msie || (el.currentStyle.position != 'relative'))
+			if (!jQuery.browser.msie || (el.currentStyle.position != 'relative'))
 				c += el[prop];
 		}
 		

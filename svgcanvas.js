@@ -430,7 +430,7 @@ function BatchCommand(text) {
 				// The bbox for a group does not include stroke vals, so we
 				// get the bbox based on its children. 
 				var stroked_bbox = canvas.getStrokedBBox(selected.childNodes);
-				$.each(bbox, function(key, val) {
+				jQuery.each(bbox, function(key, val) { 
 					bbox[key] = stroked_bbox[key];
 				});
 			}
@@ -693,7 +693,7 @@ function BatchCommand(text) {
 					var val_arr = val_bits[1].split(/[, ]+/);
 					var letters = 'abcdef'.split('');
 					var mtx = svgroot.createSVGMatrix();
-					$.each(val_arr, function(i, item) {
+					jQuery.each(val_arr, function(i, item) { 
 						val_arr[i] = parseFloat(item);
 						if(name == 'matrix') {
 							mtx[letters[i]] = val_arr[i];
@@ -915,8 +915,8 @@ function BatchCommand(text) {
 		}
 	};
 	
-	all_properties.text = $.extend(true, {}, all_properties.shape);
-	$.extend(all_properties.text, {
+	all_properties.text = jQuery.extend(true, {}, all_properties.shape); 
+	jQuery.extend(all_properties.text, { 
 		fill: "#000000",
 		stroke_width: 0,
 		font_size: 24,
@@ -981,7 +981,7 @@ function BatchCommand(text) {
 			resultList = [];
 
 			var rubberBBox = rubberBox.getBBox();
-			$.each(rubberBBox, function(key, val) {
+			jQuery.each(rubberBBox, function(key, val) { 
 				rubberBBox[key] = val / current_zoom;
 			});
 			var i = curBBoxes.length;
@@ -1098,7 +1098,7 @@ function BatchCommand(text) {
 		var all_els = svgcontent.getElementsByTagNameNS(svgns, '*');
 		var grad_uses = [];
 		
-		$.each(all_els, function(i, el) {
+		jQuery.each.each(all_els, function(i, el) {
 			var fill = el.getAttribute('fill');
 			if(fill && fill.indexOf('url(#') == 0) {
 				//found gradient
@@ -1119,7 +1119,7 @@ function BatchCommand(text) {
 			var grad = lgrads[i];
 			var id = grad.id;
 			var url_id = 'url(#' + id + ')';
-			if($.inArray(url_id, grad_uses) == -1) {
+			if(jQuery.inArray(url_id, grad_uses) == -1) {
 				// Not found, so remove
 				grad.parentNode.removeChild(grad);
 			}
@@ -1139,7 +1139,7 @@ function BatchCommand(text) {
 		// TODO: Find out why Webkit throws an error somewhere here (breaking the editor)
 		removeUnusedGrads();
 		pathActions.clear(true);
-		$.each(svgcontent.childNodes, function(i, node) {
+		jQuery.each(svgcontent.childNodes, function(i, node) {
 			if(i && node.nodeType == 8 && node.data.indexOf('Created with') != -1) {
 				svgcontent.insertBefore(node, svgcontent.firstChild);
 			}
@@ -1279,7 +1279,7 @@ function BatchCommand(text) {
 	// and simply use the original value when necessary
 	this.fixOperaXML = function(elem, orig_el) {
 		var x_attrs = elem.attributes;
-		$.each(x_attrs, function(i, attr) {
+		jQuery.each(x_attrs, function(i, attr) {
 			if(attr.nodeValue.indexOf(',') == -1) return;
 			// attr val has comma, so let's get the good value
 			var ns = attr.prefix == 'xlink' ? xlinkns : 
@@ -1294,7 +1294,7 @@ function BatchCommand(text) {
 
 		var childs = elem.childNodes;
 		var o_childs = orig_el.childNodes;
-		$.each(childs, function(i, child) {
+		jQuery.each(childs, function(i, child) {
 			if(child.nodeType == 1) {
 				canvas.fixOperaXML(child, o_childs[i]);
 			}
@@ -1619,7 +1619,7 @@ function BatchCommand(text) {
 		// if we haven't created an initial array in polygon/polyline/path, then 
 		// make a copy of initial values and include the transform
 		if (initial == null) {
-			initial = $.extend(true, {}, changes);
+			initial = jQuery.extend(true, {}, changes);
 		}
 		// save the start transform value too
 		initial["transform"] = start_transform ? start_transform : "";
@@ -2309,7 +2309,7 @@ function BatchCommand(text) {
 			var mouse_y = pt.y;
 			evt.preventDefault();
 		
-			if($.inArray(current_mode, ['select', 'resize']) == -1) {
+			if(jQuery.inArray(current_mode, ['select', 'resize']) == -1) {
 				addGradient();
 			}
 			
@@ -2417,7 +2417,7 @@ function BatchCommand(text) {
 					// Getting the BBox from the selection box, since we know we
 					// want to orient around it
 					init_bbox = canvas.getBBox($('#selectedBox0')[0]);
-					$.each(init_bbox, function(key, val) {
+					jQuery.each(init_bbox, function(key, val) {
 						init_bbox[key] = val/current_zoom;
 					});
 					
@@ -3209,7 +3209,7 @@ function BatchCommand(text) {
 		
 		var setPointContainerTransform = function(value) {
 			var conts = $('#pathpointgrip_container,#ctrlpointgrip_container');
-			$.each(conts,function() {
+			jQuery.each(conts,function() {
 				if(!value) {
 					this.removeAttribute("transform");
 				} else {
@@ -3412,7 +3412,7 @@ function BatchCommand(text) {
 				if(seg.x1 != null && seg.x2 != null) {
 					points.splice(2, 0, seg.x1, seg.y1, seg.x2, seg.y2);
 				}
-				points = $.map(points, function(n){return n*current_zoom;});
+				points = jQuery.map(points, function(n){return n*current_zoom;});
 				replacePathSeg(seg.pathSegType, 1, points, segLine);
 			}
 		}
@@ -3812,7 +3812,7 @@ function BatchCommand(text) {
 			init: function() {
 				pathFuncs = [0,'ClosePath'];
 				var pathFuncsStrs = ['Moveto','Lineto','CurvetoCubic','CurvetoQuadratic','Arc','LinetoHorizontal','LinetoVertical','CurvetoCubicSmooth','CurvetoQuadraticSmooth'];
-				$.each(pathFuncsStrs,function(i,s){pathFuncs.push(s+'Abs');pathFuncs.push(s+'Rel');});
+				jQuery.each(pathFuncsStrs,function(i,s){pathFuncs.push(s+'Abs');pathFuncs.push(s+'Rel');});
 			},
 			mouseDown: function(evt, mouse_target, start_x, start_y) {
 				if(current_mode == "path") {
@@ -3876,7 +3876,7 @@ function BatchCommand(text) {
 			
 				// if we are dragging a point, let's move it
 				if (current_path_pt_drag != -1 && current_path) {
-					var old_path_pts = $.map(current_path_pts, function(n){return n/current_zoom;});
+					var old_path_pts = jQuery.map(current_path_pts, function(n){return n/current_zoom;});
 					updatePath(mouse_x, mouse_y, old_path_pts);
 				} else if (current_ctrl_pt_drag != -1 && current_path) {
 					// Moving the control point. Since only one segment is altered,
@@ -4157,7 +4157,7 @@ function BatchCommand(text) {
 					var type = seg.pathSegType;
 					if(type == 1) continue;
 					var pts = [];
-					$.each(['',1,2], function(j, n) {
+					jQuery.each(['',1,2], function(j, n) {
 						var x = seg['x'+n], y = seg['y'+n];
 						if(x && y) {
 							var pt = transformPoint(x, y, m);
@@ -4377,7 +4377,7 @@ function BatchCommand(text) {
 			},
 			moveNode: function(attr, newValue) {
 				var num = (attr == 'x')?0:1;
-				var old_path_pts = $.map(current_path_pts, function(n){return n/current_zoom;});
+				var old_path_pts = jQuery.map(current_path_pts, function(n){return n/current_zoom;});
 	
 				current_path_pts[current_path_pt*2 + num] = newValue-0;
 				current_path_pt_drag = current_path_pt;
@@ -4406,7 +4406,7 @@ function BatchCommand(text) {
 						var str = '';
 						var more = more?' '+more.join(' '):'';
 						var last = last?shortFloat(last):'';
-						$.each(pnts, function(i, pnt) {
+						jQuery.each(pnts, function(i, pnt) {
 							pnts[i] = shortFloat(pnt);
 						});
 						d += letter + pnts.join(' ') + more + last;
@@ -4518,7 +4518,7 @@ function BatchCommand(text) {
 		var digits = save_options.round_digits;
 		if(!isNaN(val)) {
 			return Number(Number(val).toFixed(digits));
-		} else if($.isArray(val)) {
+		} else if(jQuery.isArray(val)) {
 			return shortFloat(val[0]) + ',' + shortFloat(val[1]);
 		}
 	}
@@ -4527,7 +4527,7 @@ function BatchCommand(text) {
 	this.convertToPath = function(elem, getBBox, angle) {
 		if(elem == null) {
 			var elems = selectedElements;
-			$.each(selectedElements, function(i, elem) {
+			jQuery.each(selectedElements, function(i, elem) {
 				if(elem) canvas.convertToPath(elem);
 			});
 			return;
@@ -4569,7 +4569,7 @@ function BatchCommand(text) {
 		var d = '';
 		
 		var joinSegs = function(segs) {
-			$.each(segs, function(j, seg) {
+			jQuery.each(segs, function(j, seg) {
 				var l = seg[0], pts = seg[1];
 				d += l;
 				for(var i=0; i < pts.length; i+=2) {
@@ -4724,7 +4724,7 @@ function BatchCommand(text) {
 		// remove the selected outline before serializing
 		this.clearSelection();
 		// Update save options if provided
-		if(opts) $.extend(save_options, opts);
+		if(opts) jQuery.extend(save_options, opts);
 		save_options.apply = true;
 		
 		var str = "<?xml version=\"1.0\" standalone=\"no\"?>\n";
@@ -4924,7 +4924,7 @@ function BatchCommand(text) {
 		// create a new layer and add all the orphans to it
 		if (orphans.length > 0) {
 			var i = 1;
-			while ($.inArray(("Layer " + i), layernames) != -1) { i++; }
+			while (jQuery.inArray(("Layer " + i), layernames) != -1) { i++; } 
 			var newname = "Layer " + i;
 			current_layer = svgdoc.createElementNS(svgns, "g");
 			var layer_title = svgdoc.createElementNS(svgns, "title");
@@ -5368,7 +5368,7 @@ function BatchCommand(text) {
 				var visEls = canvas.getVisibleElements();
 				canvas.addToSelection(visEls);
 				var dx = [], dy = [];
-				$.each(visEls, function(i, item) {
+				jQuery.each(visEls, function(i, item) { 
 					dx.push(bbox.x*-1);
 					dy.push(bbox.y*-1);
 				});
@@ -5428,7 +5428,7 @@ function BatchCommand(text) {
 		switch (val) {
 			case 'selection':
 				if(!selectedElements[0]) return;
-				var sel_elems = $.map(selectedElements, function(n){ if(n) return n; });
+				var sel_elems = jQuery.map(selectedElements, function(n){ if(n) return n; }); 
 				bb = canvas.getStrokedBBox(sel_elems);
 				break;
 			case 'canvas':
@@ -5453,7 +5453,7 @@ function BatchCommand(text) {
 		svgroot.setAttribute("width", res.w * zoomlevel);
 		svgroot.setAttribute("height", res.h * zoomlevel);
 		current_zoom = zoomlevel;
-		$.each(selectedElements, function(i, elem) {
+		jQuery.each(selectedElements, function(i, elem) { 
 			if(!elem) return;
 			selectorManager.requestSelector(elem).resize();
 		});
@@ -5521,7 +5521,7 @@ function BatchCommand(text) {
 	};
 
 	var addGradient = function() {
-		$.each(['stroke','fill'],function(i,type) {
+		jQuery.each(['stroke','fill'],function(i,type) { 
 			
 			if(!cur_properties[type + '_paint'] || cur_properties[type + '_paint'].type == "solidColor") return;
 			var grad = canvas[type + 'Grad'];
@@ -5591,7 +5591,7 @@ function BatchCommand(text) {
 
 	this.setStrokePaint = function(p, addGrad) {
 		// make a copy
-		var p = new $.jGraduate.Paint(p);
+		var p = new jQuery.jGraduate.Paint(p); 
 		this.setStrokeOpacity(p.alpha/100);
 
 		// now set the current paint object
@@ -5610,7 +5610,7 @@ function BatchCommand(text) {
 
 	this.setFillPaint = function(p, addGrad) {
 		// make a copy
-		var p = new $.jGraduate.Paint(p);
+		var p = new jQuery.jGraduate.Paint(p); 
 		this.setFillOpacity(p.alpha/100, true);
 
 		// now set the current paint object
@@ -5633,7 +5633,7 @@ function BatchCommand(text) {
 
 	// When attempting to set a line's width to 0, change it to 1 instead
 	this.setStrokeWidth = function(val) {
-		if(val == 0 && $.inArray(current_mode, ['line', 'path']) != -1) {
+		if(val == 0 && jQuery.inArray(current_mode, ['line', 'path']) != -1) { 
 			canvas.setStrokeWidth(1);
 			return;
 		}
@@ -5951,7 +5951,7 @@ function BatchCommand(text) {
 			var elem = elems[i];
 			if (elem == null) continue;
 			// Set x,y vals on elements that don't have them
-			if((attr == 'x' || attr == 'y') && $.inArray(elem.tagName, ['g', 'polyline', 'path']) != -1) {
+			if((attr == 'x' || attr == 'y') && jQuery.inArray(elem.tagName, ['g', 'polyline', 'path']) != -1) { 
 				var bbox = canvas.getStrokedBBox([elem]);
 				var diff_x = attr == 'x' ? newValue - bbox.x : 0;
 				var diff_y = attr == 'y' ? newValue - bbox.y : 0;
@@ -5994,7 +5994,7 @@ function BatchCommand(text) {
 				// Use the Firefox ffClone hack for text elements with gradients or
 				// where other text attributes are changed. 
 				if(elem.nodeName == 'text') {
-					if((newValue+'').indexOf('url') == 0 || $.inArray(attr, ['font-size','font-family','x','y']) != -1) {
+					if((newValue+'').indexOf('url') == 0 || jQuery.inArray(attr, ['font-size','font-family','x','y']) != -1) { 
 						elem = ffClone(elem);
 					}
 				}
@@ -6354,7 +6354,7 @@ function BatchCommand(text) {
 					
 					// Get the BBox from the raw path for these elements
 					var elemNames = ['ellipse','path','line','polyline','polygon'];
-					if($.inArray(elem.tagName, elemNames) != -1) {
+					if(jQuery.inArray(elem.tagName, elemNames) != -1) { 
 						bb = good_bb = canvas.convertToPath(elem, true, angle);
 					} else if(elem.tagName == 'rect') {
 						// Look for radius
@@ -6415,7 +6415,7 @@ function BatchCommand(text) {
 
 		}
 		var full_bb;
-		$.each(elems, function() {
+		jQuery.each(elems, function() { 
 			if(full_bb) return;
 			full_bb = getCheckedBBox(this);
 		});
@@ -6440,7 +6440,7 @@ function BatchCommand(text) {
 			return offset;
 		}
 		
-		$.each(elems, function(i, elem) {
+		jQuery.each(elems, function(i, elem) { 
 			var cur_bb = getCheckedBBox(elem);
 			if(!cur_bb) return;
 			var offset = getOffset(elem);
@@ -6451,7 +6451,7 @@ function BatchCommand(text) {
 		full_bb.x = min_x;
 		full_bb.y = min_y;
 		
-		$.each(elems, function(i, elem) {
+		jQuery.each(elems, function(i, elem) { 
 			var cur_bb = getCheckedBBox(elem);
 			if(!cur_bb) return;
 			var offset = getOffset(elem);
@@ -6557,7 +6557,7 @@ function BatchCommand(text) {
 	var copyElem = function(el) {
 		// manually create a copy of the element
 		var new_el = document.createElementNS(svgns, el.nodeName);
-		$.each(el.attributes, function(i, attr) {
+		jQuery.each(el.attributes, function(i, attr) { 
 			var ns = attr.nodeName == 'href' ? xlinkns : 
 				attr.prefix == "xml" ? xmlns : null;
 			new_el.setAttributeNS(ns, attr.nodeName, attr.nodeValue);
@@ -6575,7 +6575,7 @@ function BatchCommand(text) {
 		}
 
 		// now create copies of all children
-		$.each(el.childNodes, function(i, child) {
+		jQuery.each(el.childNodes, function(i, child) { 
 			switch(child.nodeType) {
 				case 1: // element node
 					new_el.appendChild(copyElem(child));
@@ -6720,7 +6720,7 @@ function BatchCommand(text) {
 	};
 	
 	this.setUiStrings = function(strs) {
-		$.extend(uiStrings, strs);
+		jQuery.extend(uiStrings, strs); 
 	}
 	
 	this.clear();
@@ -6903,13 +6903,13 @@ var Utils = {
 		//return $(xml)[0];
 		var out;
 		try{
-			var dXML = ($.browser.msie)?new ActiveXObject("Microsoft.XMLDOM"):new DOMParser();
+			var dXML = (jQuery.browser.msie)?new ActiveXObject("Microsoft.XMLDOM"):new DOMParser(); 
 			dXML.async = false;
 		} catch(e){ 
 			throw new Error("XML Parser could not be instantiated"); 
 		};
 		try{
-			if($.browser.msie) out = (dXML.loadXML(sXML))?dXML:false;
+			if(jQuery.browser.msie) out = (dXML.loadXML(sXML))?dXML:false; 
 			else out = dXML.parseFromString(sXML, "text/xml");
 		}
 		catch(e){ throw new Error("Error parsing XML string"); };

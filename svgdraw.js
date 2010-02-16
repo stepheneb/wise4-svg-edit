@@ -50,7 +50,7 @@ SVGDRAW.prototype.init = function(jsonURL) {
 
 SVGDRAW.prototype.loadModules = function(jsonfilename, context) {
 	
-	$.getJSON(jsonfilename, 
+	jQuery.getJSON(jsonfilename, 
 		function(data){
 			if(data.stamps){
 				for (var item in data.stamps) {
@@ -726,13 +726,13 @@ var text2xml = function(sXML) {
 	//return $(xml)[0];
 	var out;
 	try{
-		var dXML = ($.browser.msie)?new ActiveXObject("Microsoft.XMLDOM"):new DOMParser();
+		var dXML = (jQuery.browser.msie)?new ActiveXObject("Microsoft.XMLDOM"):new DOMParser();
 		dXML.async = false;
 	} catch(e){ 
 		throw new Error("XML Parser could not be instantiated"); 
 	};
 	try{
-		if($.browser.msie) out = (dXML.loadXML(sXML))?dXML:false;
+		if(jQuery.browser.msie) out = (dXML.loadXML(sXML))?dXML:false;
 		else out = dXML.parseFromString(sXML, "text/xml");
 	}
 	catch(e){ throw new Error("Error parsing XML string"); };
