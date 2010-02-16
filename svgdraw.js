@@ -299,7 +299,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			min: 1,
 			step: 1,
 			value: 1,
-			change: function(event, ui) {
+			slide: function(event, ui) {
 				context.changeSpeed(ui.value,context);
 			}
 		});
