@@ -176,7 +176,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 		context.snapTotal = data.snapTotal;	
 	}
 	// initiate prompt/instructions
-	if(context.instructions != ""){
+	if(context.instructions && context.instructions != ""){
 		$('#prompt_text').html(context.instructions);
 		
 		$('#prompt_dialog').dialog({
@@ -204,7 +204,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 	}
 	
 	//initiate snapshots
-	if(context.snapshotsActive){
+	if(context.snapshotsActive == true){
 		$('#tool_snapshot').attr("style","display:inline");
 		
 		if(data.snapshots && data.snapshots.length > 0){
@@ -317,16 +317,14 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 		
 		// bind mouseup events to stack checker function
 		$("#tools_top,#tools_left,#svgcanvas,#tools_bottom").mouseup(function(){
-			if (context.snapshotsActive == true){
-				setTimeout(function(){
-					context.snapCheck(context);
-				},50);
-			}
+			setTimeout(function(){
+				context.snapCheck(context);
+			},50);
 		});
 	}
 	
 	// initiate description/annotation
-	if(context.descriptionActive){
+	if(context.descriptionActive == true){
 		if (context.snapshotsActive == true) { // check whether snapshots are active
 			// TODO: Check if this is necessary - context.description should already be set correctly
 			if (data.selected > -1) {
