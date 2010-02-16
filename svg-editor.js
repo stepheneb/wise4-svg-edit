@@ -135,6 +135,159 @@ function svg_edit_setup() {
 		$.prompt = function(msg, txt, cb) { dbox('prompt', msg, cb, txt);};
 	}());
 	
+	// Load the icons - moved this into the svg_edit_setup function for wise4 instead of running before document.ready
+	(function() {
+		// edited to wise4 path
+		$.svgIcons('/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/svg_edit_icons.svg', {
+			w:24, h:24,
+			id_match: false,
+			no_img: false,
+			useFallback: true,
+			fallback_path:'/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/', // edit to wise4 path
+			fallback:{
+				'new_image':'clear.png',
+				'save':'save.png',
+				'open':'open.png',
+				'source':'source.png',
+				'docprops':'document-properties.png',
+				'wireframe':'wireframe.png',
+				
+				'undo':'undo.png',
+				'redo':'redo.png',
+				
+				'select':'select.png',
+				'select_node':'select_node.png',
+				'pencil':'fhpath.png',
+				'pen':'line.png',
+				'square':'square.png',
+				'rect':'rect.png',
+				'fh_rect':'freehand-square.png',
+				'circle':'circle.png',
+				'ellipse':'ellipse.png',
+				'fh_ellipse':'freehand-circle.png',
+				'path':'path.png',
+				'text':'text.png',
+				'image':'image.png',
+				'zoom':'zoom.png',
+				
+				'clone':'clone.png',
+				'delete':'delete.png',
+				'group':'shape_group.png',
+				'ungroup':'shape_ungroup.png',
+				'move_top':'move_top.png',
+				'move_bottom':'move_bottom.png',
+				'to_path':'to_path.png',
+				'link_controls':'link_controls.png',
+				'reorient':'reorient.png',
+				
+				'align_left':'align-left.png',
+				'align_center':'align-center.png',
+				'align_right':'align-right.png',
+				'align_top':'align-top.png',
+				'align_middle':'align-middle.png',
+				'align_bottom':'align-bottom.png',
+
+				'go_up':'go-up.png',
+				'go_down':'go-down.png',
+
+				'ok':'save.png',
+				'cancel':'cancel.png',
+				
+				'arrow_right':'flyouth.png',
+				'arrow_down':'dropdown.gif'
+			},
+			placement: {
+				'#logo a':'logo',
+			
+				'#tool_clear,#layer_new':'new_image',
+				'#tool_save':'save',
+				'#tool_open':'open',
+				'#tool_source':'source',
+				'#tool_docprops':'docprops',
+				'#tool_wireframe':'wireframe',
+				
+				'#tool_undo':'undo',
+				'#tool_redo':'redo',
+				
+				'#tool_select':'select',
+				'#tool_fhpath':'pencil',
+				'#tool_line':'pen',
+				'#tool_rect,#tools_rect_show':'rect',
+				'#tool_square':'square',
+				'#tool_fhrect':'fh_rect',
+				'#tool_ellipse,#tools_ellipse_show':'ellipse',
+				'#tool_circle':'circle',
+				'#tool_fhellipse':'fh_ellipse',
+				'#tool_path':'path',
+				'#tool_text,#layer_rename':'text',
+				'#tool_image':'image',
+				'#tool_zoom':'zoom',
+				
+				'#tool_clone,#tool_clone_multi,#tool_node_clone':'clone',
+				'#layer_delete,#tool_delete,#tool_delete_multi,#tool_node_delete':'delete',
+				'#tool_move_top':'move_top',
+				'#tool_move_bottom':'move_bottom',
+				'#tool_topath':'to_path',
+				'#tool_node_link':'link_controls',
+				'#tool_reorient':'reorient',
+				'#tool_group':'group',
+				'#tool_ungroup':'ungroup',
+				
+				'#tool_alignleft':'align_left',
+				'#tool_aligncenter':'align_center',
+				'#tool_alignright':'align_right',
+				'#tool_aligntop':'align_top',
+				'#tool_alignmiddle':'align_middle',
+				'#tool_alignbottom':'align_bottom',
+				
+				'#url_notice':'warning',
+				
+				'#layer_up':'go_up',
+				'#layer_down':'go_down',
+				'#layerlist td.layervis':'eye',
+				
+				'#tool_source_save,#tool_docprops_save':'ok',
+				'#tool_source_cancel,#tool_docprops_cancel':'cancel',
+				
+				'.flyout_arrow_horiz':'arrow_right',
+				'.dropdown button':'arrow_down',
+				'#palette .palette_item:first, #fill_bg, #stroke_bg':'no_color'
+			},
+			resize: {
+				'#logo a .svg_icon': 32,
+				'.flyout_arrow_horiz .svg_icon': 5,
+				'.layer_button .svg_icon, #layerlist td.layervis .svg_icon': 14,
+				'.dropdown button .svg_icon': 7,
+				'.palette_item:first .svg_icon, #fill_bg .svg_icon, #stroke_bg .svg_icon': 16,
+				'.toolbar_button button .svg_icon':16
+			},
+			callback: function(icons) {
+				$('.toolbar_button button > svg, .toolbar_button button > img').each(function() {
+					$(this).parent().prepend(this);
+				});
+				
+				// Use small icons by default if not all left tools are visible
+				var tleft = $('#tools_left');
+				var min_height = tleft.offset().top + tleft.outerHeight();
+				var size = $.pref('iconsize');
+				if(size && size != 'm') {
+					svgCanvas.setIconSize(size);				
+				} else if($(window).height() < min_height) {
+					// Make smaller
+					svgCanvas.setIconSize('s');
+				}
+				
+				// Load source if given
+				var loc = document.location.href;
+				if(loc.indexOf('?source=') != -1) {
+					var pre = '?source=data:image/svg+xml;base64,';
+					var src = loc.substring(loc.indexOf(pre) + pre.length);
+					svgCanvas.setSvgString(Utils.decode64(src));				
+				}
+			}
+		});
+	}());
+	
 	var setSelectMode = function() {
 		$('.tool_button_current').removeClass('tool_button_current').addClass('tool_button');
 		$('#tool_select').addClass('tool_button_current');
@@ -2435,7 +2588,7 @@ function svg_edit_setup() {
 };
 
 // This process starts before document.ready so the icons appear ASAP
-(function() {
+/*(function() {
 	// edited to wise4 path
 	$.svgIcons('/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/svg_edit_icons.svg', {
 		w:24, h:24,
@@ -2565,9 +2718,8 @@ function svg_edit_setup() {
 				$(this).parent().prepend(this);
 			});
 			
-			// TODO: Enable this block of code - for some reason, within wise4 it throws "$.pref is not a function" error
 			// Use small icons by default if not all left tools are visible
-			/*var tleft = $('#tools_left');
+			var tleft = $('#tools_left');
 			var min_height = tleft.offset().top + tleft.outerHeight();
 			var size = $.pref('iconsize');
 			if(size && size != 'm') {
@@ -2575,7 +2727,7 @@ function svg_edit_setup() {
 			} else if($(window).height() < min_height) {
 				// Make smaller
 				svgCanvas.setIconSize('s');
-			}*/
+			}
 			
 			// Load source if given
 			var loc = document.location.href;
@@ -2586,7 +2738,7 @@ function svg_edit_setup() {
 			}
 		}
 	});
-}());
+}());*/
 
 // This happens when the page is loaded
 $(function() {

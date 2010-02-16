@@ -564,12 +564,7 @@ SVGDRAW.prototype.bindSnapshot = function(item,context) {
 		}
 	);
 	
-	$(item).children(".snap_delete").click(function(){
-		$(this).parent().unbind("click");
-		var index = $("div.snap").index(item);
-		context.index = index;
-		$("#deletesnap_dialog").dialog('open');
-	});
+	$(item).children(".snap_delete").click(function(){context.deleteClick(this,context);});
 	
 	// TODO: Make this sortable binder initiate only once (after first snapshot has been saved)
 	$("#snap_images").sortable({
@@ -596,6 +591,13 @@ SVGDRAW.prototype.bindSnapshot = function(item,context) {
 	    placeholder: 'placeholder'
 	});
 
+};
+
+SVGDRAW.prototype.deleteClick = function(item,context){
+	$(item).parent().unbind("click");
+	var index = $(".snap_delete").index(item);
+	context.index = index;
+	$("#deletesnap_dialog").dialog('open');
 };
 
 SVGDRAW.prototype.snapClick = function(item,context){
@@ -662,7 +664,8 @@ SVGDRAW.prototype.snapPlayback = function(mode,speed,context){
 		}
 	}
 	if (mode=="play"){
-		$('.snap').unbind("click"); // unbind click function
+		$('.snap').unbind('click'); // unbind snap click function
+		$('.snap_delete').unbind('click'); // unbind delete click function
 		$('#snap_images').sortable('disable');
 		context.playback = true;
 		$('#play').hide();
@@ -690,7 +693,8 @@ SVGDRAW.prototype.snapPlayback = function(mode,speed,context){
 		//$('#snap_browse').show();
 		$("#svgcanvas").stopTime('play');
 		setTimeout(function(){
-        	$('.snap').click(function(){context.snapClick(this,context);}); // rebind click function
+        	$('.snap').click(function(){context.snapClick(this,context);}); // rebind snap click function
+        	$('.snap_delete').click(function(){context.deleteClick(this,context);}); // rebind delete click function
         	$('#snap_images').sortable('enable');
         }, 300);
 	}

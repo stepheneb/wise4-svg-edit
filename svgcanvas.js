@@ -2392,6 +2392,7 @@ function BatchCommand(text) {
 							'display': 'inline'
 						}, 100);
 					}
+					$('#text').blur(); // unfocus text input box on all select operations (wise4)
 					break;
 				case "zoom": 
 					started = true;
