@@ -138,7 +138,7 @@ $(function() {
 			xlinkns = "http://www.w3.org/1999/xlink",
 			icon_w = opts.w?opts.w : 24,
 			icon_h = opts.h?opts.h : 24,
-			useFallbackImgs = useFallback?useFallback : false,
+			useFallbackImgs = opts.use_fallback?opts.use_fallback : false,
 			elems, svgdoc, testImg,
 			icons_made = false, data_loaded = false, load_attempts = 0,
 			ua = navigator.userAgent, isOpera = !!window.opera, isSafari = (ua.indexOf('Safari/') > -1 && ua.indexOf('Chrome/')==-1),
@@ -156,9 +156,8 @@ $(function() {
 				}
 			} else {
 				// check whether useFallback parameter was set to true (wise4)
-				
-				if (useFallbackImgs) {
-					$(setTimeout(function() {$(useFallback)},10)); // use fallback png icons
+				if (useFallbackImgs==true) {
+					$(setTimeout(function() {useFallback();},10)); // use fallback png icons
 				} else {
 					$.ajax({
 						url: file,
@@ -440,6 +439,6 @@ $(function() {
 })(jQuery);
 
 //used to notify scriptloader that this script has finished loading
-if(typeof eventManager != 'undefined'){
-	eventManager.fire('scriptLoaded', 'vle/node/draw/svg-edit-2.4rc1/svgicons/jquery.svgicons.js');
-};
+//if(typeof eventManager != 'undefined'){
+	//eventManager.fire('scriptLoaded', 'vle/node/draw/svg-edit-2.4rc1/svgicons/jquery.svgicons.js');
+//};

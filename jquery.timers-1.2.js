@@ -138,6 +138,6 @@ jQuery(window).bind("unload", function() {
 });
 
 //used to notify scriptloader that this script has finished loading
-if(typeof eventManager != 'undefined'){
-	eventManager.fire('scriptLoaded', 'vle/node/draw/svg-edit-2.4rc1/jquery.timers-1.2.js');
-};
+//if(typeof eventManager != 'undefined'){
+	//eventManager.fire('scriptLoaded', 'vle/node/draw/svg-edit-2.4rc1/jquery.timers-1.2.js');
+//};

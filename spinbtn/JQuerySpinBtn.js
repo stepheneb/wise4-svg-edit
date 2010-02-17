@@ -60,7 +60,7 @@
 	});
  
  */
-jQuery.fn.SpinButton = function(cfg){
+$.fn.SpinButton = function(cfg){
 	return this.each(function(){
 
 		this.repeating = false;
@@ -92,7 +92,7 @@ jQuery.fn.SpinButton = function(cfg){
 			var v;
 			if(isNaN(this.value)) {
 				v = this.spinCfg.reset;
-			} else if(jQuery.isFunction(this.spinCfg.stepfunc)) {
+			} else if($.isFunction(this.spinCfg.stepfunc)) {
 				v = this.spinCfg.stepfunc(this, i);
 			} else {
 				v = Number(this.value) + Number(i);
@@ -100,7 +100,7 @@ jQuery.fn.SpinButton = function(cfg){
 			if (this.spinCfg.min !== null) v = Math.max(v, this.spinCfg.min);
 			if (this.spinCfg.max !== null) v = Math.min(v, this.spinCfg.max);
 			this.value = v;
-			if (jQuery.isFunction(this.spinCfg.callback)) this.spinCfg.callback(this);
+			if ($.isFunction(this.spinCfg.callback)) this.spinCfg.callback(this);
 		};
 		
 		$(this)
@@ -166,7 +166,7 @@ jQuery.fn.SpinButton = function(cfg){
 		})
 		
 		.dblclick(function(e) {
-			if (jQuery.browser.msie)
+			if ($.browser.msie)
 				this.adjustValue(this.spinCfg._direction * this.spinCfg.step);
 		})
 		
@@ -245,7 +245,7 @@ jQuery.fn.SpinButton = function(cfg){
 		var c = el[prop], b = document.body;
 		
 		while ((el = el.offsetParent) && (el != b)) {
-			if (!jQuery.browser.msie || (el.currentStyle.position != 'relative'))
+			if (!$.browser.msie || (el.currentStyle.position != 'relative'))
 				c += el[prop];
 		}
 		
@@ -254,6 +254,6 @@ jQuery.fn.SpinButton = function(cfg){
 };
 
 //used to notify scriptloader that this script has finished loading
-if(typeof eventManager != 'undefined'){
-	eventManager.fire('scriptLoaded', 'vle/node/draw/svg-edit-2.4rc1/spinbtn/JQuerySpinBtn.js');
-};
+//if(typeof eventManager != 'undefined'){
+	//eventManager.fire('scriptLoaded', 'vle/node/draw/svg-edit-2.4rc1/spinbtn/JQuerySpinBtn.js');
+//};

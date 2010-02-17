@@ -50,7 +50,7 @@ SVGDRAW.prototype.init = function(jsonURL) {
 
 SVGDRAW.prototype.loadModules = function(jsonfilename, context) {
 	
-	jQuery.getJSON(jsonfilename, 
+	$.getJSON(jsonfilename, 
 		function(data){
 			if(data.stamps){
 				for (var item in data.stamps) {
@@ -490,7 +490,7 @@ SVGDRAW.prototype.addSnapshot = function(svgString,num,context) {
 	var snapHolder = '<div class="snap" title="Click to Open; Click and Drag to Reorder">' +
 	'<div class="snap_wrapper"></div>' + 
 	'<div class="snap_delete" title="Delete Snapshot"><span>X</span></div>' +
-	'<div class="snap_num"><span>' + snapNum + '</span></div>'
+	'<div class="snap_num"><span>' + snapNum + '</span></div>' +
 	'</div>';
 	$("#snap_images").append(snapHolder);
 	
@@ -726,13 +726,13 @@ var text2xml = function(sXML) {
 	//return $(xml)[0];
 	var out;
 	try{
-		var dXML = (jQuery.browser.msie)?new ActiveXObject("Microsoft.XMLDOM"):new DOMParser();
+		var dXML = ($.browser.msie)?new ActiveXObject("Microsoft.XMLDOM"):new DOMParser();
 		dXML.async = false;
 	} catch(e){ 
 		throw new Error("XML Parser could not be instantiated"); 
 	};
 	try{
-		if(jQuery.browser.msie) out = (dXML.loadXML(sXML))?dXML:false;
+		if($.browser.msie) out = (dXML.loadXML(sXML))?dXML:false;
 		else out = dXML.parseFromString(sXML, "text/xml");
 	}
 	catch(e){ throw new Error("Error parsing XML string"); };
@@ -740,6 +740,6 @@ var text2xml = function(sXML) {
 };
 
 //used to notify scriptloader that this script has finished loading
-if(typeof eventManager != 'undefined'){
-	eventManager.fire('scriptLoaded', 'vle/node/draw/svg-edit-2.4rc1/svgdraw.js');
-};
+//if(typeof eventManager != 'undefined'){
+	//eventManager.fire('scriptLoaded', 'vle/node/draw/svg-edit-2.4rc1/svgdraw.js');
+//};
