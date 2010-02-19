@@ -357,7 +357,7 @@ function BatchCommand(text) {
 								"r": 4,
 								"stroke": "blue",
 								"stroke-width": 2,
-								"style": "cursor:url(images/rotate.png) 12 12, auto;"
+								"style": "cursor:url(/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/rotate.png) 12 12, url(/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/rotate.png), pointer" // edited to wise4 path
 							}
 						}) );
 		
@@ -3044,7 +3044,8 @@ function BatchCommand(text) {
 						'y': y-currStamp.height/2
 					},1000);
 					// keep = (element.width.baseVal.value && element.height.baseVal.value);
-					keep = (element.getAttribute('width') != 0 || element.getAttribute('height') != 0);
+					//keep = (element.getAttribute('width') != 0 || element.getAttribute('height') != 0);
+					keep = true; // in wise4, we always keep image
 					break;
 				case "circle":
 					// keep = (element.r.baseVal.value);
@@ -3169,7 +3170,7 @@ function BatchCommand(text) {
 				cleanupElement(element);
 				if(current_mode == "path") {
 					pathActions.toEditMode(element);
-				} else if (current_mode == "text" || current_mode == "image") {
+				} else if (current_mode == "text"/*|| current_mode == "image"*/) { // keep in image mode in wise4
 					// keep us in the tool we were in unless it was a text or image element
 					canvas.addToSelection([element], true);
 				}

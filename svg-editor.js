@@ -602,7 +602,7 @@ function svg_edit_setup() {
 	// stamp selector position (wise4)
 	//TODO: update css
 	var pos = $('#tool_image').position();
-	$('#tools_stamps').css({'left': pos.left+36, 'top': pos.top+2});
+	$('#tools_stamps').css({'left': pos.left+40, 'top': pos.top-38});
 
 	var changeRectRadius = function(ctl) {
 		svgCanvas.setRectRadius(ctl.value);
@@ -2443,7 +2443,7 @@ function svg_edit_setup() {
 		w:24, h:24,
 		id_match: false,
 		no_img: false,
-		use_fallback: true,
+		use_fallback: true, // using png icon images in wise4 because svg gradients do not render correctly
 		fallback_path:'/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/', // edited to wise4 path
 		fallback:{
 			'new_image':'clear.png',
@@ -2498,7 +2498,7 @@ function svg_edit_setup() {
 			'arrow_down':'dropdown.gif'
 		},
 		placement: {
-			'#logo a':'logo',
+			//'#logo a':'logo',
 		
 			'#tool_clear,#layer_new':'new_image',
 			'#tool_save':'save',

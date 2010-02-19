@@ -112,12 +112,6 @@ body {
 
 /* wise4 */
 #svg_editor div#workarea {
-	/*display: inline-block;
-	position:absolute;
-	margin-top: 75px;
-	margin-right: 40px;*/
-	/*bottom: 60px;*/
-	/*right: 14px;*/
 	margin-right:2px;
 	padding:10px 10px;
 	background-color: #A0A0A0;
@@ -310,10 +304,11 @@ body {
 
 #svg_editor #snapshots div.hover {
 	border:2px solid #555555;
+	background-color:#DDDDDD;
 }
 
 #svg_editor #snapshots div.snap.active {
-	background-color:#EFEFEF !important;
+	background-color:#CCCCCC !important;
 	border-color:#333333 !important;	
 }
 
@@ -740,7 +735,8 @@ span.zoom_tool {
 	position: absolute;
 	margin: 0;
 	padding: 0;
-	left: -93px;
+	/*left: -93px;*/
+	left: -100px; /*wise4*/
 	top: 26px;
 	display: none;
 }
@@ -870,10 +866,58 @@ span.zoom_tool {
 	width: 30px;
 }
 
-/* stamp selector (wise4) */
+/*
+ *  stamp selector (wise4) 
+ */
 #svg_editor #tools_stamps {
-	background:#E0E0E0 !important;
-	display:none
+	background:#E8E8E8 !important;
+	display:none;
+	border:1px solid #777777;
+	cursor:default;
+}
+
+#svg_editor #tools_stamps .tools_title {
+	margin:5px;
+	font-weight:bold;
+}
+
+#svg_editor #tools_stamps #stamp_images {
+	margin:0 auto 5px;
+	padding:5px 0;
+	max-height:200px;
+	width:100px;
+	overflow:auto;
+	background-color:#FFFFFF;
+	text-align:center;
+}
+
+#svg_editor #tools_stamps .tool_image {
+	border:2px solid #999999;
+	max-height: 50px;
+	max-width: 50px;
+	cursor: pointer !important;
+	margin:4px;
+	padding:4px;
+	border-radius:5px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+}
+
+#svg_editor #tools_stamps .tool_image:hover {
+	background-color:#DDDDDD;
+	border-color:#555555;
+}
+
+#svg_editor #tools_stamps .tool_image_current {
+	background-color:#CCCCCC;
+	border:2px solid #333333 !important;
+}
+
+#svg_editor #svgcanvas img#stamp_preview {
+	opacity:.85;
+	display:none;
+	position:fixed;
+	cursor:crosshair;
 }
 
 /* TODO: figure out what more-specific selector causes me to write this atrocity and not
@@ -892,35 +936,6 @@ span.zoom_tool {
 #svg_editor .tool_button:hover, 
 #svg_editor .push_button:hover {
 	background-color: #FFF;
-}
-
-/*wise4*/
-#svg_editor #tools_stamps .tool_image {
-	float: left;
-	background-color: #EEE;
-	border-left: 1px solid #FFFFFF;
-	border-top: 1px solid #FFFFFF;
-	border-right: 1px solid #808080;
-	border-bottom: 1px solid #808080;
-	max-height: 50px;
-	max-width: 50px;
-	cursor: pointer !important;
-	margin:4px;
-	padding:4px;
-}
-
-/*wise4*/
-#svg_editor #tools_stamps .tool_image:hover {
-	background-color:#fff;
-}
-
-/*wise4*/
-#svg_editor #tools_stamps .tool_image_current {
-	background-color: #B0B0B0;
-	border-left: 1px solid #808080;
-	border-top: 1px solid #808080;
-	border-right: 1px solid #FFFFFF;
-	border-bottom: 1px solid #FFFFFF;
 }
 
 #svg_editor #tools_rect .tool_flyout_button_current, #svg_editor #tools_ellipse .tool_flyout_button_current {

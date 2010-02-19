@@ -1,3 +1,5 @@
+// TODO: Comment me more thoroughly!
+
 function SVGDRAW(node) {
 	this.node = node;
 	this.content = node.getContent().getContentJSON();
@@ -148,7 +150,6 @@ SVGDRAW.prototype.loadCallback = function(studentWorkJSON, context) {
 };
 
 SVGDRAW.prototype.saveToVLE = function() {
-	//var svgStringToSave = this.svgCanvas.getSvgString();
 	// strip out annotations
 	if (this.teacherAnnotation != "") {
 		svgStringToSave = svgStringToSave.replace(this.teacherAnnotation, "");
@@ -432,22 +433,24 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			var num = i*1 + 1;
 			//stamptxt += "<img id='" + i + "' class='tool_image' title='" + context.stamps[i].title + "' src=" + context.stamps[i].uri + " alt='Stamp " + num + "' height='" + height + "' width= '" + width + "'></div>";
 			// max stamp preview image height and width are hard-coded in css now (max 50px)
-			stamptxt += "<img id='" + i + "' class='tool_image' title='" + context.stamps[i].title + "' src=" + context.stamps[i].uri + " alt='Stamp " + num + "'></div>";
+			stamptxt += "<img id='" + i + "' class='tool_image' title='" + context.stamps[i].title + "' src=" + context.stamps[i].uri + " alt='Stamp " + num + "' />";
 		}
-		$('#tools_stamps').append(stamptxt);
+		$('#stamp_images').append(stamptxt);
 		// set first image as default (selected)
 		this.svgCanvas.setStamp(0);
-		$("#tools_stamps > #0").addClass("tool_image_current");
+		context.setStampPreview(0,context);
+		$("#stamp_images > #0").addClass("tool_image_current");
 		
 		// bind click event to set selected stamp image (wise4)
 		$('.tool_image').click(function(){
-			var id = $(this).attr('id');
-			context.svgCanvas.setStamp(id);
+			var index = $(this).attr('id');
+			context.svgCanvas.setStamp(index);
 			$('.tool_image').each(function(i){
-				if ($(this).attr("id") == id) {
+				if ($(this).attr("id") == index) {
 					$(this).addClass("tool_image_current");
 				} else {$(this).removeClass("tool_image_current");};
 			});
+			context.setStampPreview(index,context);
 			$('#tools_stamps').fadeOut("slow");
 		});
 	} else {
@@ -710,12 +713,40 @@ SVGDRAW.prototype.changeSpeed = function(value, context){
 		context.snapPlayback("pause",speed,context);
 		context.snapPlayback("play",speed,context);
 	}
-}
+};
 
 SVGDRAW.prototype.updateNumbers = function(){
 	$(".snap_num > span").each(function(index){
 		var num = "" + (index*1 + 1);
 		$(this).text(num);
+	});
+};
+
+SVGDRAW.prototype.setStampPreview = function(index, context){
+	var height = context.stamps[index].height;
+	var width = context.stamps[index].width;
+	$('#stamp_preview').attr('src',context.stamps[index].uri);
+	$('#svgcanvas').mousemove(function(e){
+		if (context.svgCanvas.getMode() == 'image') {
+			if($('#sidepanels').is(':visible')){
+				$('#stamp_preview').height(height*.75)
+					.width(width*.75);
+				$('#stamp_preview').css({'left': e.pageX - height*.75/2, 'top': e.pageY - width*.75/2});
+			} else {
+				$('#stamp_preview').height(height)
+					.width(width);
+				$('#stamp_preview').css({'left': e.pageX - height/2, 'top': e.pageY - width/2});
+			}
+			if (e.pageY < this.offsetTop || e.pageX < this.offsetLeft || e.pageX > $('#svgcanvas').width() + this.offsetLeft || e.pageY > $('#svgcanvas').height() + this.offsetTop) {
+				$('#stamp_preview').hide();
+			}
+			else {
+				$('#stamp_preview').show();
+			}
+			$('#stamp_images').mouseenter(function(){
+				$('#stamp_preview').hide();
+			});
+		}
 	});
 };
 
