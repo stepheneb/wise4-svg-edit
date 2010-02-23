@@ -878,6 +878,9 @@ function svg_edit_setup() {
 		$(button).addClass('tool_button_current');
 		// when a tool is selected, we should deselect any currently selected elements
 		svgCanvas.clearSelection();
+		// set opacity to 1 as default for any new elements (wise4)
+		svgCanvas.setOpacity(1);
+		$('#opac_slider').slider('option', 'value', 1);
 		return true;
 	};
 	
@@ -1799,11 +1802,11 @@ function svg_edit_setup() {
 
 	var boxgrad = svgdocbox.getElementById('gradbox_');
 	boxgrad.id = 'gradbox_fill';
-	svgdocbox.documentElement.setAttribute('width',16.5);
+	svgdocbox.documentElement.setAttribute('width',26.5); /*changed width to 26.5 for wise 4 from 16.5 */
 	$('#fill_color').append( document.importNode(svgdocbox.documentElement,true) );
 	
 	boxgrad.id = 'gradbox_stroke';	
-	svgdocbox.documentElement.setAttribute('width',16.5);
+	svgdocbox.documentElement.setAttribute('width',26.5); /*changed width to 26.5 for wise 4 from 16.5 */
 	$(svgdocbox.documentElement.firstChild).attr('fill', '#000000');
 	$('#stroke_color').append( document.importNode(svgdocbox.documentElement,true) );
 	
@@ -1826,14 +1829,14 @@ function svg_edit_setup() {
 		});
 	},1000);
 		
-	// much simpler color picker, a la original #palette_holder (wise4)
+	// much simpler color picker, a la original svg-edit #palette_holder (wise4)
 	$('#fill_color').click(function(){
 		//colorPicker($(this));
 		picker = "fill";
 		var color = svgCanvas.getFillColor();
 		$('#palette_preview').css({'background-color': color});
 		var pos = $('#fill_color').position();
-		$('#palette_holder').css({'left': pos.left+12, 'top': pos.top-292});
+		$('#palette_holder').css({'left': pos.left+26, 'top': pos.top-272});
 		$('#palette_holder').show();
 		updateToolButtonState();
 	});
@@ -1845,7 +1848,7 @@ function svg_edit_setup() {
 		var color = svgCanvas.getStrokeColor();
 		$('#palette_preview').css({'background-color': color});
 		var pos = $('#stroke_color').position();
-		$('#palette_holder').css({'left': pos.left+12, 'top': pos.top-292});
+		$('#palette_holder').css({'left': pos.left+26, 'top': pos.top-272});
 		$('#palette_holder').show();
 		updateToolButtonState();
 	});

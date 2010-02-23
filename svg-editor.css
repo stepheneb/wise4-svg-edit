@@ -56,7 +56,7 @@ body {
 
 /* wise4 */
 #svg_editor div#palette_holder {
-	display:none; /* wise4 */
+	display:none;
 	position:absolute;
 	text-align:center;
 	border:1px solid #777777;
@@ -73,7 +73,25 @@ body {
 	margin-top: 2px;
 }*/
 
+/* wise4 */
 #svg_editor #stroke_bg, 
+#svg_editor #fill_bg {
+	height: 26px;
+	width: 26px;
+	margin: 2px;
+}
+
+/* wise4 */
+#svg_editor #fill_color, #svg_editor #stroke_color {
+	height: 26px;
+	width: 26px;
+	border: 1px solid #808080;
+	cursor: pointer;
+	margin-top: -29px;
+	margin-left: 2px;
+}
+
+/*#svg_editor #stroke_bg, 
 #svg_editor #fill_bg {
 	height: 16px;
 	width: 16px;
@@ -87,7 +105,7 @@ body {
 	cursor: pointer;
 	margin-top: -19px;
 	margin-left: 1px;
-}
+}*/
 
 /* wise4 */
 #svg_editor div#palette {
@@ -576,7 +594,7 @@ body {
 	border-bottom: none;
 	float:left;
 	width:99%;
-	min-height:72px;
+	min-height:70px;
 	/* Ideally this should be auto (makes scrollbar if needed), but currently hides 
 	the .dropdown lists.
 /*	overflow: auto;*/
@@ -612,6 +630,27 @@ body {
 	top: 75px;
 	left: 2px;
 }*/
+
+/* wise4 */
+#svg_editor #tools_left hr {
+	margin-right:4px;
+	width:85%;
+}
+
+#svg_editor #fill_tool_left, #svg_editor #stroke_tool_left {
+	text-align:center;
+	margin-right:4px;
+}
+
+#svg_editor #stroke_tool_left {
+	margin-top:2px;
+	font-size:11px;
+}
+
+#svg_editor #stroke_width {
+	padding:2px 6px 2px 1px;
+	margin-top:4px;	
+}
 
 #workarea.wireframe #svgcontent * {
 	fill: none;
@@ -680,6 +719,19 @@ body {
 #tools_top input {
 	margin-top: 5px;
 	height: 15px;
+}
+
+/*wise4 */
+#tools_top input#text {
+	border:1px solid #808080;
+	background-color:#FEFF6F;
+	height:18px;
+	margin-top:5px;
+	padding:3px 2px 0;
+}
+
+#tools_top input#text:focus {
+	border-color:#3CB371;
 }
 
 #svg_editor .flyout_arrow_horiz {
@@ -914,7 +966,7 @@ span.zoom_tool {
 }
 
 #svg_editor #svgcanvas img#stamp_preview {
-	opacity:.85;
+	opacity:.75;
 	display:none;
 	position:fixed;
 	cursor:crosshair;
@@ -976,14 +1028,16 @@ span.zoom_tool {
 }
 
 /*wise4*/
-#svg_editor #tools_bottom_3 {
+#svg_editor #tools_top_2 {
 	/*float:right;*/
+	position:absolute;
+	right:10px;
+	top:40px;
 	text-align: right;
-	margin-right:2px;
 }
 
 /*wise4*/
-#svg_editor #tools_bottom_3 div {
+#svg_editor #tools_top_2 div {
 	padding:2px;
 	display:inline;
 	display:none;
@@ -995,7 +1049,7 @@ span.zoom_tool {
 }
 
 /*wise4*/
-#svg_editor #tools_bottom_3 img, #svg_editor #snapshot_tools img {
+#svg_editor #tools_top_2 img, #svg_editor #snapshot_tools img {
 	vertical-align:middle;
 	height:24px;
 }
@@ -1014,16 +1068,16 @@ span.zoom_tool {
 /*wise4*/
 #svg_editor #tool_prompt {
 	display:none;
-	position:absolute;
+	/*position:absolute;
 	right:12px;
-	top:48px;
+	top:48px;*/
 	cursor:pointer;
 }
 
 /*wise4*/
 #svg_editor #copyright {
 	text-align: right;
-	margin-top:20px;
+	margin-top:2px;
 	margin-right:2px;
 }
 
@@ -1446,6 +1500,6 @@ button#tool_docprops_cancel {
 /* wise4 default hidden regions*/
 #sidepanels, #notepanel, #descriptionpanel, #overlay,
 #new_snap_dialog, #prompt_dialog, #snapwarning_dialog,
-#deletesnap_dialog, #playback, #snap_description, .snap_description_wrapper {
+#deletesnap_dialog, #playback, #snap_description {
 	display:none;
 }
