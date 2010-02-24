@@ -5,8 +5,30 @@
 <meta http-equiv="Content-type" content="application/xhtml+xml;charset=UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
 
-<!-- Development version of script tags: 
-<script type="text/javascript" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/jquery.js"></script> -->
+<link rel="icon" type="image/png" href="images/logo.png"/>
+<link rel="stylesheet" href="jgraduate/css/jPicker-1.0.9.css" type="text/css"/>
+<link rel="stylesheet" href="jgraduate/css/jGraduate-0.2.0.css" type="text/css"/>
+<link rel="stylesheet" href="svg-editor.css" type="text/css"/>
+<link rel="stylesheet" href="spinbtn/JQuerySpinBtn.css" type="text/css"/>
+<!-- Development version of script tags: -->
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="js-hotkeys/jquery.hotkeys.min.js"></script>
+<script type="text/javascript" src="jgraduate/jquery.jgraduate.js"></script>
+<script type="text/javascript" src="svgicons/jquery.svgicons.js"></script>
+<script type="text/javascript" src="spinbtn/JQuerySpinBtn.js"></script>
+<script type="text/javascript" src="locale/locale.js"></script>
+<script type="text/javascript" src="svgcanvas.js"></script>
+<script type="text/javascript" src="svg-editor.js"></script>
+<!-- <script type="text/javascript" src="extensions/ext-closepath.js"></script>
+<script type="text/javascript" src="extensions/ext-arrows.js"></script>
+<script type="text/javascript" src="extensions/ext-connector.js"></script> -->
+
+<!-- Development version of script tags:  -->
+<!-- <script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="svg-editor.js"></script>
+<script type="text/javascript" src="svg-canvas.js"></script>
+<script type="text/javascript" src="svg-draw.js"></script>
+<script type="text/javascript" src="svg-drawstate.js"></script> -->
 
 <!-- feeds -->
 <link rel="alternate" type="application/atom+xml" title="SVG-edit General Discussion" href="http://groups.google.com/group/svg-edit/feed/atom_v1_0_msgs.xml" />
@@ -294,7 +316,7 @@
 			</div>
 			<div id="snapshots">
 				<div id="snapshot_tools">
-					<img class="snapshot_new" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/camera.png" alt="camera" title="Take a new snapshot" />
+					<img class="snapshot_new" src="images/camera.png" alt="camera" title="Take a new snapshot" />
 					<a class="label snapshot_new" title="Take a new snapshot">New Snapshot</a>
 					<hr />
 				</div>
@@ -304,13 +326,13 @@
 			</div>
 			<div id="play_controls">
 				<div id="playback">
-					<img id="play" class="snap_controls" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/play.png" alt="play" title="Play" />
-					<img id="pause" class="snap_controls" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/pause.png" alt="pause" title="Pause" />
+					<img id="play" class="snap_controls" src="images/play.png" alt="play" title="Play" />
+					<img id="pause" class="snap_controls" src="images/pause.png" alt="pause" title="Pause" />
 					<div id="play_speed" title="Playback Speed"></div>
 					<div id="current_speed"></div>
 					<!-- <div id="snap_browse">
-						<img id="next" class="snap_controls" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/previous.png" alt="back" title="Back" />
-						<img id="previous" class="snap_controls" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/next.png" alt="forward" title="Forward" />
+						<img id="next" class="snap_controls" src="images/previous.png" alt="back" title="Back" />
+						<img id="previous" class="snap_controls" src="images/next.png" alt="forward" title="Forward" />
 					</div> hide forward/back buttons for now, TODO: see whether users want them -->
 				</div>
 			</div>
@@ -417,11 +439,11 @@
 	<div id="tools_bottom_3">
 		<div id="tool_description">
 			<a class="label tool_description" title="Add Description to Drawing">Add Description</a>
-			<img class="tool_description"src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/document-properties.png" title="Add Description to Drawing" alt="icon" />
+			<img class="tool_description"src="images/document-properties.png" title="Add Description to Drawing" alt="icon" />
 		</div>
 		<div id="tool_snapshot">
 			<a class="label tool_snapshot" title="Open Snapshots">Snapshots</a>
-			<img class="tool_snapshot" src="/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/snapshot.png" title="Open Snapshots" alt="icon" />
+			<img class="tool_snapshot" src="images/snapshot.png" title="Open Snapshots" alt="icon" />
 		</div>
 	</div>
 	
