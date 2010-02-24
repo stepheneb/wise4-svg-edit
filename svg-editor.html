@@ -79,9 +79,19 @@
 </div>-->
 
 <div id="tools_top" class="tools_panel">
-	
-	<div id="tool_prompt">
-		<a class="label tool_prompt" title="Review Step Instructions">Review Instructions</a>
+	<div id="tools_top_2">
+		<div id="tool_prompt">
+			<a class="label tool_prompt" title="Review Step Instructions">Review Instructions</a>
+			<img src="images/document-properties.png" title="Review Step Instructions" alt="icon" />
+		</div>
+		<div id="tool_description">
+			<a class="label tool_description" title="Add Description to Drawing">Add Description</a>
+			<img class="tool_description"src="images/paste.png" title="Add Description to Drawing" alt="icon" />
+		</div>
+		<div id="tool_snapshot">
+			<a class="label tool_snapshot" title="Open Snapshots">Snapshots</a>
+			<img class="tool_snapshot" src="images/snapshot.png" title="Open Snapshots" alt="icon" />
+		</div>
 	</div>
 	
 	<!-- File-like buttons: New, Save, Source -->
@@ -267,7 +277,7 @@
 		</div><br />
 		<div class="toolset">
 			<label id="textLabel" class="text_tool" for="text">Enter Text Here: </label>
-			<input id="text" class="text_tool" type="text" title="Change text contents" size="35"/>
+			<input id="text" class="text_tool" type="text" title="Change text contents" size="45"/>
 		</div>
 	</div>
 	
@@ -302,6 +312,15 @@
 		<div class="tool_button" id="tool_path" title="Polygon Tool"></div>
 		<div class="tool_button" id="tool_text" title="Text Tool"></div>
 		<div class="tool_button" id="tool_image" title="Stamp Tool"></div>
+		<hr />
+		<div id="fill_tool_left" class="label">Fill</div>
+		<div id="fill_bg"></div>
+		<div id="fill_color" name="fill" class="color_block"  title="Change fill color"></div>
+		<div id="stroke_tool_left" class="label">Line</div>
+		<div id="stroke_bg"></div>
+		<div id="stroke_color" name="stroke" class="color_block" title="Change line color"></div>
+		<!--<label id="stroke_widthLabel">Thick:</label>-->
+		<input id="stroke_width" title="Change line thickness" size="1" value="5" type="text" data-attr="Stroke Width"/>
 		<!--<div class="tool_button" id="tool_zoom" title="Zoom Tool [Ctrl+Up/Down]"></div>-->
 	</div> <!-- tools_left -->
 	
@@ -379,13 +398,20 @@
 				<textarea id="snap_description_content" class="description_input" rows="4"></textarea>
 			</div>
 		</div>
+		<div id="draw_description">
+			<div class="draw_description_wrapper">
+				<div class="draw_description_header">Description: </div>
+				<div id="draw_description_content"></div>
+				<div id="edit_description"><a title="Edit Description">Edit</a></div>
+			</div>
+		</div>
 	</div>
 
 </div> <!-- work_wrapper -->
 
 <div id="tools_bottom" class="tools_panel">
 
-    <!-- Zoom buttons -->
+    <!-- Zoom buttons 
 	<div id="zoom_panel" class="magic_field">
 		<span id="zoomLabel" class="zoom_tool label">zoom:</span>
 		<input id="zoom" class="zoom_tool" title="Change zoom level" size="3" value="100" type="text" />
@@ -407,7 +433,7 @@
 		</div>
 		<div class="tool_sep"></div>
 	</div>
-
+	
 	<div id="tools_bottom_2">
 		<table>
 		<tr>
@@ -423,29 +449,9 @@
 				<label id="stroke_widthLabel">Thickness:</label>
 				<input id="stroke_width" title="Change stroke width" size="2" value="5" type="text" data-attr="Stroke Width"/>
 			</td>
-			<td>
-				<select id="stroke_style" title="Change stroke dash style">
-					<option selected="selected" value="none">---</option>
-					<option value="2,2">...</option>
-					<option value="5,5">- -</option>
-					<option value="5,2,2,2">- .</option>
-					<option value="5,2,2,2,2,2">- ..</option>
-				</select>
-			</td>
 		</tr>
 		</table>
-	</div>
-
-	<div id="tools_bottom_3">
-		<div id="tool_description">
-			<a class="label tool_description" title="Add Description to Drawing">Add Description</a>
-			<img class="tool_description"src="images/document-properties.png" title="Add Description to Drawing" alt="icon" />
-		</div>
-		<div id="tool_snapshot">
-			<a class="label tool_snapshot" title="Open Snapshots">Snapshots</a>
-			<img class="tool_snapshot" src="images/snapshot.png" title="Open Snapshots" alt="icon" />
-		</div>
-	</div>
+	</div>-->
 	
 	<div id="copyright">Powered by <a href="http://svg-edit.googlecode.com/" target="_blank">SVG-edit v2.4</a></div>
 </div> <!-- tools_bottom -->
@@ -621,6 +627,8 @@
 </div>
 
 <div id="overlay" />
+
+<div id="show_description" />
 
 </body>
 </html>

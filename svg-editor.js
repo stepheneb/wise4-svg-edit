@@ -314,7 +314,7 @@ function svg_edit_setup() {
 					};
 				}
 				return new $.jGraduate.Paint(opts);
-			}
+			};
 			
 			fillPaint = getPaint(fillColor, fillOpacity);
 			strokePaint = getPaint(strokeColor, strokeOpacity);
@@ -325,12 +325,15 @@ function svg_edit_setup() {
 			// Make it clear to students that stroke is not applicable to text objects (wise4)
 			if (selectedElement.tagName == "text") {
 				strokeOpacity = "Not Available";
+				strokeColor = "none";
 			} else {
 				//strokeOpacity = strokeOpacity + "%";
 				strokeOpacity = ""; // remove opacity labels (wise4)
 			}
+			
 			// update fill color
 			if (fillColor == "transparent" || fillColor == "initial") {
+				fillColor = "none";
 				//fillOpacity = "N/A";
 				// Make opacity identifier clearer for students (wise4)
 				if (selectedElement.tagName == "line" || selectedElement.tagName == "polyline"){
@@ -341,25 +344,20 @@ function svg_edit_setup() {
 			}
 			
 			// update stroke color (wise4)
-			if (strokeColor == "transparent" || fillColor == "initial") {
+			if (strokeColor == "transparent" || strokeColor == "initial") {
+				strokeColor = "none";
 				//fillOpacity = "N/A";
 				// Make opacity identifier clearer for students (wise4)
 				if (selectedElement.tagName == "text"){
-					fillOpacity = "Not Available";
+					strokeOpacity = "Not Available";
 				} else {
-					fillOpacity = "None";
+					strokeOpacity = "None";
 				}
 			}
 			
-			document.getElementById("gradbox_fill").parentNode.firstChild.setAttribute("fill", fillColor);
-			if (strokeColor == null || strokeColor == "" || strokeColor == "none") {
-				strokeColor = "none";
-				//strokeOpacity = "N/A";
-				// Make description clearer for students (wise4)
-				strokeOpacity = "None";
-			}
-			
 			// update the rect inside #fill_color
+			document.getElementById("gradbox_fill").parentNode.firstChild.setAttribute("fill", fillColor);
+			// update the rect inside #stroke_color
 			document.getElementById("gradbox_stroke").parentNode.firstChild.setAttribute("fill", strokeColor);
 			$('#fill_opacity').html(fillOpacity);
 			$('#stroke_opacity').html(strokeOpacity);
@@ -382,12 +380,16 @@ function svg_edit_setup() {
 				$('#stroke_width').show();
 			}
 			
-			// Modify fill and stroke labels for when image is selected (wise4)
+			// Modify fill and stroke labels and colors for when image is selected (wise4)
 			if(selectedElement.tagName == "image") {
-				fillOpacity = "Not Available";
-				strokeOpacity = "Not Available"
-				$('#fill_opacity').html(fillOpacity);
-				$('#stroke_opacity').html(strokeOpacity);
+				var fillOpacity = "Not Available";
+				var strokeOpacity = "Not Available"
+				var strokeColor = "none";
+				var fillColor = "none";
+				// update the rect inside #fill_color
+				document.getElementById("gradbox_fill").parentNode.firstChild.setAttribute("fill", fillColor);
+				// update the rect inside #stroke_color
+				document.getElementById("gradbox_stroke").parentNode.firstChild.setAttribute("fill", strokeColor);
 			}
 		}
 		
@@ -641,7 +643,7 @@ function svg_edit_setup() {
 	// Snapshot link click handler (wise4)
 	// toggles sidepanel and zooms/restores image (hard-coded at 75% zoom for now)
 	// TODO: figure out how to not zoom image if in full screen mode in wise4
-	$('.tool_snapshot').click(function(){
+	$('#tool_snapshot').click(function(){
 		var ctl = {
 				'value':100
 		};
@@ -652,9 +654,6 @@ function svg_edit_setup() {
 			ctl.value = 75;
 			svgCanvas.setSnapState(true);
 			changeZoom(ctl);
-			//} else {
-				//changeZoom(ctl);
-			//}
 		} else {
 			$('#sidepanels').hide();
 			$('#snap_description').hide();
@@ -672,7 +671,24 @@ function svg_edit_setup() {
 		$('#snap_description').hide();
 		svgCanvas.setSnapState(false);
 		changeZoom(ctl);
-		
+	});
+	
+	// Draw description label (click) toggle function (wise4)
+	// toggles draw description label and zooms/restores image (hard-coded at 90% zoom)
+	// TODO: This is a cludge (using click of phantom element to toggle description label),
+	// figure out how to do this in a better way
+	$('#show_description').click(function(){
+		var ctl = {
+				'value':94
+		};
+		//if(mode==true){
+			changeZoom(ctl);
+			$('#draw_description').show();
+		//} else if(mode==false){
+		//	ctl.value = 1;
+		//	changeZoom(ctl);
+		//	$('#draw_description').hide();
+		//}
 	});
 	
 	var changeOpacity = function(ctl, val) {
@@ -878,6 +894,9 @@ function svg_edit_setup() {
 		$(button).addClass('tool_button_current');
 		// when a tool is selected, we should deselect any currently selected elements
 		svgCanvas.clearSelection();
+		// set opacity to 1 as default for any new elements (wise4)
+		svgCanvas.setOpacity(1);
+		$('#opac_slider').slider('option', 'value', 1);
 		return true;
 	};
 	
@@ -1233,7 +1252,7 @@ function svg_edit_setup() {
 	var zoomDone = function() {
 		updateBgImage();
 		updateWireFrame();
-	}
+	};
 
 	var clickWireframe = function() {
 		$('#tool_wireframe').toggleClass('push_button_pressed');
@@ -1248,7 +1267,7 @@ function svg_edit_setup() {
 		}
 		
 		updateWireFrame();
-	}
+	};
 	
 	var updateWireFrame = function() {
 		// Test support
@@ -1256,7 +1275,7 @@ function svg_edit_setup() {
 
 		var rule = "#workarea.wireframe #svgcontent * { stroke-width: " + 1/svgCanvas.getZoom() + "px; }";
 		$('#wireframe_rules').text($('#workarea').hasClass('wireframe') ? rule : "");
-	}
+	};
 
 	var showSourceEditor = function(){
 		if (editingsource) return;
@@ -1799,11 +1818,11 @@ function svg_edit_setup() {
 
 	var boxgrad = svgdocbox.getElementById('gradbox_');
 	boxgrad.id = 'gradbox_fill';
-	svgdocbox.documentElement.setAttribute('width',16.5);
+	svgdocbox.documentElement.setAttribute('width',26.5); /*changed width to 26.5 for wise 4 from 16.5 */
 	$('#fill_color').append( document.importNode(svgdocbox.documentElement,true) );
 	
 	boxgrad.id = 'gradbox_stroke';	
-	svgdocbox.documentElement.setAttribute('width',16.5);
+	svgdocbox.documentElement.setAttribute('width',26.5); /*changed width to 26.5 for wise 4 from 16.5 */
 	$(svgdocbox.documentElement.firstChild).attr('fill', '#000000');
 	$('#stroke_color').append( document.importNode(svgdocbox.documentElement,true) );
 	
@@ -1826,14 +1845,14 @@ function svg_edit_setup() {
 		});
 	},1000);
 		
-	// much simpler color picker, a la original #palette_holder (wise4)
+	// much simpler color picker, a la original svg-edit #palette_holder (wise4)
 	$('#fill_color').click(function(){
 		//colorPicker($(this));
 		picker = "fill";
 		var color = svgCanvas.getFillColor();
 		$('#palette_preview').css({'background-color': color});
 		var pos = $('#fill_color').position();
-		$('#palette_holder').css({'left': pos.left+12, 'top': pos.top-292});
+		$('#palette_holder').css({'left': pos.left+26, 'top': pos.top-272});
 		$('#palette_holder').show();
 		updateToolButtonState();
 	});
@@ -1845,7 +1864,7 @@ function svg_edit_setup() {
 		var color = svgCanvas.getStrokeColor();
 		$('#palette_preview').css({'background-color': color});
 		var pos = $('#stroke_color').position();
-		$('#palette_holder').css({'left': pos.left+12, 'top': pos.top-292});
+		$('#palette_holder').css({'left': pos.left+26, 'top': pos.top-272});
 		$('#palette_holder').show();
 		updateToolButtonState();
 	});
