@@ -36,5 +36,5 @@ SVGDRAWSTATE.prototype.getStudentWork = function() {
 
 //used to notify scriptloader that this script has finished loading
 if(typeof eventManager != 'undefined'){
-	eventManager.fire('scriptLoaded', 'vle/node/draw/svg-edit-2.4rc1/svgdrawstate.js');
+	eventManager.fire('scriptLoaded', 'svgdrawstate.js');
 };

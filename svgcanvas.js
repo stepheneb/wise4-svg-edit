@@ -357,7 +357,7 @@ function BatchCommand(text) {
 								"r": 4,
 								"stroke": "blue",
 								"stroke-width": 2,
-								"style": "cursor:url(/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/rotate.png) 12 12, url(/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/rotate.png), pointer" // edited to wise4 path
+								"style": "cursor:url(images/rotate.png) 12 12, url(images/rotate.png), pointer" // edited to wise4 path
 							}
 						}) );
 		
@@ -6920,5 +6920,5 @@ var Utils = {
 
 //used to notify scriptloader that this script has finished loading
 //if(typeof eventManager != 'undefined'){
-	//eventManager.fire('scriptLoaded', 'vle/node/draw/svg-edit-2.4rc1/svgcanvas.js');
+	//eventManager.fire('scriptLoaded', 'svgcanvas.js');
 //};
