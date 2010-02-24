@@ -36,11 +36,12 @@ function SVGDRAW(node) {
 function Snapshot(svg, id, context){
 	this.svg = svg;
 	this.id = id;
-	//if (description){
-		//this.description = description;
-	//} else {
-	this.description = context.description;  // set snapshot initial description to current
-	//};
+	if(context.description != ""){
+		this.description = context.description;  // set snapshot initial description to current
+	}
+	else {
+		this.description = context.defaultDescription;
+	}
 }
 
 SVGDRAW.prototype.init = function(jsonURL) {
@@ -340,7 +341,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 					}
 				}
 			//$('#tool_description').attr("style", "display:inline"); // show description link
-			} else if (context.defaultDescription) {
+			} else if (context.defaultDescription!="") {
 				context.description = context.defaultDescription;
 			}
 			
@@ -354,7 +355,6 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 				for (var i=0; i<context.snapshots.length; i++) {
 					if (context.snapshots[i].id == context.active) {
 						context.snapshots[i].description = value;
-						context.saveToVLE();
 						$(this).attr("disabled", "disabled");
 						//context.snapCheck(context);
 					}
@@ -363,16 +363,27 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			
 			$('#snap_description_commit').attr("disabled", "disabled");
 		} else {
-			// TODO: add vle check for saved description logic
-			if(data.description){
+			if(data.description!=""){
 				context.description = data.description;
+				$('#draw_description_content').html(data.description);
+				// TODO: Once Firefox supports text-overflow css property, remove this (and jquery.text-overflow.js plugin)
+				//setTimeout(function(){
+					$('#show_description').click();
+					$('#draw_description_content').ellipsis();
+				//},1000);
 			}
-			else if (context.defaultDescription) {
+			else if (context.defaultDescription!="") {
 				context.description = context.defaultDescription;
+				$('#draw_description_content').html(context.defaultDescription);
+				// TODO: Once Firefox supports text-overflow css property, remove this (and jquery.text-overflow.js plugin)
+				setTimeout(function(){
+					$('#show_description').click();
+					$('#draw_description_content').ellipsis();
+				},100);
 			}
 			
 			// Show description panel on link click
-			$('.tool_description').click(function(){
+			$('#tool_description, #edit_description').click(function(){
 				if (!$('#descriptionpanel').is(':visible')) { // prevent text from being overridden if panel is already visible
 					$('#description_commit').attr("disabled", "disabled");
 					$('#description_close').attr("disabled", "disabled");
@@ -393,19 +404,27 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			$('#description_commit').click(function(){
 				var value = $('#description_content').val();
 				context.description = value;
+				//if(value!="" && value!=context.defaultDescription){
+					$('#draw_description_content').html(value);
+					// TODO: Once Firefox supports text-overflow css property, remove this (and jquery.text-overflow.js plugin)
+					$('#show_description').click();
+					$('#draw_description_content').ellipsis();
+				//}
 				$(this).attr("disabled", "disabled");
-				context.saveToVLE(); // save changes to VLE
 			});
 			
 			// Save description text and close dialogue
 			$('#description_close').click(function(){
 				var value = $('#description_content').val();
 				context.description = value;
+				//if(value!="" && value!=context.defaultDescription){
+					$('#draw_description_content').html(value);
+					// TODO: Once Firefox supports text-overflow css property, remove this (and jquery.text-overflow.js plugin)
+					$('#show_description').click();
+					$('#draw_description_content').ellipsis();
+				//}
 				$('#descriptionpanel').hide();
 				$("#overlay").hide();
-				context.saveToVLE(); // save changes to VLE
-			// TODO: add logic to check whether save button has been clicked already
-			// If it has, no need to resave the data to the vle
 			});
 			
 			$('#description_content').keyup(function(){
@@ -418,7 +437,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 				$("#overlay").hide();
 			});
 			
-			$('#tool_description').attr("style", "display:inline"); // show add description link
+			$('#tool_description').attr("style", "display:inline"); // show add description link/button
 		}
 	}
 	
@@ -476,7 +495,6 @@ SVGDRAW.prototype.newSnapshot = function(context) {
 		$('#tool_description').attr("style", "display:inline"); // show description link
 	}*/
 	context.description = context.descriptionDefault;
-	context.saveToVLE();
 	$('#snap_description_commit').attr("disabled","disabled");
 };
 
@@ -516,6 +534,7 @@ SVGDRAW.prototype.addSnapshot = function(svgString,num,context) {
 // Open a snapshot as current drawing
 SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
 	$('#svgcanvas').stop(true,true); // stop and remove any currently running animations
+	$('#snap_description_content').blur();
 	var snap = context.snapshots[index].svg;
 	context.svgCanvas.setSvgString(snap);
 	if($('#sidepanels').is(':visible')){
@@ -536,9 +555,7 @@ SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
 	//},10);
 	context.warning = false;
 	$('#snap_description_commit').attr("disabled","disabled");
-	//context.updateClass(index,context);
 	//$('.snap_description_wrapper').show(); // show snap description box
-	//$('#tool_description').attr("style", "display:inline"); // show description link
 };
 
 // Bind snapshot thumbnail to click function that opens corresponding snapshot, delete function, hover function, sorting function
@@ -708,7 +725,6 @@ SVGDRAW.prototype.changeSpeed = function(value, context){
 	}
 	$('#current_speed').text(label); // update speed display
 	if(context.playback == true){ // if in playback mode, change current playback speed
-		//context.snapPlayback("pause",speed,context);
 		$("#svgcanvas").stopTime('play');
 		context.snapPlayback("play",speed,context);
 	}

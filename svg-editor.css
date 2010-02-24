@@ -150,10 +150,21 @@ body {
 }*/
 
 /* wise4 */
+#svg_editor div#workarea #draw_description {
+}
+
+#svg_editor div#workarea #draw_description_content {
+	height:15px;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	width:490px;
+	margin-left:5px;
+}
+
 #svg_editor div#workarea #snap_description {
 }
 
-#svg_editor #snap_description .snap_description_wrapper {
+#svg_editor #snap_description .snap_description_wrapper, #svg_editor #draw_description .draw_description_wrapper {
 	/*background-color:#FFD9AC;*/
 	background-color:#E8E8E8;
 	padding:5px;
@@ -164,6 +175,24 @@ body {
 	width:90%;
 	margin:10px auto 0;
 	text-align:left;
+}
+
+#svg_editor #draw_description .draw_description_wrapper {
+	height:15px;
+	width:600px;
+}
+
+#svg_editor #draw_description #edit_description {
+	float:right;
+	cursor:pointer;
+}
+
+#svg_editor #draw_description .draw_description_wrapper div {
+	float:left;
+}
+
+#svg_editor #draw_description .draw_description_header {
+	font-weight:bold;
 }
 
 #svg_editor #snap_description .snap_description_header {
@@ -1060,7 +1089,7 @@ span.zoom_tool {
 }
 
 /*wise4*/
-#svg_editor .tool_description, #svg_editor .tool_snapshot,
+#svg_editor #tool_description, #svg_editor #tool_snapshot,
 #svg_editor .snapshot_new {
 	cursor:pointer;
 }
@@ -1500,6 +1529,7 @@ button#tool_docprops_cancel {
 /* wise4 default hidden regions*/
 #sidepanels, #notepanel, #descriptionpanel, #overlay,
 #new_snap_dialog, #prompt_dialog, #snapwarning_dialog,
-#deletesnap_dialog, #playback, #snap_description {
+#deletesnap_dialog, #playback, #snap_description, #draw_description,
+#show_description {
 	display:none;
 }
