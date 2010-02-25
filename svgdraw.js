@@ -352,7 +352,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			// Save description text
 			$('#snap_description_commit').click(function(){
 				var value = $('#snap_description_content').val();
-				$('#draw_description_content').val(value);
+				$('#draw_description_content').html(value);
 				for (var i=0; i<context.snapshots.length; i++) {
 					if (context.snapshots[i].id == context.active) {
 						context.snapshots[i].description = value;
