@@ -340,9 +340,9 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 						context.description = data.snapshots[i].description;
 					}
 				}
-			//$('#tool_description').attr("style", "display:inline"); // show description link
-			} else if (context.defaultDescription!="") {
-				context.description = context.defaultDescription;
+			} else /*if (context.defaultDescription!="")*/ {
+				//context.description = context.defaultDescription;
+				$('#snap_description_wrapper').hide();
 			}
 			
 			$('#snap_description_content').keyup(function(){
@@ -352,34 +352,35 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			// Save description text
 			$('#snap_description_commit').click(function(){
 				var value = $('#snap_description_content').val();
+				$('#draw_description_content').val(value);
 				for (var i=0; i<context.snapshots.length; i++) {
 					if (context.snapshots[i].id == context.active) {
 						context.snapshots[i].description = value;
 						$(this).attr("disabled", "disabled");
-						//context.snapCheck(context);
 					}
 				}
 			});
-			
+			$('#edit_description').click(function(){
+				$('#tool_snapshot').click();
+				$('#snap_description_content').focus();
+			});
+			$('#draw_description_header').text('Snapshot Description:');
+			$('#draw_description_content').css('width',440);
 			$('#snap_description_commit').attr("disabled", "disabled");
 		} else {
 			if(data.description!=""){
 				context.description = data.description;
 				$('#draw_description_content').html(data.description);
+				$('#show_description').click();
 				// TODO: Once Firefox supports text-overflow css property, remove this (and jquery.text-overflow.js plugin)
-				//setTimeout(function(){
-					$('#show_description').click();
-					$('#draw_description_content').ellipsis();
-				//},1000);
+				$('#draw_description_content').ellipsis();
 			}
 			else if (context.defaultDescription!="") {
 				context.description = context.defaultDescription;
 				$('#draw_description_content').html(context.defaultDescription);
+				$('#show_description').click();
 				// TODO: Once Firefox supports text-overflow css property, remove this (and jquery.text-overflow.js plugin)
-				setTimeout(function(){
-					$('#show_description').click();
-					$('#draw_description_content').ellipsis();
-				},100);
+				$('#draw_description_content').ellipsis();
 			}
 			
 			// Show description panel on link click
@@ -491,9 +492,6 @@ SVGDRAW.prototype.newSnapshot = function(context) {
 	context.selected = true;
 	context.warning = false;
 	context.addSnapshot(current,num,context);
-	/*if (context.descriptionActive == true) {
-		$('#tool_description').attr("style", "display:inline"); // show description link
-	}*/
 	context.description = context.descriptionDefault;
 	$('#snap_description_commit').attr("disabled","disabled");
 };
@@ -555,7 +553,6 @@ SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
 	//},10);
 	context.warning = false;
 	$('#snap_description_commit').attr("disabled","disabled");
-	//$('.snap_description_wrapper').show(); // show snap description box
 };
 
 // Bind snapshot thumbnail to click function that opens corresponding snapshot, delete function, hover function, sorting function
@@ -643,10 +640,17 @@ SVGDRAW.prototype.snapCheck = function(context){
 		for (var i=0; i<context.snapshots.length; i++){
 			if(context.snapshots[i].id == context.active){
 				context.index = i;
-				//$('#tool_description').attr("style", "display:inline"); // show description link
 				if(context.playback == false && context.descriptionActive == true){
-					$('#snap_description_content').val(context.snapshots[i].description); // show corresponding description text
-					//$('.snap_description_wrapper').show();
+					// show corresponding description text
+					$('#snap_description_content').val(context.snapshots[i].description);
+					$('#draw_description_content').html(context.snapshots[i].description);
+					$('#snap_description_wrapper').show();
+					$('#draw_description_wrapper').show();
+					if (!$('#sidepanels').is(':visible')) {
+						$('#show_description').click();
+						// TODO: Once Firefox supports text-overflow css property, remove this (and jquery.text-overflow.js plugin)
+						$('#draw_description_content').ellipsis();
+					}
 				}
 				break;
 			}
@@ -658,13 +662,16 @@ SVGDRAW.prototype.snapCheck = function(context){
 		context.updateClass(context.index,context);
 	} else {
 		context.selected = false;
-		if (context.descriptionActive == true && context.descriptionActive == true) {
-			//$('#tool_description').hide(); // hide description link
-			//$('.snap_description_wrapper').hide();
+		if (context.descriptionActive == true) {
+			$('#snap_description_wrapper').hide();
+			$('#draw_description_wrapper').hide();
+			if (!$('#sidepanels').is(':visible')) {
+				$('#hide_description').click();
+			}
 		}
 		context.updateClass(-1,context);
 	}
-};
+};;
 
 SVGDRAW.prototype.snapPlayback = function(mode,speed,context){
 	var index = 0;
@@ -686,7 +693,7 @@ SVGDRAW.prototype.snapPlayback = function(mode,speed,context){
 		$('#play').hide();
 		//$('#snap_browse').hide();
 		if(context.descriptionActive == true){
-			$('.snap_description_wrapper').hide();	
+			$('#snap_description_wrapper').hide();	
 		}
 		$('#pause').attr("style","display:inline !important");
 		$("#svgcanvas").everyTime(speed,'play',function(){
@@ -705,7 +712,7 @@ SVGDRAW.prototype.snapPlayback = function(mode,speed,context){
 		$('#pause').attr("style","display:none !important");
 		$('#play').attr("style","display:inline");
 		if(context.descriptionActive == true){
-			$('.snap_description_wrapper').show();	
+			$('#snap_description_wrapper').show();	
 		}
 		//$('#snap_browse').show();
 		setTimeout(function(){

@@ -642,53 +642,67 @@ function svg_edit_setup() {
 	
 	// Snapshot link click handler (wise4)
 	// toggles sidepanel and zooms/restores image (hard-coded at 75% zoom for now)
-	// TODO: figure out how to not zoom image if in full screen mode in wise4
-	$('#tool_snapshot').click(function(){
+	// TODO: figure out how to not zoom image if in full screen mode and descriptions are not active in wise4
+	$('#tool_snapshot, #close_snapshots').click(function(){
 		var ctl = {
-				'value':100
+				'value':75
 		};
 		if(!$('#sidepanels').is(':visible')){
+			$('#draw_description').hide();
 			$('#sidepanels').show();
 			$('#snap_description').show();
-			//if(document.getElementById("workarea").offsetWidth < 700){
-			ctl.value = 75;
 			svgCanvas.setSnapState(true);
 			changeZoom(ctl);
 		} else {
 			$('#sidepanels').hide();
 			$('#snap_description').hide();
+			$('#draw_description').show();
 			svgCanvas.setSnapState(false);
+			if($('#draw_description_wrapper').is(':visible')){
+				ctl.value = 94;
+			} else {
+				ctl.value = 100;
+			}
 			changeZoom(ctl);
+			// TODO: Once Firefox supports text-overflow css property, remove this (and jquery.text-overflow.js plugin)
+			$('#draw_description_content').ellipsis();
 		}
 	});
 	
 	// Close snapshots link(x) clickhandler (wise4)
-	$('#close_snapshots').click(function(){
+	/*$('#close_snapshots').click(function(){
 		var ctl = {
 				'value':100
 		};
 		$('#sidepanels').hide();
 		$('#snap_description').hide();
+		$('#draw_description').show();
 		svgCanvas.setSnapState(false);
 		changeZoom(ctl);
-	});
+	});*/
 	
-	// Draw description label (click) toggle function (wise4)
-	// toggles draw description label and zooms/restores image (hard-coded at 90% zoom)
-	// TODO: This is a cludge (using click of phantom element to toggle description label),
+	// Draw description label (click) open function (wise4)
+	// opens draw description label and zooms image (hard-coded at 90% zoom)
+	// TODO: This is a kludge (using click of hidden element to toggle description label),
 	// figure out how to do this in a better way
 	$('#show_description').click(function(){
 		var ctl = {
 				'value':94
 		};
-		//if(mode==true){
-			changeZoom(ctl);
-			$('#draw_description').show();
-		//} else if(mode==false){
-		//	ctl.value = 1;
-		//	changeZoom(ctl);
-		//	$('#draw_description').hide();
-		//}
+		changeZoom(ctl);
+		$('#draw_description').show();
+	});
+	
+	// Draw description label (click) open function (wise4)
+	// opens draw description label and zooms image (hard-coded at 90% zoom)
+	// TODO: This is a kludge (using click of hidden element to toggle description label),
+	// figure out how to do this in a better way
+	$('#hide_description').click(function(){
+		$('#draw_description').hide();
+		var ctl = {
+				'value':100
+		};
+		changeZoom(ctl);
 	});
 	
 	var changeOpacity = function(ctl, val) {
