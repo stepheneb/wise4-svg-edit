@@ -556,8 +556,10 @@ SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
 	if(context.descriptionActive==true){
 		context.description = context.snapshots[index].description;
 		$('#snap_description_content').val(context.description);
-		$('#snap_description_wrapper').show();
-		$('#draw_description_wrapper').show();
+		if(context.playback=='pause'){
+			$('#snap_description_wrapper').show();
+			$('#draw_description_wrapper').show();	
+		}
 	}
 	context.updateClass(context.index,context);
 	context.warning = false;
