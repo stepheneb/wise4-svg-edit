@@ -368,33 +368,23 @@ body {
 }
 
 #svg_editor .snap_controls {
-	display:inline;
-	margin:4px 2px 0 0;
+	float:left;
+	margin:4px 4px 0 0;
 	cursor:pointer;
 }
 
-#svg_editor #play_controls #snap_browse {
-	float:right;
-}
-
-#svg_editor #play_controls #play {
-	float:left;
-}
-
-#svg_editor #play_controls #pause {
-	float:left;
-}
-
 #svg_editor #play_controls #play_speed {
-	width:70px;
-	float:left;
-	margin:5px 5px 0 8px;
+	width:58px;
+	float:right;
+	margin:5px 3px 0 5px;
 	cursor:pointer;
 }
 
 #svg_editor #play_controls #current_speed {
-	float:left;
-	margin:1px 5px 0;
+	float:right;
+	margin:2px 0 0 5px;
+	text-align:right;
+	width:72px;
 }
 
 #svg_editor #play_controls #previous {
@@ -870,20 +860,36 @@ span.zoom_tool {
 	width: 24px;
 	margin: 2px;
 	padding: 2px;
-	border-left: 1px solid #FFFFFF;
+	/*border-left: 1px solid #FFFFFF;
 	border-top: 1px solid #FFFFFF;
 	border-right: 1px solid #808080;
 	border-bottom: 1px solid #808080;
+	* updated to svg-edit 2.5 styling
+	*/
+	-moz-border-radius:5px 5px 5px 5px;
+	-webkit-border-radius:5px 5px 5px 5px;
+	border-radius:5px 5px 5px 5px;
+	background-color:#E8E8E8;
+	border-color:#FFFFFF #808080 #808080 #FFFFFF;
+	border-left:1px solid #FFFFFF;
+	border-style:solid;
+	border-width:1px;
 	cursor: pointer;
 }
 
 #svg_editor .tool_button_current,
 #svg_editor .push_button_pressed {
-	border-left: 1px solid #808080;
+	/*border-left: 1px solid #808080;
 	border-top: 1px solid #808080;
 	border-right: 1px solid #FFFFFF;
 	border-bottom: 1px solid #FFFFFF;
 	background-color: #B0B0B0;
+	* updated to svg-edit 2.5 styling
+	*/
+	background-color:#F4E284 !important;
+	/*border-left:1px solid #663300 !important;
+	border-top:1px solid #663300 !important;*/
+	border-color:#663300 #E0A874 #E0A874 #663300 !important;
 }
 
 #svg_editor .tool_button_disabled {
@@ -1016,16 +1022,31 @@ span.zoom_tool {
 
 #svg_editor .tool_button:hover, 
 #svg_editor .push_button:hover {
-	background-color: #FFF;
+	/*background-color: #FFF;
+	 * updated to svg-edit 2.5 styling
+	 */
+	background-color:#FFFFCC;
+	border-color:#FCD9BA #E0A874 #E0A874 #FCD9BA;
+	border-left:1px solid #FCD9BA;
+	border-style:solid !important;
+	border-width:1px !important;
 }
 
-#svg_editor #tools_rect .tool_flyout_button_current, #svg_editor #tools_ellipse .tool_flyout_button_current {
+/* updated to svg-edit 2.5 styling */
+#svg_editor .tool_flyout_button:hover {
+	background-color:#FFFFCC !important;
+	border-color:#FCD9BA #E0A874 #E0A874 #FCD9BA !important;
+	border-style:solid !important;
+	border-width:1px !important;
+}
+
+/*#svg_editor #tools_rect .tool_flyout_button_current, #svg_editor #tools_ellipse .tool_flyout_button_current {
 	border-left: 1px solid #808080;
 	border-top: 1px solid #808080;
 	border-right: 1px solid #FFFFFF;
 	border-bottom: 1px solid #FFFFFF;
 	background-color: #B0B0B0;
-}
+}*/
 
 /* wise4 */
 #svg_editor #tools_bottom {

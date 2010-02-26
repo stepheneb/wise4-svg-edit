@@ -658,39 +658,21 @@ function svg_edit_setup() {
 			$('#snap_description').hide();
 			$('#draw_description').show();
 			svgCanvas.setSnapState(false);
-			if($('#draw_description_wrapper').is(':visible')){
-				ctl.value = 94;
-			} else {
-				ctl.value = 100;
-			}
+			ctl.value = 100;
 			changeZoom(ctl);
-			// TODO: Once Firefox supports text-overflow css property, remove this (and jquery.text-overflow.js plugin)
-			$('#draw_description_content').ellipsis();
 		}
 	});
-	
-	// Close snapshots link(x) clickhandler (wise4)
-	/*$('#close_snapshots').click(function(){
-		var ctl = {
-				'value':100
-		};
-		$('#sidepanels').hide();
-		$('#snap_description').hide();
-		$('#draw_description').show();
-		svgCanvas.setSnapState(false);
-		changeZoom(ctl);
-	});*/
 	
 	// Draw description label (click) open function (wise4)
 	// opens draw description label and zooms image (hard-coded at 90% zoom)
 	// TODO: This is a kludge (using click of hidden element to toggle description label),
 	// figure out how to do this in a better way
 	$('#show_description').click(function(){
+		$('#draw_description').show();
 		var ctl = {
-				'value':94
+			'value':94
 		};
 		changeZoom(ctl);
-		$('#draw_description').show();
 	});
 	
 	// Draw description label (click) open function (wise4)
@@ -698,11 +680,11 @@ function svg_edit_setup() {
 	// TODO: This is a kludge (using click of hidden element to toggle description label),
 	// figure out how to do this in a better way
 	$('#hide_description').click(function(){
-		$('#draw_description').hide();
 		var ctl = {
-				'value':100
+			'value':100
 		};
 		changeZoom(ctl);
+		$('#draw_description').hide();
 	});
 	
 	var changeOpacity = function(ctl, val) {
@@ -2471,8 +2453,7 @@ function svg_edit_setup() {
 
 // This process starts before document.ready so the icons appear ASAP
 (function() {
-	// edited to wise4 path
-	$.svgIcons('/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/svg_edit_icons.svg', {
+	$.svgIcons('/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/svg_edit_icons.svg', { // edited to wise4 path
 		w:24, h:24,
 		id_match: false,
 		no_img: false,

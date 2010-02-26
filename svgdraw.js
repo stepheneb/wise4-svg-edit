@@ -20,7 +20,7 @@ function SVGDRAW(node) {
 	this.selected = false; // boolean to specify whether a snapshot is currently selected
 	this.warning = false;  // boolean for initial (load) warning state (if snapshots have been saved, not currently selected)
 	this.snapTotal = 0; // var to hold total number of snapshots created
-	this.playback = false; // boolean to specify whether snapshot playback mode is active
+	this.playback = "pause"; // var to specify whether snapshot playback mode is active
 	
 	// json object to hold student data for the node
 	this.studentData = {
@@ -36,12 +36,12 @@ function SVGDRAW(node) {
 function Snapshot(svg, id, context){
 	this.svg = svg;
 	this.id = id;
-	if(context.description != ""){
-		this.description = context.description;  // set snapshot initial description to current
-	}
-	else {
+	//if(context.description != ""){
+		//this.description = context.description;  // set snapshot initial description to current
+	//}
+	//else {
 		this.description = context.defaultDescription;
-	}
+	//}
 }
 
 SVGDRAW.prototype.init = function(jsonURL) {
@@ -280,6 +280,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 				'Yes': function() {
 					if ($(".snap:eq(" + context.index + ")").hasClass("hover")) {
 						context.warning = true;
+						$('#snap_description_wrapper').hide();
 					}
 					context.snapshots.splice(context.index,1);
 					$(".snap:eq(" + context.index + ")").fadeOut(1000, function(){$(this).remove()});
@@ -323,7 +324,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 		context.warningStackSize = 0; // set warning stack checker to 0 on intial load
 		
 		// bind mouseup events to stack checker function
-		$("#tools_top,#tools_left,#svgcanvas,#tools_bottom").mouseup(function(){
+		$("#tools_top,#tools_left,#svgcanvas,#close_snapshots,#tools_bottom").mouseup(function(){
 			setTimeout(function(){
 				context.snapCheck(context);
 			},50);
@@ -343,6 +344,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			} else /*if (context.defaultDescription!="")*/ {
 				//context.description = context.defaultDescription;
 				$('#snap_description_wrapper').hide();
+				$('#draw_description_wrapper').hide();
 			}
 			
 			$('#snap_description_content').keyup(function(){
@@ -399,6 +401,10 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 					$("#overlay").show();
 					$('#descriptionpanel').show(); // show description panel
 				}
+			});
+			
+			$('#edit_description').click(function(){
+				$('#description_content').focus();
 			});
 			
 			// Save description text
@@ -484,7 +490,7 @@ SVGDRAW.prototype.newSnapshot = function(context) {
 	var id = context.snapTotal;
 	var newSnap = new Snapshot(current,context.snapTotal,context);
 	context.snapshots.push(newSnap);
-	context.snapTotal = id + 1;
+	context.snapTotal = id*1 + 1;
 	var num = context.snapshots.length-1;
 	context.warningStackSize = context.svgCanvas.getUndoStackSize();
 	context.active = id;
@@ -493,6 +499,9 @@ SVGDRAW.prototype.newSnapshot = function(context) {
 	context.warning = false;
 	context.addSnapshot(current,num,context);
 	context.description = context.descriptionDefault;
+	setTimeout(function(){
+		context.snapCheck(context);
+	},100);
 	$('#snap_description_commit').attr("disabled","disabled");
 };
 
@@ -524,9 +533,9 @@ SVGDRAW.prototype.addSnapshot = function(svgString,num,context) {
 		$('#playback').show();
 	}
 	//context.updateClass(context.index,context);
-	setTimeout(function(){
-		context.snapCheck(context);
-	},100);
+	//setTimeout(function(){
+		//context.snapCheck(context);
+	//},100);
 };
 
 // Open a snapshot as current drawing
@@ -548,9 +557,10 @@ SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
 	context.index = index;
 	context.active = context.snapshots[index].id;
 	context.description = context.snapshots[index].description;
-	//setTimeout(function(){
-		context.snapCheck(context);
-	//},10);
+	if(context.descriptionActive==true){
+		$('#snap_description_content').val(context.description);
+	}
+	context.updateClass(context.index,context);
 	context.warning = false;
 	$('#snap_description_commit').attr("disabled","disabled");
 };
@@ -636,42 +646,42 @@ SVGDRAW.prototype.updateClass = function(num,context){
 };
 
 SVGDRAW.prototype.snapCheck = function(context){
-	if(context.warningStackSize == context.svgCanvas.getUndoStackSize()){
-		for (var i=0; i<context.snapshots.length; i++){
-			if(context.snapshots[i].id == context.active){
-				context.index = i;
-				if(context.playback == false && context.descriptionActive == true){
-					// show corresponding description text
-					$('#snap_description_content').val(context.snapshots[i].description);
-					$('#draw_description_content').html(context.snapshots[i].description);
-					$('#snap_description_wrapper').show();
-					$('#draw_description_wrapper').show();
-					if (!$('#sidepanels').is(':visible')) {
-						$('#show_description').click();
-						// TODO: Once Firefox supports text-overflow css property, remove this (and jquery.text-overflow.js plugin)
-						$('#draw_description_content').ellipsis();
+	if(context.playback == "pause"){
+		if(context.warningStackSize == context.svgCanvas.getUndoStackSize()){
+			for (var i=0; i<context.snapshots.length; i++){
+				if(context.snapshots[i].id == context.active){
+					context.index = i;
+					if(context.descriptionActive == true){
+						// show corresponding description text
+						$('#snap_description_content').val(context.snapshots[i].description);
+						$('#draw_description_content').html(context.snapshots[i].description);
+						$('#snap_description_wrapper').show();
+						$('#draw_description_wrapper').show();
+						if (!$('#sidepanels').is(':visible')) {
+							$('#show_description').click();
+						}
 					}
+					break;
 				}
-				break;
+				else {
+					context.index = -1;
+				}
 			}
-			else {
-				context.index = -1;
+			context.selected = true;
+			context.updateClass(context.index,context);
+		} else {
+			context.selected = false;
+			if (context.descriptionActive == true) {
+				if (!$('#sidepanels').is(':visible')) {
+					$('#hide_description').click();
+				}
+				$('#snap_description_wrapper').hide();
+				$('#draw_description_wrapper').hide();
 			}
+			context.updateClass(-1,context);
 		}
-		context.selected = true;
-		context.updateClass(context.index,context);
-	} else {
-		context.selected = false;
-		if (context.descriptionActive == true) {
-			$('#snap_description_wrapper').hide();
-			$('#draw_description_wrapper').hide();
-			if (!$('#sidepanels').is(':visible')) {
-				$('#hide_description').click();
-			}
-		}
-		context.updateClass(-1,context);
 	}
-};;
+};
 
 SVGDRAW.prototype.snapPlayback = function(mode,speed,context){
 	var index = 0;
@@ -685,15 +695,21 @@ SVGDRAW.prototype.snapPlayback = function(mode,speed,context){
 			index = 0;
 		}
 	}
-	if (mode=="play"){
+	if (mode=='play' || mode=='loop'){
+		if(mode=='play'){
+			context.playback = 'play';
+		} else {
+			context.playback = 'loop';
+		}
 		$('.snap').unbind('click'); // unbind snap click function
 		$('.snap_delete').unbind('click'); // unbind delete click function
 		$('#snap_images').sortable('disable');
-		context.playback = true;
 		$('#play').hide();
+		$('#loop').hide();
 		//$('#snap_browse').hide();
 		if(context.descriptionActive == true){
-			$('#snap_description_wrapper').hide();	
+			$('#snap_description_wrapper').hide();
+			$('#draw_description_wrapper').hide();
 		}
 		$('#pause').attr("style","display:inline !important");
 		$("#svgcanvas").everyTime(speed,'play',function(){
@@ -702,19 +718,21 @@ SVGDRAW.prototype.snapPlayback = function(mode,speed,context){
 			$("#snap_images").attr({ scrollTop: page * 375 });
 			index = index+1;
 			if(index > context.snapshots.length-1){
-				index = 0;
+				if(mode=="loop"){
+					index = 0;
+				} else {
+					context.snapPlayback("pause",speed,context);
+				}
+				
 			}
 		},0);
 	} else if (mode=="pause") {
 		$("#svgcanvas").stopTime('play');
-		context.playback = false;
+		context.playback = 'pause';
 		context.snapCheck(context);
 		$('#pause').attr("style","display:none !important");
 		$('#play').attr("style","display:inline");
-		if(context.descriptionActive == true){
-			$('#snap_description_wrapper').show();	
-		}
-		//$('#snap_browse').show();
+		$('#loop').attr("style","display:inline");
 		setTimeout(function(){
         	$('.snap').click(function(){context.snapClick(this,context);}); // rebind snap click function
         	$('.snap_delete').click(function(){context.deleteClick(this,context);}); // rebind delete click function
@@ -731,9 +749,14 @@ SVGDRAW.prototype.changeSpeed = function(value, context){
 		var label = value + " snaps/sec";
 	}
 	$('#current_speed').text(label); // update speed display
-	if(context.playback == true){ // if in playback mode, change current playback speed
+	if(context.playback != 'pause'){ // if in playback mode, change current playback speed
 		$("#svgcanvas").stopTime('play');
-		context.snapPlayback("play",speed,context);
+		if(context.playback=='play'){
+			context.snapPlayback('play',speed,context);
+		} else if (context.playback=='loop'){
+			context.snapPlayback('loop',speed,context);
+		}
+		
 	}
 };
 

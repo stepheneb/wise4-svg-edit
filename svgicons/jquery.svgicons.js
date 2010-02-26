@@ -164,14 +164,15 @@ $(function() {
 						dataType: 'xml',
 						success: function(data) {
 							svgdoc = data;
-							$(function() {
+							//$(function() { // for some reason, this doesn't work with wise4
+								//alert("ajax success");
 								getIcons('ajax');
-							});
+							//});
 						},
 						error: function() {
-							$(function() {
+							//$(function() { // for some reason, this doesn't work with wise4
 								useFallback();
-							});
+							//});
 						}
 					});
 				}
