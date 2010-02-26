@@ -370,7 +370,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			$('#draw_description_content').css('width',440);
 			$('#snap_description_commit').attr("disabled", "disabled");
 		} else {
-			if(data.description!=""){
+			if(data.description && data.description!=""){
 				context.description = data.description;
 				$('#draw_description_content').html(data.description);
 				$('#show_description').click();
@@ -380,9 +380,6 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			else if (context.defaultDescription!="") {
 				context.description = context.defaultDescription;
 				$('#draw_description_content').html(context.defaultDescription);
-				$('#show_description').click();
-				// TODO: Once Firefox supports text-overflow css property, remove this (and jquery.text-overflow.js plugin)
-				$('#draw_description_content').ellipsis();
 			}
 			
 			// Show description panel on link click
@@ -556,9 +553,11 @@ SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
 	context.selected = true;
 	context.index = index;
 	context.active = context.snapshots[index].id;
-	context.description = context.snapshots[index].description;
 	if(context.descriptionActive==true){
+		context.description = context.snapshots[index].description;
 		$('#snap_description_content').val(context.description);
+		$('#snap_description_wrapper').show();
+		$('#draw_description_wrapper').show();
 	}
 	context.updateClass(context.index,context);
 	context.warning = false;
