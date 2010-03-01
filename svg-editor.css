@@ -1551,6 +1551,7 @@ button#tool_docprops_cancel {
 #sidepanels, #notepanel, #descriptionpanel, #overlay,
 #new_snap_dialog, #prompt_dialog, #snapwarning_dialog,
 #deletesnap_dialog, #playback, #snap_description, #draw_description,
-#show_description, #hide_description {
+#show_description, #hide_description, #snap_description_wrapper,
+#draw_description_wrapper {
 	display:none;
 }
