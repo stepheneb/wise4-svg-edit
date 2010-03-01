@@ -233,6 +233,10 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			}
 		}
 		
+		if (context.descriptionActive=='false'){
+			$('#snap_description_wrapper').hide();
+		}
+		
 		$('#new_snap_dialog').dialog({
 			bgiframe: true,
 			resizable: false,
@@ -342,6 +346,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 					}
 				}
 			} else /*if (context.defaultDescription!="")*/ {
+				alert('no snapshot selected');
 				//context.description = context.defaultDescription;
 				$('#snap_description_wrapper').hide();
 				$('#draw_description_wrapper').hide();
@@ -370,14 +375,14 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			$('#draw_description_content').css('width',440);
 			$('#snap_description_commit').attr("disabled", "disabled");
 		} else {
+			$('#snap_description_wrapper').hide();
 			if(data.description && data.description!=""){
 				context.description = data.description;
 				$('#draw_description_content').html(data.description);
 				$('#show_description').click();
 				// TODO: Once Firefox supports text-overflow css property, remove this (and jquery.text-overflow.js plugin)
 				$('#draw_description_content').ellipsis();
-			}
-			else if (context.defaultDescription!="") {
+			} else if (context.defaultDescription!="") {
 				context.description = context.defaultDescription;
 				$('#draw_description_content').html(context.defaultDescription);
 			}
@@ -443,6 +448,9 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			
 			$('#tool_description').attr("style", "display:inline"); // show add description link/button
 		}
+	} else if(context.descriptionActive == false){
+		$('#snap_description_wrapper').hide();
+		$('#draw_description_wrapper').hide();
 	}
 	
 	//initiate stamps
