@@ -2457,7 +2457,6 @@ function svg_edit_setup() {
 		w:24, h:24,
 		id_match: false,
 		no_img: false,
-		use_fallback: true, // using png icon images in wise4 because svg gradients do not render correctly
 		fallback_path:'/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/', // edited to wise4 path
 		fallback:{
 			'new_image':'clear.png',
@@ -2573,7 +2572,7 @@ function svg_edit_setup() {
 			'.flyout_arrow_horiz .svg_icon': 5,
 			'.layer_button .svg_icon, #layerlist td.layervis .svg_icon': 14,
 			'.dropdown button .svg_icon': 7,
-			'.palette_item:first .svg_icon, #fill_bg .svg_icon, #stroke_bg .svg_icon': 16,
+			'.palette_item:first .svg_icon, #fill_bg .svg_icon, #stroke_bg .svg_icon': /*16*/27, // increase size of fill_bg and stroke_bg to match wise4 color picker
 			'.toolbar_button button .svg_icon':16
 		},
 		callback: function(icons) {

@@ -63,9 +63,6 @@ All options are optional and can include:
 - 'svgz (boolean)': Indicate that the file is an SVGZ file, and thus not to
 	parse as XML. SVGZ files add compression benefits, but getting data from
 	them fails in Firefox 2 and older.
-	
-- 'useFallback (boolean)': Indicates whether fallback images should be used
-	instead of svg icons (default: false). (wise4 edit)
 
 5. To access an icon at a later point without using the callback, use this:
 	$.getSvgIcon(id (string));
@@ -155,27 +152,17 @@ $(function() {
 					useFallback();
 				}
 			} else {
-				// check whether useFallback parameter was set to true (wise4)
-				if (useFallbackImgs==true) {
-					$(setTimeout(function() {useFallback();},10)); // use fallback png icons
-				} else {
-					$.ajax({
-						url: file,
-						dataType: 'xml',
-						success: function(data) {
-							svgdoc = data;
-							//$(function() { // for some reason, this doesn't work with wise4
-								//alert("ajax success");
-								getIcons('ajax');
-							//});
-						},
-						error: function() {
-							//$(function() { // for some reason, this doesn't work with wise4
-								useFallback();
-							//});
-						}
-					});
-				}
+				$.ajax({
+					url: file,
+					dataType: 'xml',
+					success: function(data) {
+						svgdoc = data;
+						getIcons('ajax');
+					},
+					error: function() {
+						useFallback();
+					}
+				});
 			}
 			
 		function getIcons(evt, no_wait) {
@@ -359,9 +346,13 @@ $(function() {
 				$(this).attr('id', new_id);			
 	
 				svg_el.find('[fill="url(#' + id + ')"]').each(function() {
-					$(this).attr('fill', 'url(#' + new_id + ')');
+					//$(this).attr('fill', 'url(#' + new_id + ')');
+					// fix for wise4 url() reference problems
+					$(this).attr('fill', 'url(/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/svg_edit_icons.svg#' + id + ')');
 				}).end().find('[stroke="url(#' + id + ')"]').each(function() {
-					$(this).attr('stroke', 'url(#' + new_id + ')');
+					//$(this).attr('stroke', 'url(#' + new_id + ')');
+					// fix for wise4 url() reference problems
+					$(this).attr('stroke', 'url(/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/svg_edit_icons.svg#' + id + ')');
 				}).end().find('use').each(function() {
 					if(this.getAttribute('xlink:href') == '#' + id) {
 						this.setAttributeNS(xlinkns,'href','#' + new_id);
