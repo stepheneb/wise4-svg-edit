@@ -566,7 +566,7 @@ function svg_edit_setup() {
 	$('#palette').append(str);
 	
 	// set first palette-item (no color) background (wise4)
-	$('#palette .palette_item:first').css({'background': 'transparent url("/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/no-color-item.png") center'});
+	$('#palette .palette_item:first').css({'background': 'transparent url("images/no-color-item.png") center'});
 	
 	// Set up editor background functionality
 	var color_blocks = ['#FFF','#888','#000','url(data:image/gif;base64,R0lGODlhEAAQAIAAAP%2F%2F%2F9bW1iH5BAAAAAAALAAAAAAQABAAAAIfjG%2Bgq4jM3IFLJgpswNly%2FXkcBpIiVaInlLJr9FZWAQA7)'];
@@ -827,7 +827,7 @@ function svg_edit_setup() {
 		
 		// update preview color (wise4)
 		if (color=='none'){
-			$('#palette_preview').css({'background': 'transparent url("/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/no-color.png") center'}); // set preview color bg to 'none' image
+			$('#palette_preview').css({'background': 'transparent url("images/no-color.png") center'}); // set preview color bg to 'none' image
 		} else {
 			$('#palette_preview').css({'background': color});
 		}
@@ -2453,11 +2453,11 @@ function svg_edit_setup() {
 
 // This process starts before document.ready so the icons appear ASAP
 (function() {
-	$.svgIcons('/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/svg_edit_icons.svg', { // edited to wise4 path
+	$.svgIcons('svg_edit_icons.svg', { // edited to wise4 path
 		w:24, h:24,
 		id_match: false,
 		no_img: false,
-		fallback_path:'/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/', // edited to wise4 path
+		fallback_path:'images/', // edited to wise4 path
 		fallback:{
 			'new_image':'clear.png',
 			'save':'save.png',

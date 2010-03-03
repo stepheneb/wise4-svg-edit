@@ -432,5 +432,5 @@ $(function() {
 
 //used to notify scriptloader that this script has finished loading
 //if(typeof eventManager != 'undefined'){
-	//eventManager.fire('scriptLoaded', 'vle/node/draw/svg-edit-2.4rc1/svgicons/jquery.svgicons.js');
+	//eventManager.fire('scriptLoaded', 'svgicons/jquery.svgicons.js');
 //};
