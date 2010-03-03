@@ -348,11 +348,11 @@ $(function() {
 				svg_el.find('[fill="url(#' + id + ')"]').each(function() {
 					//$(this).attr('fill', 'url(#' + new_id + ')');
 					// fix for wise4 url() reference problems
-					$(this).attr('fill', 'url(/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/svg_edit_icons.svg#' + id + ')');
+					$(this).attr('fill', 'url(mages/svg_edit_icons.svg#' + id + ')');
 				}).end().find('[stroke="url(#' + id + ')"]').each(function() {
 					//$(this).attr('stroke', 'url(#' + new_id + ')');
 					// fix for wise4 url() reference problems
-					$(this).attr('stroke', 'url(/vlewrapper/vle/node/draw/svg-edit-2.4rc1/images/svg_edit_icons.svg#' + id + ')');
+					$(this).attr('stroke', 'url(images/svg_edit_icons.svg#' + id + ')');
 				}).end().find('use').each(function() {
 					if(this.getAttribute('xlink:href') == '#' + id) {
 						this.setAttributeNS(xlinkns,'href','#' + new_id);
