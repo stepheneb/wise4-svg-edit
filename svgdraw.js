@@ -825,6 +825,6 @@ var text2xml = function(sXML) {
 };
 
 //used to notify scriptloader that this script has finished loading
-//if(typeof eventManager != 'undefined'){
-	//eventManager.fire('scriptLoaded', 'svgdraw.js');
-//};
+if(typeof eventManager != 'undefined'){
+	eventManager.fire('scriptLoaded', 'svgdraw.js');
+};

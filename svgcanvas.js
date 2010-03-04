@@ -6919,6 +6919,6 @@ var Utils = {
 };
 
 //used to notify scriptloader that this script has finished loading
-//if(typeof eventManager != 'undefined'){
-	//eventManager.fire('scriptLoaded', 'svgcanvas.js');
-//};
+if(typeof eventManager != 'undefined'){
+	eventManager.fire('scriptLoaded', 'svgcanvas.js');
+};
