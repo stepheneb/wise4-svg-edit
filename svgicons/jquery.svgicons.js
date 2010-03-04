@@ -38,7 +38,7 @@ All options are optional and can include:
 - 'fallback (object literal)': List of raster images with each
 	key being the SVG icon ID to replace, and the value the image file name.
 	
-- 'fallback_path (string)': The path to use for all images
+- 'fallback_path (string)': The path to use for all image
 	listed under "fallback"
 	
 - 'replace (boolean)': If set to true, HTML elements will be replaced by,
@@ -348,7 +348,7 @@ $(function() {
 				svg_el.find('[fill="url(#' + id + ')"]').each(function() {
 					//$(this).attr('fill', 'url(#' + new_id + ')');
 					// fix for wise4 url() reference problems
-					$(this).attr('fill', 'url(mages/svg_edit_icons.svg#' + id + ')');
+					$(this).attr('fill', 'url(images/svg_edit_icons.svg#' + id + ')');
 				}).end().find('[stroke="url(#' + id + ')"]').each(function() {
 					//$(this).attr('stroke', 'url(#' + new_id + ')');
 					// fix for wise4 url() reference problems
