@@ -2687,5 +2687,5 @@ $(function() {
 
 //used to notify scriptloader that this script has finished loading
 if(typeof eventManager != 'undefined'){
-	eventManager.fire('scriptLoaded', 'vle/node/draw/svg-edit-2.4rc1/svg-editor.js');
+	eventManager.fire('scriptLoaded', 'svg-editor.js');
 };
