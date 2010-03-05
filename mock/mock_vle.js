@@ -21,7 +21,8 @@ var node = {
     getContent: function () {
         return {
             getContentJSON: function () {
-                // mock out this JSON
+                // mock out this JSON?
+                console.log("node.getContent().getContentJSON() called.")
                 return "";
             },
             
@@ -97,8 +98,8 @@ var scriptloader = (function () {
     };
     
     return {
+        // mock for steps 4-7
         loadScripts: function (name, window, nodeId, eventManager) {
-            // mock for steps 4-7
             if (name == "svgdraw") {
                 loadNextUnloadedScript();
             }
@@ -145,20 +146,26 @@ var vle = {
     getLatestStateForCurrentNode: function () {
         return {
             description: "A page.",
-            selected: -1,
-            snapTotal: 1,
+            selected: 0,
+            snapTotal: 3,
+            
             snapshots: [{
-                id: 1,
-                svg: '<svg width="600" height="450" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">  <g>  <title>Layer 1</title>  <rect x="102.5" y="57" width="92" height="116" id="svg_1" fill="#FF0000" stroke="#000000" stroke-width="5"/>  </g> </svg>'
-            }],
-            svgString: '<svg width="600" height="450" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">  <g>  <title>Layer 1</title>  <rect stroke-width="5" stroke="#000000" fill="#FF0000" id="svg_2" height="147" width="147" y="109.5" x="231"/> </g> </svg>'
+                    id: 0,
+                    svg: '<svg width="600" height="450" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">  <g>  <title>Layer 1</title>  <rect x="102.5" y="57" width="92" height="116" id="svg_1" fill="#FF0000" stroke="#000000" stroke-width="5"/>  </g> </svg>'
+                }, {   
+                    id: 1,
+                    svg: '<svg width="600" height="450" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">  <g>  <title>Layer 1</title>  <rect stroke-width="5" stroke="#000000" fill="#FF0000" id="svg_1" height="116" width="92" y="103.66667" x="142.5"/>  </g> </svg>'
+                }, {   
+                    id: 2,
+                    svg: '<svg width="600" height="450" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">  <g>  <title>Layer 1</title>  <rect stroke-width="5" stroke="#000000" fill="#FF0000" id="svg_1" height="116" width="92" y="111.66667" x="233.16667"/>  </g> </svg>'
+                }],
+            svgString: '<svg width="600" height="450" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">  <g>  <title>Layer 1</title>  <rect x="102.5" y="57" width="92" height="116" id="svg_1" fill="#FF0000" stroke="#000000" stroke-width="5"/>  </g> </svg>'
         };
     },
   
     saveState: function () {
     }
 };
-
 
 
 (function () {
@@ -176,8 +183,8 @@ var vle = {
     };
 }());
 
-// fixes for possible circular dependencies: methods called by self-executing function in svg-editor.js before objects
-// are defined in svg_edit_setup() (also in svg-editor.js)
+// fixes for possible circular dependencies: methods called by immediately self-executing function in svg-editor.js
+// before the corresponding objects are defined (also in svg-editor.js, but in a function called strictly after load.)
 
 // mock out $.pref for line 2586 of svg-editor.js
 $.pref = function(key, val) {
@@ -190,8 +197,7 @@ $.pref = function(key, val) {
     }
 };
 
-// $.svgCanvas for line 2591 of svg-editor.js
-
+// mock out $.svgCanvas for line 2591 of svg-editor.js
 var svgCanvas = {
     setIconSize: function (size) {
         console.log("svgCanvas.setIconSize called with argument: " + size + " before being (re)defined.");
