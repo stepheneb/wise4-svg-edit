@@ -1,0 +1,9 @@
+{
+   "description_active": false,
+   "description_default": "Enter description here.",
+   "prompt": "This draw step enables students take snapshots of their drawings.",
+   "snapshots_active": true,
+   "stamps": [],
+   "svg_background": "",
+   "type": "SVGDraw"
+}
