@@ -38,7 +38,7 @@ All options are optional and can include:
 - 'fallback (object literal)': List of raster images with each
 	key being the SVG icon ID to replace, and the value the image file name.
 	
-- 'fallback_path (string)': The path to use for all image
+- 'fallback_path (string)': The path to use for all images
 	listed under "fallback"
 	
 - 'replace (boolean)': If set to true, HTML elements will be replaced by,
