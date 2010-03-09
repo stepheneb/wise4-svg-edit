@@ -640,9 +640,15 @@ function svg_edit_setup() {
 		});
 	}
 	
+	
+
 	// Snapshot link click handler (wise4)
 	// toggles sidepanel and zooms/restores image (hard-coded at 75% zoom for now)
 	// TODO: figure out how to not zoom image if in full screen mode and descriptions are not active in wise4
+	
+    // *** qd-animator
+    
+	/*	
 	$('#tool_snapshot, #close_snapshots').click(function(){
 		var ctl = {
 				'value':75
@@ -662,6 +668,21 @@ function svg_edit_setup() {
 			changeZoom(ctl);
 		}
 	});
+	*/
+
+    // define this as a global 
+    qdOpenSnapshotPanel = function () {
+        var ctl = {
+    			'value':75
+        }
+    	$('#draw_description').hide();
+    	$('#sidepanels').show();
+    	$('#snap_description').show();
+    	svgCanvas.setSnapState(true);
+    	changeZoom(ctl);
+    };
+	
+	
 	
 	// Draw description label (click) open function (wise4)
 	// opens draw description label and zooms image (hard-coded at 90% zoom)

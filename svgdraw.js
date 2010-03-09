@@ -488,7 +488,15 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 	// reset undo stack
 	this.svgCanvas.resetUndo();
 	$("#tool_undo").addClass("tool_button_disabled");
+	
+	
+    // ** qd-animator
+
+	qdOpenSnapshotPanel();
+	
 };
+
+
 
 SVGDRAW.prototype.newSnapshot = function(context) {
 	var current = context.svgCanvas.getSvgString();
@@ -753,9 +761,9 @@ SVGDRAW.prototype.snapPlayback = function(mode,speed,context){
 SVGDRAW.prototype.changeSpeed = function(value, context){
 	var speed = 1000/value;
 	if (value == 1){
-		var label = value + " snap/sec";
+		var label = value + " frame/sec";
 	} else {
-		var label = value + " snaps/sec";
+		var label = value + " frames/sec";
 	}
 	$('#current_speed').text(label); // update speed display
 	if(context.playback != 'pause'){ // if in playback mode, change current playback speed
