@@ -555,8 +555,42 @@ SVGDRAW.prototype.addSnapshot = function(svgString,num,context) {
 SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
 	$('#svgcanvas').stop(true,true); // stop and remove any currently running animations
 	$('#snap_description_content').blur();
+	
 	var snap = context.snapshots[index].svg;
 	context.svgCanvas.setSvgString(snap);
+	
+	// ** qd-animate
+	if(index > 0) {		
+        // previous frame exists    
+	    
+	    // pull this out into a function
+	    
+    	var svgns = "http://www.w3.org/2000/svg";
+    	var svg = document.getElementById("svgcontent");
+
+        
+        var prevKeyframe = context.snapshots[index-1].svg;        
+        var prevKeyframeXml = text2xml(prevKeyframe);
+    	var prevKeyframeNode = document.importNode(prevKeyframeXml.documentElement, true);
+
+    	var wrapperXml = text2xml('<svg width="600" height="450" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"> <defs> <filter id="desaturate"> <feColorMatrix in="SourceGraphic" type="saturate" values="1.0" /> </filter> </defs> <g class="flipbook-prev-frame" style="filter:url(#desaturate); opacity:1.0"> </g> </svg>');
+    	var wrapperNode = document.importNode(wrapperXml.documentElement, true);
+
+        var wrapperGNode = wrapperNode.getElementsByTagName("g")[0];
+        var keyframeChildren = prevKeyframeNode.children;
+        
+        for (var i = 0; i < keyframeChildren.length; i++) {
+            wrapperGNode.appendChild(keyframeChildren[i]);
+        }
+        svg.appendChild(wrapperGNode);
+	}
+
+	if ((index+1) < context.snapTotal) {
+        // subsequent frame exists
+    }
+	
+	
+	
 	if($('#sidepanels').is(':visible')){
 		context.svgCanvas.setZoom(.75);
 	}
@@ -580,6 +614,7 @@ SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
 	context.updateClass(context.index,context);
 	context.warning = false;
 	$('#snap_description_commit').attr("disabled","disabled");
+
 };
 
 // Bind snapshot thumbnail to click function that opens corresponding snapshot, delete function, hover function, sorting function
