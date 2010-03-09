@@ -564,31 +564,28 @@ SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
         // previous frame exists    
 	    
 	    // pull this out into a function
-	    
-    	var svgns = "http://www.w3.org/2000/svg";
-    	var svg = document.getElementById("svgcontent");
-
-        
+    	
         var prevKeyframe = context.snapshots[index-1].svg;        
         var prevKeyframeXml = text2xml(prevKeyframe);
     	var prevKeyframeNode = document.importNode(prevKeyframeXml.documentElement, true);
 
-    	var wrapperXml = text2xml('<svg width="600" height="450" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"> <defs> <filter id="desaturate"> <feColorMatrix in="SourceGraphic" type="saturate" values="1.0" /> </filter> </defs> <g class="flipbook-prev-frame" style="filter:url(#desaturate); opacity:1.0"> </g> </svg>');
+    	var wrapperXml = text2xml('<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"> <defs> <filter id="desaturate"> <feColorMatrix in="SourceGraphic" type="saturate" values="0.25" /> </filter> </defs> <g class="flipbook-prev-frame" style="filter:url(#desaturate); opacity:0.25"> </g> </svg>');
     	var wrapperNode = document.importNode(wrapperXml.documentElement, true);
-
         var wrapperGNode = wrapperNode.getElementsByTagName("g")[0];
-        var keyframeChildren = prevKeyframeNode.children;
         
-        for (var i = 0; i < keyframeChildren.length; i++) {
-            wrapperGNode.appendChild(keyframeChildren[i]);
+        var keyframeChildren = prevKeyframeNode.getElementsByTagName("g")[0].children;
+
+        // length property of the NodeList keyframeChildren is updated dynamically
+        while (keyframeChildren.length > 0) {
+            wrapperGNode.appendChild(keyframeChildren[0]);
         }
-        svg.appendChild(wrapperGNode);
+        
+        document.getElementById("svgcontent").appendChild(wrapperNode);
 	}
 
 	if ((index+1) < context.snapTotal) {
         // subsequent frame exists
     }
-	
 	
 	
 	if($('#sidepanels').is(':visible')){
@@ -598,7 +595,8 @@ SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
 	context.warningStackSize = 0;
 	$("#tool_undo").addClass("tool_button_disabled");
 	if (pulsate==true){
-		$('#svgcanvas').effect("pulsate", {times: '1'}, 700); // pulsate new canvas
+	    // ** qd-animate
+		//$('#svgcanvas').effect("pulsate", {times: '1'}, 700); // pulsate new canvas
 	}
 	context.selected = true;
 	context.index = index;
