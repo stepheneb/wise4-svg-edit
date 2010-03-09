@@ -1,0 +1,67 @@
+thoughts after talking with George Dinwiddie and Noah:
+
+1. do we really need to base our code on wise4-svg-edit?
+2. even if we don't base our code on wise4-svg-edit, it would be good to have a VLE mock for our own use (AND for Berkeley's use.)
+3. it's worth your while to refactor some of the wise4-svg-edit code (thought it is also a good strategy to see if you can stub out the VLE dependency without making changes to wise4-svg-edit)
+4. if you do refactor some of the wise4-svg-edit code, it is an option to throw it away.
+5. However, it would be desirable to push some of your changes to the berkeley repo, both to develop the relationship with the berkeley developers and to make sure that their further work also incorporates your changes (rather than having to do a merge later, which might be very confusing.)
+6. "characterization tests" are a neat idea.
+
+
+started branch 'animator', 3/5/2010.
+
+how to make progress on animator:
+
+1. where to place the frames in animation timeline?
+
+  - probably want them to be visually underneath the work area, like a film strip
+  - they probably should live inside div#workwrapper
+    * note that the snapshot panel div#snapshotpanel lives inside div#sidepanel which lives under div#workwrapper
+    
+
+2. put an "Animation" control up next to the "Snapshots" control? Modify html
+
+3. testability: can we spec out the objects we need to create *first*, or should we do UI first and refactor to testable objects after?
+
+--
+
+4. animation *data* should be loaded in say SVGDRAW.prototype.loadCallback;
+   animation controls should be initiated somehow from SVGDRAW.prototype.initDisplay
+   
+  
+  ---
+  
+  
+  notes on apparent behavior of svg_edit
+
+  1. translate value of transform attribute attr is present during drag. Translate attribute is removed after drag and x, y are updated instead.
+
+  2. rotate value of transform attribute is present after the first time the rotation control is clicked. 
+     After the rotation control is clicked, the transform attribute and its 'rotate=' does not go away.
+
+  3. elements are given id svg_n, where n = <greatest n currently outstanding> + 1
+
+  4. saved svg strings do not have ids on svg elements.
+  ---
+  
+use getBBox method to find center of paths and other non-rect elements
+
+  outstanding question: how to persist identity of svg element between animation frames if ids are stripped by svg-edit.
+  
+
+according to jquery-svg plugin page ( http://keith-wood.name/svg.html tab SVG DOM) "The SVG DOM is different to the HTML DOM for which jQuery was designed. In particular, any attributes that can be animated are stored as objects instead of plain strings. This includes the class attribute. Thus, jQuery's functions that work with classes don't work on SVG nodes."
+
+SO: IF we are to use class names to store object identity in the svg, we need to deal with the api.
+  
+
+
+NOTE: the Berkeley snapshot functionality is creating svg elements with ids that duplicate those in svg#svgcontent
+fix and use xpath to create test that ensures no duplicate ids?
+
+
+Here's how to navigate to rect#svg_1 in svg#svgcontent:
+
+document.getElementById("svgcontent").childNodes[0].childNodes[1]
+
+(using Firebug to check svgcanvas.save() method verifies that class names are not stripped from the saved SVG string; the multiple id bug may not be a showstopper)
+
