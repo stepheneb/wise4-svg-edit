@@ -493,7 +493,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
     // ** qd-animator
 
 	qdOpenSnapshotPanel();
-	
+	context.openSnapshot(0, false, context);
 };
 
 

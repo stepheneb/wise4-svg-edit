@@ -159,7 +159,7 @@ var vle = {
                     id: 2,
                     svg: '<svg width="600" height="450" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">  <g>  <title>Layer 1</title>  <rect stroke-width="5" stroke="#000000" fill="#FF0000" id="svg_1" height="116" width="92" y="111.66667" x="233.16667"/>  </g> </svg>'
                 }],
-            svgString: '<svg width="600" height="450" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">  <g>  <title>Layer 1</title>  <rect class="testClassFromSvgString" x="102.5" y="57" width="92" height="116" id="svg_1" fill="#FF0000" stroke="#000000" stroke-width="5"/>  </g> </svg>'
+            svgString: '<svg width="600" height="450" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">  <g>  <title>Layer 1</title>  </g> </svg>'
         };
     },
   
