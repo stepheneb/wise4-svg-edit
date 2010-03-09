@@ -371,7 +371,7 @@ function svg_edit_setup() {
 			$('#group_opacity').val(opac_perc);
 			$('#opac_slider').slider('option', 'value', opac_perc);
 			
-			// Hide bottom toolbar options that are not applicable (wise4)
+			// Hide toolbar options that are not applicable (wise4)
 			if(selectedElement.tagName == "text" || selectedElement.tagName == "image") {
 				$('#stroke_widthLabel').hide();
 				$('#stroke_width').hide();
@@ -516,8 +516,7 @@ function svg_edit_setup() {
 				else if(el_name == 'image') {
 					var xlinkNS="http://www.w3.org/1999/xlink";
 					var href = elem.getAttributeNS(xlinkNS, "href");
-					// not necessary for wise4 stamps, throws error
-          			// setImageURL(href);
+          			// setImageURL(href); // not necessary for wise4 stamps
         		} // image
 			}
 		} // if (elem != null)
@@ -657,13 +656,13 @@ function svg_edit_setup() {
 			$('#draw_description').hide();
 			$('#sidepanels').show();
 			$('#snap_description').show();
-			svgCanvas.setSnapState(true);
+			//svgCanvas.setSnapState(true);
 			changeZoom(ctl);
 		} else {
 			$('#sidepanels').hide();
 			$('#snap_description').hide();
 			$('#draw_description').show();
-			svgCanvas.setSnapState(false);
+			//svgCanvas.setSnapState(false);
 			ctl.value = 100;
 			changeZoom(ctl);
 		}
@@ -1105,7 +1104,7 @@ function svg_edit_setup() {
 		svgCanvas.setMode('text');
 		// always set opacity to 1 (wise4)
 		svgCanvas.setOpacity(1);
-		// change cursor to text (wise4) - indicates to students that drawing is active
+		// change cursor to text (wise4) - indicates to students that text drawing is active
 		$('#styleoverrides').text('#svgcanvas svg{cursor:text}');
 	};
 	
@@ -1193,7 +1192,7 @@ function svg_edit_setup() {
 		$.confirm(uiStrings.QwantToClear, function(ok) {
 			if(!ok) return;
 			svgCanvas.clear();
-			svgCanvas.setResolution(600, 450);
+			svgCanvas.setResolution(600, 450); //wise4
 			zoomImage();
 			populateLayers();
 			updateContextPanel();
@@ -1862,7 +1861,7 @@ function svg_edit_setup() {
 		});
 	},1000);
 		
-	// much simpler color picker, a la original svg-edit #palette_holder (wise4)
+	// much simpler color picker, similar to original svg-edit #palette_holder (wise4)
 	$('#fill_color').click(function(){
 		//colorPicker($(this));
 		picker = "fill";
@@ -1874,7 +1873,7 @@ function svg_edit_setup() {
 		updateToolButtonState();
 	});
 
-	// much simpler color picker, a la original #palette_holder (wise4)
+	// much simpler color picker, similar to original original svg-edit #palette_holder (wise4)
 	$('#stroke_color').click(function(){
 		//colorPicker($(this));
 		picker="stroke";
@@ -2463,7 +2462,7 @@ function svg_edit_setup() {
 	// set starting resolution (centers canvas)
 	setResolution(600,450); // edited for wise4
 	
-	// make note panel draggable (wise4)
+	// make description panel draggable (wise4)
 	$('#descriptionpanel').draggable({ containment: 'window' });
 	
 //	var revnums = "svg-editor.js ($Rev: 1153 $) ";
@@ -2625,6 +2624,7 @@ function svg_edit_setup() {
 
 // This happens when the page is loaded
 $(function() {
+	// these initializers now run on setup in svgdraw.js (wise4)
 	//svgCanvas = svg_edit_setup();
 	//put_locale(svgCanvas);
 	
@@ -2670,39 +2670,6 @@ $(function() {
 	}
 	
 });
-
-
-// wise4 student data loading
-//This happens when the page is loaded
-(function() {
-	  VleDS = function(_vle){
-	    this.data = "";
-	    this.annotations = "";
-	    this.vle = _vle;
-	    this.vleNode=_vle.getCurrentNode();
-	  };
-
-	  VleDS.prototype = {
-	    save: function(_data) {
-	        this.vle.saveState(_data,this.vleNode);
-	        this.data = _data;
-	    },
-
-	    load: function(context,callback) {
-	      this.data = this.vle.getLatestStateForCurrentNode();
-	      //this.data = '<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480"><!-- Created with SVG-edit - http://svg-edit.googlecode.com/ --><g><title>bg</title><text xml:space="preserve" text-anchor="middle" font-family="serif" font-size="24" stroke-width="0" stroke="#000000" fill="#000000" id="svg_1" y="165.5" x="77">background</text></g><g><title>Layer 1</title><rect stroke-width="5" stroke="#000000" fill="#FF0000" id="svg_2" height="147" width="147" y="109.5" x="231"/></g></svg>';
-	      callback(this.data,context);
-	    },
-	    
-	    loadAnnotations: function(context,callback) {
-	    	//this.annotations = this.vle.get
-	    },
-	    toString: function() {
-	      return "VLE Data Service (" + this.vle + ")";
-	    }
-	  };
-
-})();
 
 
 

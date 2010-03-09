@@ -346,7 +346,6 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 					}
 				}
 			} else /*if (context.defaultDescription!="")*/ {
-				alert('no snapshot selected');
 				//context.description = context.defaultDescription;
 				$('#snap_description_wrapper').hide();
 				$('#draw_description_wrapper').hide();
@@ -773,7 +772,6 @@ SVGDRAW.prototype.snapPlayback = function(mode,speed,context){
 		$('#snap_images').sortable('disable');
 		$('#play').hide();
 		$('#loop').hide();
-		//$('#snap_browse').hide();
 		if(context.descriptionActive == true){
 			$('#snap_description_wrapper').hide();
 			$('#draw_description_wrapper').hide();
@@ -881,6 +879,37 @@ var text2xml = function(sXML) {
 	catch(e){ throw new Error("Error parsing XML string"); };
 	return out;
 };
+
+// VLE data service setup
+// This happens when the page is loaded
+(function() {
+	  VleDS = function(_vle){
+	    this.data = "";
+	    this.annotations = "";
+	    this.vle = _vle;
+	    this.vleNode=_vle.getCurrentNode();
+	  };
+
+	  VleDS.prototype = {
+	    save: function(_data) {
+	        this.vle.saveState(_data,this.vleNode);
+	        this.data = _data;
+	    },
+
+	    load: function(context,callback) {
+	      this.data = this.vle.getLatestStateForCurrentNode();
+	      callback(this.data,context);
+	    },
+	    
+	    loadAnnotations: function(context,callback) {
+	    	//this.annotations = this.vle.get
+	    },
+	    toString: function() {
+	      return "VLE Data Service (" + this.vle + ")";
+	    }
+	  };
+
+})();
 
 //used to notify scriptloader that this script has finished loading
 if(typeof eventManager != 'undefined'){
