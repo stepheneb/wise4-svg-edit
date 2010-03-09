@@ -151,7 +151,7 @@ var vle = {
             
             snapshots: [{
                     id: 0,
-                    svg: '<svg width="600" height="450" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">  <g>  <title>Layer 1</title>  <rect x="102.5" y="57" width="92" height="116" id="svg_1" fill="#FF0000" stroke="#000000" stroke-width="5"/>  </g> </svg>'
+                    svg: '<svg width="600" height="450" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">  <g>  <g class="frameWrapper"> <title>Layer 1</title>  <rect x="102.5" y="57" width="92" height="116" id="svg_1" fill="#FF0000" stroke="#000000" stroke-width="5"/>  </g> </g> </svg>'
                 }, {   
                     id: 1,
                     svg: '<svg width="600" height="450" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">  <g>  <title>Layer 1</title>  <rect stroke-width="5" stroke="#000000" fill="#FF0000" id="svg_1" height="116" width="92" y="103.66667" x="142.5"/>  </g> </svg>'
