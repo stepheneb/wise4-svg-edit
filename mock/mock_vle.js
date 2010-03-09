@@ -151,13 +151,13 @@ var vle = {
             
             snapshots: [{
                     id: 0,
-                    svg: '<svg width="600" height="450" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">  <g> <title>Layer 1</title>  <rect class="testClassFromSnapshot" x="102.5" y="57" width="92" height="116" id="svg_1" fill="#FF0000" stroke="#000000" stroke-width="5"/>  </g> </svg>'
+                    svg: '<svg width="600" height="450" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">  <g> <title>Layer 1</title>  <circle stroke-width="5" stroke="rgb(127, 0, 0)" fill="rgb(255, 212, 170)" id="svg_2" r="33.9043" cy="163.33353" cx="79.33308"/>  <rect stroke-width="5" stroke="rgb(127, 0, 0)" fill="rgb(255, 212, 170)" id="svg_4" height="70.66667" width="70.66667" y="236.00001" x="45.33335"/>  </g> </svg>'
                 }, {   
                     id: 1,
-                    svg: '<svg width="600" height="450" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">  <g>  <title>Layer 1</title>  <rect stroke-width="5" stroke="#000000" fill="#FF0000" id="svg_1" height="116" width="92" y="103.66667" x="142.5"/>  </g> </svg>'
+                    svg: '<svg width="600" height="450" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">  <g>  <title>Layer 1</title>  <circle cx="284.66642" cy="78.00019" r="33.9043" id="svg_2" fill="rgb(255, 212, 170)" stroke="rgb(127, 0, 0)" stroke-width="5"/>  <rect x="249.33334" y="237.33334" width="70.66667" height="70.66667" id="svg_4" fill="rgb(255, 212, 170)" stroke="rgb(127, 0, 0)" stroke-width="5"/> </g> </svg>'
                 }, {   
                     id: 2,
-                    svg: '<svg width="600" height="450" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">  <g>  <title>Layer 1</title>  <rect stroke-width="5" stroke="#000000" fill="#FF0000" id="svg_1" height="116" width="92" y="111.66667" x="233.16667"/>  </g> </svg>'
+                    svg: '<svg width="600" height="450" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">  <g>  <title>Layer 1</title>  <circle cx="517.99975" cy="164.66686" r="33.9043" id="svg_2" fill="rgb(255, 212, 170)" stroke="rgb(127, 0, 0)" stroke-width="5"/>  <rect x="484" y="237.33334" width="70.66667" height="70.66667" id="svg_4" fill="rgb(255, 212, 170)" stroke="rgb(127, 0, 0)" stroke-width="5"/> </g> </svg>'
                 }],
             svgString: '<svg width="600" height="450" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">  <g>  <title>Layer 1</title>  </g> </svg>'
         };
