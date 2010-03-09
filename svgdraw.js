@@ -559,33 +559,50 @@ SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
 	var snap = context.snapshots[index].svg;
 	context.svgCanvas.setSvgString(snap);
 	
+	
 	// ** qd-animate
+	
+	var makeWrapper = function () {
+	    var xml = text2xml('<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"> <defs> <filter id="desaturate"> <feColorMatrix in="SourceGraphic" type="saturate" values="0.25" /> </filter> </defs> <g class="flipbook-prev-frame" style="filter:url(#desaturate); opacity:0.25"> </g> </svg>');
+    	var node = document.importNode(xml.documentElement, true);
+
+        return node;
+    };
+    
+    
+    var makeKeyframeSvgElementCollection = function (index) {
+        var keyframeSvgText = context.snapshots[index].svg;        
+        var keyframeXml = text2xml(keyframeSvgText);
+    	var keyframeNode = document.importNode(keyframeXml.documentElement, true);
+
+    	return keyframeNode.getElementsByTagName("g")[0].children;
+    };
+    
+    
+    var wrapper;
+
 	if(index > 0) {		
         // previous frame exists    
 	    
-	    // pull this out into a function
-    	
-        var prevKeyframe = context.snapshots[index-1].svg;        
-        var prevKeyframeXml = text2xml(prevKeyframe);
-    	var prevKeyframeNode = document.importNode(prevKeyframeXml.documentElement, true);
+	    wrapper = wrapper || makeWrapper();
+        var gNode = wrapper.getElementsByTagName("g")[0];
+        var keyframeSvgElements = makeKeyframeSvgElementCollection(index-1);
 
-    	var wrapperXml = text2xml('<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"> <defs> <filter id="desaturate"> <feColorMatrix in="SourceGraphic" type="saturate" values="0.25" /> </filter> </defs> <g class="flipbook-prev-frame" style="filter:url(#desaturate); opacity:0.25"> </g> </svg>');
-    	var wrapperNode = document.importNode(wrapperXml.documentElement, true);
-        var wrapperGNode = wrapperNode.getElementsByTagName("g")[0];
-        
-        var keyframeChildren = prevKeyframeNode.getElementsByTagName("g")[0].children;
-
-        // length property of the NodeList keyframeChildren is updated dynamically
-        while (keyframeChildren.length > 0) {
-            wrapperGNode.appendChild(keyframeChildren[0]);
+        // keyframeSvgElements is a NodeList, whose length property is updated dynamically when elements are moved out 
+        while (keyframeSvgElements.length > 0) {
+            gNode.appendChild(keyframeSvgElements[0]);
         }
-        
-        document.getElementById("svgcontent").appendChild(wrapperNode);
 	}
 
 	if ((index+1) < context.snapTotal) {
         // subsequent frame exists
     }
+	
+	if (wrapper) {
+	    document.getElementById("svgcontent").appendChild(wrapper);
+	}
+	
+	// ** end qd-animate
 	
 	
 	if($('#sidepanels').is(':visible')){
