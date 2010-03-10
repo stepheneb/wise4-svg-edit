@@ -550,18 +550,12 @@ SVGDRAW.prototype.addSnapshot = function(svgString,num,context) {
 	//},100);
 };
 
-// Open a snapshot as current drawing
-SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
-	$('#svgcanvas').stop(true,true); // stop and remove any currently running animations
-	$('#snap_description_content').blur();
-	
-	var snap = context.snapshots[index].svg;
-	context.svgCanvas.setSvgString(snap);
-	
-	
-	// ** qd-animate
-	
-	var makeWrapper = function () {
+
+// ** qd-animate
+
+var qdInsertGhostedFrames = function (index, context) {
+    
+    var makeWrapper = function () {
 	    var xml = text2xml('<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"> <defs> <filter id="desaturate"> <feColorMatrix in="SourceGraphic" type="saturate" values="0.25" /> </filter> </defs> <g style="filter:url(#desaturate); opacity:0.25"> <g class="flipbook-prev-frame"> </g> <g class="flipbook-next-frame"> </g> </g> </svg>');
     	var node = document.importNode(xml.documentElement, true);
 
@@ -608,6 +602,28 @@ SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
 	if ($wrapper) {
 	    document.getElementById("svgcontent").appendChild($wrapper[0]);
 	}
+}
+
+
+var qdDrawGhostedLines = function () {};
+
+
+// ** end qd-animate changes
+
+
+// Open a snapshot as current drawing
+SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
+	$('#svgcanvas').stop(true,true); // stop and remove any currently running animations
+	$('#snap_description_content').blur();
+	
+	var snap = context.snapshots[index].svg;
+	context.svgCanvas.setSvgString(snap);
+	
+	
+	// ** qd-animate
+	
+	qdInsertGhostedFrames(index, context);
+	qdDrawGhostedLines();
 	
 	// ** end qd-animate changes
 	
