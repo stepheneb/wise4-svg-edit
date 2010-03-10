@@ -602,10 +602,58 @@ var qdInsertGhostedFrames = function (index, context) {
 	if ($wrapper) {
 	    document.getElementById("svgcontent").appendChild($wrapper[0]);
 	}
-}
+};
 
 
-var qdDrawGhostedLines = function () {};
+var createLine = function (from, to) {
+
+    var svgns = "http://www.w3.org/2000/svg";
+
+    var line = document.createElementNS(svgns, "line");
+    
+    line.setAttribute('x1', from.x + from.width/2);
+    line.setAttribute('y1', from.y + from.height/2);
+    line.setAttribute('x2', to.x + to.width/2);
+    line.setAttribute('y2', to.y + to.height/2);
+    line.setAttribute('stroke', '#000000');
+    line.setAttribute('stroke-width', '3');
+    line.setAttribute('opacity', '0.1');
+    
+    return line;
+};
+
+    
+var qdDrawGhostedLines = function () {
+    
+    // note the following works the way you'd want:
+    // $("#svgcontent").find(".flipbook-actor-2").each(function () { this.setAttribute("fill", "red"); })
+    
+    $("#svgcontent .flipbook-prev-frame").children().each(function () {
+        var actorClass = (/flipbook-actor-\d+/.exec(this.getAttribute("class")) || [null])[0];
+        
+        if (actorClass) {
+            var from = this.getBBox();
+            var to = $("#svgcontent > g > ." + actorClass)[0].getBBox();
+
+            $("#svgcontent")[0].appendChild(createLine(from, to));
+        }
+        
+
+    });
+    
+    
+    $("#svgcontent .flipbook-next-frame").children().each(function () {
+        var actorClass = (/flipbook-actor-\d+/.exec(this.getAttribute("class")) || [null])[0];
+        
+        if (actorClass) {
+            var to = this.getBBox();
+            var from = $("#svgcontent > g > ." + actorClass)[0].getBBox();
+
+            $("#svgcontent")[0].appendChild(createLine(from, to));
+        }
+    });
+
+};
 
 
 // ** end qd-animate changes
