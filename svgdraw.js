@@ -852,6 +852,7 @@ SVGDRAW.prototype.snapPlayback = function(mode,speed,context){
 		$('#pause').attr("style","display:inline !important");
 		$("#svgcanvas").everyTime(speed,'play',function(){
 			context.openSnapshot(index,false,context,true);
+			context.lastPlayedIndex = index;
 			var page = Math.floor(index/3);
 			$("#snap_images").attr({ scrollTop: page * 375 });
 			index = index+1;
@@ -861,11 +862,10 @@ SVGDRAW.prototype.snapPlayback = function(mode,speed,context){
 				} else {
 					context.snapPlayback("pause",speed,context);
 				}
-				
 			}
 		},0);
 	} else if (mode=="pause") {
-	    context.openSnapshot(index,false,context,false);  //** qd-animate: redisplay with ghosted lines off
+	    context.openSnapshot(context.lastPlayedIndex || 0,false,context,false);  //** qd-animate: redisplay with ghosted lines off
 		$("#svgcanvas").stopTime('play');
 		context.playback = 'pause';
 		context.snapCheck(context);
