@@ -677,7 +677,6 @@ function svg_edit_setup() {
     	$('#draw_description').hide();
     	$('#sidepanels').show();
     	$('#snap_description').show();
-    	svgCanvas.setSnapState(true);
     	changeZoom(ctl);
     };
 	
