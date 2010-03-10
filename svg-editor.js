@@ -2452,7 +2452,7 @@ function svg_edit_setup() {
 
 // This process starts before document.ready so the icons appear ASAP
 (function() {
-	$.svgIcons('svg_edit_icons.svg', { // edited to wise4 path
+	$.svgIcons('images/svg_edit_icons.svg', { // edited to wise4 path
 		w:24, h:24,
 		id_match: false,
 		no_img: false,
