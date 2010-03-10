@@ -660,7 +660,7 @@ var qdDrawGhostedLines = function () {
 
 
 // Open a snapshot as current drawing
-SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
+SVGDRAW.prototype.openSnapshot = function(index,pulsate,context, animating) {
 	$('#svgcanvas').stop(true,true); // stop and remove any currently running animations
 	$('#snap_description_content').blur();
 	
@@ -669,9 +669,10 @@ SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
 	
 	
 	// ** qd-animate
-	
-	qdInsertGhostedFrames(index, context);
-	qdDrawGhostedLines();
+	if (!animating) {
+	    qdInsertGhostedFrames(index, context);
+	    qdDrawGhostedLines();
+	}
 	
 	// ** end qd-animate changes
 	
@@ -850,7 +851,7 @@ SVGDRAW.prototype.snapPlayback = function(mode,speed,context){
 		}
 		$('#pause').attr("style","display:inline !important");
 		$("#svgcanvas").everyTime(speed,'play',function(){
-			context.openSnapshot(index,false,context);
+			context.openSnapshot(index,false,context,true);
 			var page = Math.floor(index/3);
 			$("#snap_images").attr({ scrollTop: page * 375 });
 			index = index+1;
@@ -864,6 +865,7 @@ SVGDRAW.prototype.snapPlayback = function(mode,speed,context){
 			}
 		},0);
 	} else if (mode=="pause") {
+	    context.openSnapshot(index,false,context,false);  //** qd-animate: redisplay with ghosted lines off
 		$("#svgcanvas").stopTime('play');
 		context.playback = 'pause';
 		context.snapCheck(context);
