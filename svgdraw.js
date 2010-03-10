@@ -562,7 +562,7 @@ SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
 	// ** qd-animate
 	
 	var makeWrapper = function () {
-	    var xml = text2xml('<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"> <defs> <filter id="desaturate"> <feColorMatrix in="SourceGraphic" type="saturate" values="0.25" /> </filter> </defs> <g class="flipbook-prev-frame" style="filter:url(#desaturate); opacity:0.25"> </g> </svg>');
+	    var xml = text2xml('<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"> <defs> <filter id="desaturate"> <feColorMatrix in="SourceGraphic" type="saturate" values="0.25" /> </filter> </defs> <g style="filter:url(#desaturate); opacity:0.25"> <g class="flipbook-prev-frame"> </g> <g class="flipbook-next-frame"> </g> </g> </svg>');
     	var node = document.importNode(xml.documentElement, true);
 
         return node;
@@ -578,13 +578,13 @@ SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
     };
     
     
-    var wrapper;
+    var $wrapper;       // a jQuery object
 
 	if(index > 0) {		
         // previous frame exists    
 	    
-	    wrapper = wrapper || makeWrapper();
-        var gNode = wrapper.getElementsByTagName("g")[0];
+	    $wrapper = $wrapper || $(makeWrapper());
+        var gNode = $wrapper.find(".flipbook-prev-frame")[0];
         var keyframeSvgElements = makeKeyframeSvgElementCollection(index-1);
 
         // keyframeSvgElements is a NodeList, whose length property is updated dynamically when elements are moved out 
@@ -595,13 +595,21 @@ SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
 
 	if ((index+1) < context.snapTotal) {
         // subsequent frame exists
+	    $wrapper = $wrapper || $(makeWrapper());
+        var gNode = $wrapper.find(".flipbook-next-frame")[0];
+        var keyframeSvgElements = makeKeyframeSvgElementCollection(index+1);
+
+        // keyframeSvgElements is a NodeList, whose length property is updated dynamically when elements are moved out 
+        while (keyframeSvgElements.length > 0) {
+            gNode.appendChild(keyframeSvgElements[0]);
+        }
     }
 	
-	if (wrapper) {
-	    document.getElementById("svgcontent").appendChild(wrapper);
+	if ($wrapper) {
+	    document.getElementById("svgcontent").appendChild($wrapper[0]);
 	}
 	
-	// ** end qd-animate
+	// ** end qd-animate changes
 	
 	
 	if($('#sidepanels').is(':visible')){
