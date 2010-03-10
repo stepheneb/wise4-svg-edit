@@ -559,7 +559,7 @@ var qdInsertGhostedFrames = function (index, context) {
 	    var xml = text2xml('<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"> <defs> <filter id="desaturate"> <feColorMatrix in="SourceGraphic" type="saturate" values="0.25" /> </filter> </defs> <g style="filter:url(#desaturate); opacity:0.25"> <g class="flipbook-prev-frame"> </g> <g class="flipbook-next-frame"> </g> </g> </svg>');
     	var node = document.importNode(xml.documentElement, true);
 
-        return node;
+        return $(node);
     };
     
     
@@ -577,7 +577,7 @@ var qdInsertGhostedFrames = function (index, context) {
 	if(index > 0) {		
         // previous frame exists    
 	    
-	    $wrapper = $wrapper || $(makeWrapper());
+	    $wrapper = $wrapper || makeWrapper();
         var gNode = $wrapper.find(".flipbook-prev-frame")[0];
         var keyframeSvgElements = makeKeyframeSvgElementCollection(index-1);
 
@@ -589,7 +589,7 @@ var qdInsertGhostedFrames = function (index, context) {
 
 	if ((index+1) < context.snapTotal) {
         // subsequent frame exists
-	    $wrapper = $wrapper || $(makeWrapper());
+	    $wrapper = $wrapper || makeWrapper();
         var gNode = $wrapper.find(".flipbook-next-frame")[0];
         var keyframeSvgElements = makeKeyframeSvgElementCollection(index+1);
 
