@@ -10,6 +10,7 @@ function SVGDRAW(node) {
 	this.stamps  =  []; // array to hold stamp paths
 	this.snapshotsActive  =  false; // boolean to specify whether snapshots are active
 	this.snapshots  =  []; // array to hold snapshots
+	this.snapsAllowed = 10; // by default, set number of snapshots allowed to 10
 	this.descriptionActive =  false; // boolean to specify whether student annotations/descriptions are active
 	this.description  =  ""; // string to hold annotation/description text
 	this.defaultDescription = ""; // string to hold starting description text
@@ -254,7 +255,8 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 		});
 
 		$('.snapshot_new').click(function(){
-			$('#new_snap_dialog').dialog('open');
+			context.checkSnapshots(context);
+			//$('#new_snap_dialog').dialog('open');
 		});
 		
 		$('#snapwarning_dialog').dialog({
@@ -269,6 +271,32 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 					$(this).dialog('close');
 				},
 				Cancel: function() {
+					$(this).dialog('close');
+				}
+			}
+		});
+		
+		$('#snaplimit_dialog').dialog({
+			bgiframe: true,
+			resizable: false,
+			modal: true,
+			autoOpen:false,
+			width:490,
+			buttons: {
+				'OK': function() {
+					$(this).dialog('close');
+				}
+			}
+		});
+		
+		$('#snapnumber_dialog').dialog({
+			bgiframe: true,
+			resizable: false,
+			modal: true,
+			autoOpen:false,
+			width:490,
+			buttons: {
+				'OK': function() {
 					$(this).dialog('close');
 				}
 			}
@@ -487,6 +515,19 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 	// reset undo stack
 	this.svgCanvas.resetUndo();
 	$("#tool_undo").addClass("tool_button_disabled");
+};
+
+SVGDRAW.prototype.checkSnapshots = function(context) {
+	var current = context.svgCanvas.getSvgString();
+	var size = current.length * 2;
+	if(size > 20480){
+		$('#snaplimit_dialog').dialog('open');
+		return;
+	} if (context.snapshots.length >= context.snapsAllowed) {
+		$('#snapnumber_dialog').dialog('open');
+		return;
+	}
+	$('#new_snap_dialog').dialog('open');
 };
 
 SVGDRAW.prototype.newSnapshot = function(context) {
@@ -834,22 +875,100 @@ var text2xml = function(sXML) {
 
 	  VleDS.prototype = {
 	    save: function(_data) {
-	        this.vle.saveState(_data,this.vleNode);
+			/* compress nodeState data */
+			//alert(yui.JSON.stringify(_data));
+			_data = this.compress(yui.JSON.stringify(_data));
+			this.vle.saveState(_data,this.vleNode);
 	        this.data = _data;
 	    },
 
 	    load: function(context,callback) {
-	      this.data = this.vle.getLatestStateForCurrentNode();
-	      callback(this.data,context);
+			this.data = this.vle.getLatestStateForCurrentNode();
+			/* decompress nodeState data */
+			if(!yui.JSON.stringify(this.data).match(/^{/)){
+				//alert("no match");
+				this.data = yui.JSON.parse(this.decompress(this.data));
+				//alert(this.data);
+			} else {
+				//alert(this.data);
+				//alert("match");
+			}
+			callback(this.data,context);
 	    },
 	    
 	    loadAnnotations: function(context,callback) {
 	    	//this.annotations = this.vle.get
 	    },
+		
 	    toString: function() {
 	      return "VLE Data Service (" + this.vle + ")";
-	    }
-	  };
+	    },
+		
+		/**
+		 * LZW Compression functions for svgdraw nodeState data
+		 * From http://rosettacode.org/wiki/LZW_compression
+		 * Available under the GNU Free Documentation License (http://www.gnu.org/licenses/fdl-1.2.html) 
+		 */
+		//LZW Compression for Strings
+		compress: function(uncompressed) {
+			// Build the dictionary.
+			var dictSize = 256;
+			var dictionary = {};
+			for (var i = 0; i < 256; i++){
+			    dictionary[String.fromCharCode(i)] = i;
+			}
+			
+			var w = "";
+			var result = [];
+			for (var i = 0; i < uncompressed.length; i++) {
+				var c = uncompressed.charAt(i);
+			    var wc = w + c;
+			    if (dictionary[wc])
+			        w = wc;
+			    else {
+			        result.push(dictionary[w]);
+			        // Add wc to the dictionary.
+			        dictionary[wc] = dictSize++;
+			        w = "" + c;
+			    }
+			}
+			
+			// Output the code for w.
+			if (w != "")
+			    result.push(dictionary[w]);
+			return result;
+		},
+		 //LZW Decompression for Strings
+		 decompress: function(compressed) {
+		        // Build the dictionary.
+		        var dictSize = 256;
+		        var dictionary = [];
+		        for (var i = 0; i < 256; i++) {
+		            dictionary[i] = String.fromCharCode(i);
+				}
+		 
+		        var w = String.fromCharCode(compressed[0]);
+		        var result = w;
+		        for (var i = 1; i < compressed.length; i++) {
+		            var entry = "";
+		            var k = compressed[i];
+		            if (dictionary[k])
+		                entry = dictionary[k];
+		            else if (k == dictSize)
+		                entry = w + w.charAt(0);
+		            else
+		                return null;
+		 
+		            result += entry;
+		 
+		            // Add w+entry[0] to the dictionary.
+		            dictionary[dictSize++] = w + entry.charAt(0);
+		 
+		            w = entry;
+		        }
+		        return result;
+		    }
+		};
 
 })();
 
