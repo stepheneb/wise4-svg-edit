@@ -969,7 +969,7 @@ function svg_edit_setup() {
 		icon[0].setAttribute('width',holder.width());
 		icon[0].setAttribute('height',holder.height());
 		holder.empty().append(icon);
-	}
+	};
 	
 	var clickSelect = function() {
 		if (toolButtonClick('#tool_select')) {
@@ -2276,7 +2276,7 @@ function svg_edit_setup() {
 			//{sel:'#tool_clear', fn: clickClear, evt: 'click', key: [modKey+'N', true]},
 			//{sel:'#tool_save', fn: function() { editingsource?saveSourceEditor():clickSave()}, evt: 'click', key: [modKey+'S', true]},
 			//{sel:'#tool_open', fn: clickOpen, evt: 'click', key: [modKey+'O', true]},
-			//{sel:'#tool_source', fn: showSourceEditor, evt: 'click', key: ['U', true]},
+			{sel:'#tool_source', fn: showSourceEditor, evt: 'click', key: ['U', true]},
 			//{sel:'#tool_wireframe', fn: clickWireframe, evt: 'click', key: ['F', true]},
 			{sel:'#tool_source_cancel,#svg_source_overlay,#tool_docprops_cancel', fn: cancelOverlays, evt: 'click', key: ['esc', false, false], hidekey: true},
 			//{sel:'#tool_source_save', fn: saveSourceEditor, evt: 'click'},
@@ -2290,9 +2290,9 @@ function svg_edit_setup() {
 			{sel:'#tool_move_top', fn: moveToTopSelected, evt: 'click', key: 'shift+up'},
 			{sel:'#tool_move_bottom', fn: moveToBottomSelected, evt: 'click', key: 'shift+down'},
 			{sel:'#tool_topath', fn: convertToPath, evt: 'click'},
-			{sel:'#tool_undo', fn: clickUndo, evt: 'click', key: [modKey+'Z', true]},
-			{sel:'#tool_redo', fn: clickRedo, evt: 'click', key: [modKey+'Y', true]},
-			{sel:'#tool_clone,#tool_clone_multi', fn: clickClone, evt: 'click', key: [modKey+'C', true]},
+			{sel:'#tool_undo', fn: clickUndo, evt: 'click'/*, key: [modKey+'Z', true]*/},
+			{sel:'#tool_redo', fn: clickRedo, evt: 'click'/*, key: [modKey+'Y', true]*/},
+			{sel:'#tool_clone,#tool_clone_multi', fn: clickClone, evt: 'click'/*, key: [modKey+'C', true]*/},
 			{sel:'#tool_group', fn: clickGroup, evt: 'click', key: [modKey+'G', true]},
 			{sel:'#tool_ungroup', fn: clickGroup, evt: 'click'},
 			{sel:'[id^=tool_align]', fn: clickAlign, evt: 'click'},

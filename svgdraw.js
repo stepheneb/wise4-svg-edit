@@ -22,6 +22,7 @@ function SVGDRAW(node) {
 	this.warning = false;  // boolean for initial (load) warning state (if snapshots have been saved, not currently selected)
 	this.snapTotal = 0; // var to hold total number of snapshots created
 	this.playback = "pause"; // var to specify whether snapshot playback mode is active
+	this.lz77 = new LZ77(); // lz77 compression object
 	
 	// json object to hold student data for the node
 	this.studentData = {
@@ -100,11 +101,15 @@ SVGDRAW.prototype.loadCallback = function(studentWorkJSON, context) {
 		// check for previous work and load it
 		var svgString;
 		if (studentWorkJSON){
-			try{
+			try {
 				svgString = studentWorkJSON.svgString;
 			} catch(err) {
 				svgString = studentWorkJSON;
 			}
+			// check whether svg string was compressed (for backwards compatibility)
+			//if($.isArray(svgString)){
+				//svgString = context.decompress(svgString);
+			//}
 			context.svgCanvas.setSvgString(svgString);
 			
 			if(context.dataService.vle.getConfig().getConfigParam('mode') == 'run'){
@@ -156,6 +161,7 @@ SVGDRAW.prototype.saveToVLE = function() {
 	if (this.teacherAnnotation != "") {
 		svgStringToSave = svgStringToSave.replace(this.teacherAnnotation, "");
 	}
+	//this.studentData.svgString = this.compress(this.svgCanvas.getSvgString());
 	this.studentData.svgString = this.svgCanvas.getSvgString();
 	this.studentData.description = this.description;
 	this.studentData.snapshots = this.snapshots;
@@ -276,25 +282,12 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 			}
 		});
 		
-		$('#snaplimit_dialog').dialog({
-			bgiframe: true,
-			resizable: false,
-			modal: true,
-			autoOpen:false,
-			width:490,
-			buttons: {
-				'OK': function() {
-					$(this).dialog('close');
-				}
-			}
-		});
-		
 		$('#snapnumber_dialog').dialog({
 			bgiframe: true,
 			resizable: false,
 			modal: true,
 			autoOpen:false,
-			width:490,
+			width:420,
 			buttons: {
 				'OK': function() {
 					$(this).dialog('close');
@@ -355,7 +348,7 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 		
 		context.warningStackSize = 0; // set warning stack checker to 0 on intial load
 		
-		// bind mouseup events to stack checker function
+		// bind mouseup events to snap checker function
 		$("#tools_top,#tools_left,#svgcanvas,#close_snapshots,#tools_bottom").mouseup(function(){
 			setTimeout(function(){
 				context.snapCheck(context);
@@ -512,18 +505,48 @@ SVGDRAW.prototype.initDisplay = function(data,context) {
 		$('#tool_image').hide(); // if no stamps are defined, hide stamp tool button
 	}
 	
+	$('#drawlimit_dialog').dialog({
+		bgiframe: true,
+		resizable: false,
+		modal: true,
+		autoOpen:false,
+		width:420,
+		buttons: {
+			'OK': function() {
+				$(this).dialog('close');
+			}
+		}
+	});
+	
+	// whenever user has modified drawing canvas, check whether current drawing is too large (>20k)
+	// TODO: add text tool changes to this code
+	$("#svgcanvas").mouseup(function(){
+		setTimeout(function(){
+			var mode = context.svgCanvas.getMode();
+			if(mode != "select" && mode != "multiselect" && mode != "zoom" && mode != "path"){
+				context.checkDrawSize(context);
+			}
+		},60);
+	});
+	
 	// reset undo stack
 	this.svgCanvas.resetUndo();
 	$("#tool_undo").addClass("tool_button_disabled");
 };
 
-SVGDRAW.prototype.checkSnapshots = function(context) {
+SVGDRAW.prototype.checkDrawSize = function(context){
 	var current = context.svgCanvas.getSvgString();
-	var size = current.length * 2;
-	if(size > 20480){
-		$('#snaplimit_dialog').dialog('open');
-		return;
-	} if (context.snapshots.length >= context.snapsAllowed) {
+	var compressed = context.lz77.compress(current);
+	//alert(current.length*2 + ' ' + compressed.length * 2);
+	// if compressed svg string is larger than 20k, alert user and undo latest change
+	if(compressed.length * 2 > 20480){
+		$('#drawlimit_dialog').dialog('open');
+		$('#tool_undo').click();
+	}
+};
+	
+SVGDRAW.prototype.checkSnapshots = function(context) {
+	if (context.snapshots.length >= context.snapsAllowed) {
 		$('#snapnumber_dialog').dialog('open');
 		return;
 	}
@@ -532,7 +555,10 @@ SVGDRAW.prototype.checkSnapshots = function(context) {
 
 SVGDRAW.prototype.newSnapshot = function(context) {
 	var current = context.svgCanvas.getSvgString();
+	//compress snapshot svgstring for data storage
+	//var compressed = "--lz77--" + context.lz77.compress(current);
 	var id = context.snapTotal;
+	//var newSnap = new Snapshot(compressed,context.snapTotal,context);
 	var newSnap = new Snapshot(current,context.snapTotal,context);
 	context.snapshots.push(newSnap);
 	context.snapTotal = id*1 + 1;
@@ -588,6 +614,15 @@ SVGDRAW.prototype.openSnapshot = function(index,pulsate,context) {
 	$('#svgcanvas').stop(true,true); // stop and remove any currently running animations
 	$('#snap_description_content').blur();
 	var snap = context.snapshots[index].svg;
+	// check whether snap svg string was previously compressed (for backwards compatibility)
+	/*if(context.snapshots[index].svg.match(/^--lz77--/)){ // check whether data has been previously compressed (for backwards compatibilty)
+		snap = context.snapshots[index].svg.replace("--lz77--","");
+		snap = context.lz77.decompress(snap);
+	} else {
+		snap = context.snapshots[index].svg;
+		// compress snap svg string if it hasn't already been
+		context.snapshots[index].svg = "--lz77--" + context.lz77.compress(context.snapshots[index].svg);
+	}*/
 	context.svgCanvas.setSvgString(snap);
 	if($('#sidepanels').is(':visible')){
 		context.svgCanvas.setZoom(.75);
@@ -871,28 +906,31 @@ var text2xml = function(sXML) {
 	    this.annotations = "";
 	    this.vle = _vle;
 	    this.vleNode=_vle.getCurrentNode();
+		this.lz77 = new LZ77();
 	  };
 
 	  VleDS.prototype = {
 	    save: function(_data) {
 			/* compress nodeState data */
-			//alert(yui.JSON.stringify(_data));
-			_data = this.compress(yui.JSON.stringify(_data));
+			//alert($.stringify(_data).length * 2);
+			_data = "--lz77--" + this.lz77.compress($.stringify(_data));
+			//alert(_data.length * 2);
 			this.vle.saveState(_data,this.vleNode);
 	        this.data = _data;
 	    },
 
 	    load: function(context,callback) {
-			this.data = this.vle.getLatestStateForCurrentNode();
+			//this.data = this.vle.getLatestStateForCurrentNode();
+			var data = this.vle.getLatestStateForCurrentNode();
 			/* decompress nodeState data */
-			if(!yui.JSON.stringify(this.data).match(/^{/)){
-				//alert("no match");
-				this.data = yui.JSON.parse(this.decompress(this.data));
-				//alert(this.data);
-			} else {
-				//alert(this.data);
-				//alert("match");
+			if(typeof data == "string"){ // check whether data has been previously compressed (for backwards compatibilty)
+				if (data.match(/^--lz77--/)) {
+					//alert('match');
+					data = data.replace(/^--lz77--/,"");
+					data = $.parseJSON(this.lz77.decompress(data));
+				}
 			}
+			this.data = data;
 			callback(this.data,context);
 	    },
 	    
@@ -904,71 +942,7 @@ var text2xml = function(sXML) {
 	      return "VLE Data Service (" + this.vle + ")";
 	    },
 		
-		/**
-		 * LZW Compression functions for svgdraw nodeState data
-		 * From http://rosettacode.org/wiki/LZW_compression
-		 * Available under the GNU Free Documentation License (http://www.gnu.org/licenses/fdl-1.2.html) 
-		 */
-		//LZW Compression for Strings
-		compress: function(uncompressed) {
-			// Build the dictionary.
-			var dictSize = 256;
-			var dictionary = {};
-			for (var i = 0; i < 256; i++){
-			    dictionary[String.fromCharCode(i)] = i;
-			}
-			
-			var w = "";
-			var result = [];
-			for (var i = 0; i < uncompressed.length; i++) {
-				var c = uncompressed.charAt(i);
-			    var wc = w + c;
-			    if (dictionary[wc])
-			        w = wc;
-			    else {
-			        result.push(dictionary[w]);
-			        // Add wc to the dictionary.
-			        dictionary[wc] = dictSize++;
-			        w = "" + c;
-			    }
-			}
-			
-			// Output the code for w.
-			if (w != "")
-			    result.push(dictionary[w]);
-			return result;
-		},
-		 //LZW Decompression for Strings
-		 decompress: function(compressed) {
-		        // Build the dictionary.
-		        var dictSize = 256;
-		        var dictionary = [];
-		        for (var i = 0; i < 256; i++) {
-		            dictionary[i] = String.fromCharCode(i);
-				}
-		 
-		        var w = String.fromCharCode(compressed[0]);
-		        var result = w;
-		        for (var i = 1; i < compressed.length; i++) {
-		            var entry = "";
-		            var k = compressed[i];
-		            if (dictionary[k])
-		                entry = dictionary[k];
-		            else if (k == dictSize)
-		                entry = w + w.charAt(0);
-		            else
-		                return null;
-		 
-		            result += entry;
-		 
-		            // Add w+entry[0] to the dictionary.
-		            dictionary[dictSize++] = w + entry.charAt(0);
-		 
-		            w = entry;
-		        }
-		        return result;
-		    }
-		};
+	};
 
 })();
 

@@ -1552,7 +1552,7 @@ button#tool_docprops_cancel {
 /* wise4 default hidden regions*/
 #sidepanels, #notepanel, #descriptionpanel, #overlay,
 #new_snap_dialog, #prompt_dialog, #snapwarning_dialog,
-#deletesnap_dialog, #snaplimit_dialog, #snapnumber_dialog, 
+#deletesnap_dialog, #drawlimit_dialog, #snapnumber_dialog, 
 #playback, #snap_description, #draw_description,
 #show_description, #hide_description {
 	display:none;

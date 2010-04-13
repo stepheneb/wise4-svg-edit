@@ -3114,7 +3114,7 @@ function BatchCommand(text) {
 					started = true;
 					
 					var res = pathActions.mouseUp(evt, element, mouse_x, mouse_y);
-					element = res.element
+					element = res.element;
 					keep = res.keep;
 					break;
 				case "pathedit":
