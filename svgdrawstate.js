@@ -1,5 +1,5 @@
 function SVGDRAWSTATE(state, timestamp) {
-	this.type = "html";
+	this.type = "svgdraw";
 	this.data = state;
 	
 	if(timestamp == null) {

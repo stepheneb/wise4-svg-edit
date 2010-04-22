@@ -91,7 +91,6 @@ SVGDRAW.prototype.loadModules = function(jsonfilename, context) {
 SVGDRAW.prototype.setDataService = function(dataService) {
 	// register VLE Data Service to the svgCanvas object so that
 	// it can save back to vle's persistence mechanism.
-	// add a function to svgCanvas that will save the data to vle (wise4)
 	this.dataService=dataService;
 };
 
